@@ -50,7 +50,7 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav m-auto">
                     <a href="<?php echo site_url(); ?>" class="nav-item nav-link active">Home</a>
-                    <a href="<?php echo site_url('about'); ?>" class="nav-item nav-link">Shop</a>
+                    <a href="<?php echo site_url('shop'); ?>" class="nav-item nav-link">Shop</a>
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle" data-toggle="dropdown">Categories</a>
                         <div class="dropdown-menu rounded-0 m-0">

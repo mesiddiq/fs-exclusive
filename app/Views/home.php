@@ -56,7 +56,7 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
                     <p class="text-right">15 Products</p>
-                    <a href="javascript:;" class="cat-img position-relative overflow-hidden mb-3">
+                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
                         <img class="img-fluid" src="assets/img/cat-1.jpg" alt="">
                     </a>
                     <h5 class="font-weight-semi-bold m-0">Men's dresses</h5>
@@ -65,7 +65,7 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
                     <p class="text-right">15 Products</p>
-                    <a href="javascript:;" class="cat-img position-relative overflow-hidden mb-3">
+                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
                         <img class="img-fluid" src="assets/img/cat-2.jpg" alt="">
                     </a>
                     <h5 class="font-weight-semi-bold m-0">Women's dresses</h5>
@@ -74,7 +74,7 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
                     <p class="text-right">15 Products</p>
-                    <a href="javascript:;" class="cat-img position-relative overflow-hidden mb-3">
+                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
                         <img class="img-fluid" src="assets/img/cat-3.jpg" alt="">
                     </a>
                     <h5 class="font-weight-semi-bold m-0">Baby's dresses</h5>
@@ -83,7 +83,7 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
                     <p class="text-right">15 Products</p>
-                    <a href="javascript:;" class="cat-img position-relative overflow-hidden mb-3">
+                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
                         <img class="img-fluid" src="assets/img/cat-4.jpg" alt="">
                     </a>
                     <h5 class="font-weight-semi-bold m-0">Accerssories</h5>
@@ -92,7 +92,7 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
                     <p class="text-right">15 Products</p>
-                    <a href="javascript:;" class="cat-img position-relative overflow-hidden mb-3">
+                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
                         <img class="img-fluid" src="assets/img/cat-5.jpg" alt="">
                     </a>
                     <h5 class="font-weight-semi-bold m-0">Bags</h5>
@@ -101,7 +101,7 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
                     <p class="text-right">15 Products</p>
-                    <a href="javascript:;" class="cat-img position-relative overflow-hidden mb-3">
+                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
                         <img class="img-fluid" src="assets/img/cat-6.jpg" alt="">
                     </a>
                     <h5 class="font-weight-semi-bold m-0">Shoes</h5>
@@ -121,7 +121,7 @@
                     <div class="position-relative" style="z-index: 1;">
                         <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
                         <h1 class="mb-4 font-weight-semi-bold">Spring Collection</h1>
-                        <a href="javascript:;" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                        <a href="<?php echo site_url('shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                     <div class="position-relative" style="z-index: 1;">
                         <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
                         <h1 class="mb-4 font-weight-semi-bold">Winter Collection</h1>
-                        <a href="javascript:;" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                        <a href="<?php echo site_url('shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -206,7 +206,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -222,7 +222,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -238,7 +238,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -254,7 +254,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -270,7 +270,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -319,7 +319,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -335,7 +335,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -351,7 +351,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -367,7 +367,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -383,7 +383,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -399,7 +399,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -415,7 +415,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
@@ -431,7 +431,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="javascript:;" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
             </div>
