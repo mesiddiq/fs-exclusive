@@ -18,23 +18,17 @@
             <div class="col-md-4 d-flex my-auto justify-content-start py-3">
                 <div class="social-media">
                     <p class="mb-0 d-flex">
-                        <a href="wishlist.php" class="d-flex align-items-center justify-content-center"><span class="fas fa-heart"><i class="sr-only"></i></span></a>
-                        <a href="my-cart.php" class="d-flex align-items-center justify-content-center"><span class="fas fa-shopping-cart"><i class="sr-only"></i></span></a>                           
-                        <?php if(strlen($_SESSION['login'])) { ?>
-                        <a href="account.php" class="d-flex align-items-center justify-content-center"><span class="fa fa-user"><i class="sr-only"></i></span></a>
-                        <?php } ?>
-                        <?php if(strlen($_SESSION['login']) == 0) { ?>
-                        <a href="login.php" class="d-flex align-items-center justify-content-center"><span class="fa fa-user"><i class="sr-only"></i></span></a>
-                        <?php } else { ?>
-                        <a href="logout.php" class="d-flex align-items-center justify-content-center"><span class="fas fa-sign-out-alt"></span><i class="sr-only"></i></a>
-                        <?php } ?>
+                        <a href="javascript:;" class="d-flex align-items-center justify-content-center"><span class="fas fa-heart"><i class="sr-only"></i></span></a>
+                        <a href="my-javascript:;" class="d-flex align-items-center justify-content-center"><span class="fas fa-shopping-cart"><i class="sr-only"></i></span></a>
+                        <a href="javascript:;" class="d-flex align-items-center justify-content-center"><span class="fa fa-user"><i class="sr-only"></i></span></a>
+                        <a href="javascript:;" class="d-flex align-items-center justify-content-center"><span class="fas fa-sign-out-alt"></span><i class="sr-only"></i></a>
                     </p>
                 </div>
                 <select id="ccnge" class="mx-auto px-3" style="border: none; border-radius: 30px; background: #f5f5ef;" onchange="countrychange();">
                     <?php
                     $countries = $db->table("country")->get()->getResultArray();
                     foreach ($countries as $country):
-                        $country_id = $_SESSION['country_id']; ?>
+                        $country_id = 1; ?>
                         <option value="<?php echo $country['id'] ?>" <?php echo ($country_id == $country['id'] ? 'selected' : '') ?>><?php echo $country['country_name'] ?></option>
                     <?php endforeach; ?>
                 </select>

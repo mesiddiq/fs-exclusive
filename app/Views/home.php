@@ -291,7 +291,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control border-white p-4" placeholder="Email Goes Here">
                         <div class="input-group-append">
-                            <button class="btn btn-primary px-4">Subscribe</button>
+                            <button class="btn btn-primary text-white px-4">Subscribe</button>
                         </div>
                     </div>
                 </form>
