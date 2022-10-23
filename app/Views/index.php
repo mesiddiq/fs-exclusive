@@ -1,5 +1,6 @@
 <?php
 $db = \Config\Database::connect();
+$session = \Config\Services::session();
 ?>
 <!DOCTYPE html>
 <html lang="en">

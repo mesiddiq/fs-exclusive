@@ -41,6 +41,11 @@ $routes->get('/detail', 'Home::detail');
 $routes->get('/cart', 'Home::cart');
 $routes->get('/checkout', 'Home::checkout');
 $routes->get('/contact', 'Home::contact');
+$routes->get('/login', 'Login::index');
+$routes->post('/login', 'Login::index');
+$routes->get('/register', 'Login::register');
+$routes->post('/register', 'Login::register');
+$routes->get('/logout', 'Login::logout');
 
 /*
  * --------------------------------------------------------------------
