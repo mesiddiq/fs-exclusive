@@ -29,7 +29,9 @@
     include 'footer.php';
     ?>
 
+
     <!-- ========= All Javascript files linkup ======== -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="<?php echo site_url('admin/js/bootstrap.bundle.min.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/Chart.min.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/apexcharts.min.js'); ?>"></script>
@@ -48,7 +50,10 @@
         const dataTable = new simpleDatatables.DataTable("#table", {
             searchable: true,
         });
+    </script>
 
+    <?php if ($page_name == "dashboard") { ?>
+    <script>
         // ======== jvectormap activation
         var markers = [
             { name: "Egypt", coords: [26.8206, 30.8025] },
@@ -553,6 +558,7 @@
         });
         // =========== chart four end
     </script>
+    <?php } ?>
 
 </body>
 </html>

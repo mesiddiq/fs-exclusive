@@ -1,19 +1,19 @@
 
     <!-- Topbar Start -->
     <div class="container-fluid">
-        <div class="row bg-secondary py-2 px-xl-5">
+        <div class="row top-bar py-2 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center">
-                    <a class="text-dark px-2" href="javascript:;">
+                    <a class="text-light px-2" href="javascript:;">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a class="text-dark px-2" href="javascript:;">
+                    <a class="text-light px-2" href="javascript:;">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a class="text-dark px-2" href="javascript:;">
+                    <a class="text-light px-2" href="javascript:;">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
-                    <a class="text-dark px-2" href="javascript:;">
+                    <a class="text-light px-2" href="javascript:;">
                         <i class="fab fa-instagram"></i>
                     </a>
                 </div>
@@ -25,12 +25,12 @@
                         $countries = $this->db->table("country")->get()->getResultArray();
                         foreach ($countries as $country):
                             $country_id = 1; ?>
-                            <option value="<?php echo $country['id'] ?>" <?php echo ($country_id == $country['id'] ? 'selected' : '') ?>><?php echo $country['country_name'] ?></option>
+                            <option value="<?php echo $country['id'] ?>" <?php echo ($country_id == $country['id'] ? 'selected' : '') ?>><?php echo $country['code'] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <?php if ($this->session->get("logged_in") == true): ?>
                     <div class="nav-item dropdown">
-                        <a href="javascript:;" class="nav-link dropdown-toggle text-dark py-0" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->get("userName"); ?></a>
+                        <a href="javascript:;" class="nav-link dropdown-toggle text-light py-0" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->get("userName"); ?></a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <?php if ($this->session->get("userRole") === "1"): ?>
                             <a href="<?php echo site_url("admin/dashboard"); ?>" class="dropdown-item"><i class="fa fa-tachometer-alt"></i> Dashboard</a>
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <?php else: ?>
-                    <a class="text-dark px-2 ml-3 show-modal" href="javascript:;" data-toggle="modal" data-target="#loginModal">
+                    <a class="text-light px-2 ml-3 show-modal" href="javascript:;" data-toggle="modal" data-target="#loginModal">
                         <i class="fa fa-user"></i> Login
                     </a>
                     <?php endif; ?>
@@ -79,7 +79,7 @@
         </div>
     </div>
         
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light" id="ftco-navbar" style="background-color:#996680">
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light bg-dark" id="ftco-navbar">
         <div class="container-fluid">
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>

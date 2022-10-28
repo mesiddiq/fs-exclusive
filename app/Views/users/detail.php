@@ -22,16 +22,16 @@
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner border">
                         <div class="carousel-item active">
-                            <img class="w-100 h-100" src="assets/img/product-1.jpg" alt="Image">
+                            <img class="w-100 h-100" src="<?php echo site_url('assets/img/product-1.jpeg'); ?>" alt="Image">
                         </div>
                         <div class="carousel-item">
-                            <img class="w-100 h-100" src="assets/img/product-2.jpg" alt="Image">
+                            <img class="w-100 h-100" src="<?php echo site_url('assets/img/product-2.jpeg'); ?>" alt="Image">
                         </div>
                         <div class="carousel-item">
-                            <img class="w-100 h-100" src="assets/img/product-3.jpg" alt="Image">
+                            <img class="w-100 h-100" src="<?php echo site_url('assets/img/product-3.jpeg'); ?>" alt="Image">
                         </div>
                         <div class="carousel-item">
-                            <img class="w-100 h-100" src="assets/img/product-4.jpg" alt="Image">
+                            <img class="w-100 h-100" src="<?php echo site_url('assets/img/product-4.jpeg'); ?>" alt="Image">
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
