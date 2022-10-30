@@ -1,5 +1,14 @@
 
     
+        <style type="text/css">
+            .profile-image {
+                position: absolute;
+                width: 30px;
+                top: -5px;
+                left: 50px;
+                border-radius: 50%;
+            }
+        </style>
         <!-- ========== section start ========== -->
         <section class="section">
             <div class="container-fluid">
@@ -22,7 +31,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card-style settings-card-2 mb-30">
-                            <form method="POST" action="<?php echo site_url('admin/users/update/'.$user['id']); ?>">
+                            <form method="POST" action="<?php echo site_url('admin/users/update/'.$user['id']); ?>" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="input-style-1">
@@ -58,10 +67,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-6">
+                                        <div class="input-style-1">
+                                            <label>Profile</label>
+                                            <?php if ($user["image"] != NULL) { ?>
+                                            <img class="profile-image" src="<?php echo site_url('uploads/users/'.$user["image"]); ?>">
+                                            <?php } ?>
+                                            <input type="file" class="bg-transparent" name="image" />
+                                            <input type="hidden" name="imageName" value="<?php echo $user["image"]; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label style="font-size: 14px; font-weight: 500; color: #262d3f; display: block; margin-bottom: 10px;">Status</label>
+                                        <div class="form-check form-check-inline radio-style mb-20">
+                                            <input class="form-check-input" type="radio" value="0" name="status" <?php echo $user["status"] == 0 ? 'checked' : ''; ?>>
+                                            <label class="form-check-label" for="status">Pending</label>
+                                        </div>
+                                        <div class="form-check form-check-inline radio-style mb-20">
+                                            <input class="form-check-input" type="radio" value="1" name="status" <?php echo $user["status"] == 1 ? 'checked' : ''; ?>>
+                                            <label class="form-check-label" for="status">Verified</label>
+                                        </div>
+                                    </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>About Me</label>
-                                            <textarea placeholder="Type here" rows="6" name="about"></textarea>
+                                            <textarea class="bg-transparent" placeholder="Type here" rows="6" name="about"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-12">

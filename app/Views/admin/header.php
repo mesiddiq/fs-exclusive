@@ -17,6 +17,11 @@
                     </div>
                     <div class="col-lg-7 col-md-7 col-6">
                         <div class="header-right">
+                            <a href="<?php echo site_url(); ?>" target="_blank">
+                                <button type="button">
+                                    <i class="lni lni-code-alt"></i>
+                                </button>
+                            </a>
                             <!-- notification start -->
                             <div class="notification-box ml-15 d-none d-md-flex">
                                 <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
@@ -74,7 +79,11 @@
                                     <div class="info">
                                         <h6><?php echo $this->session->get("userName"); ?></h6>
                                         <div class="image">
-                                            <img src="<?php echo site_url('admin/images/profile/profile-image.png'); ?>" alt="" />
+                                            <?php if ($this->session->get("userImage") != NULL): ?>
+                                            <img src="<?php echo site_url('uploads/users/'.$this->session->get("userImage")); ?>" alt="<?php echo $this->session->get("userName"); ?>" />
+                                            <?php else: ?>
+                                            <img src="<?php echo site_url('uploads/users/user-image.png'); ?>" alt="<?php echo $this->session->get("userName"); ?>" />
+                                            <?php endif; ?>
                                             <span class="status"></span>
                                         </div>
                                     </div>

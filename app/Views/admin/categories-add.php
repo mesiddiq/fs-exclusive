@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="card-style settings-card-2 mb-30">
-                            <form method="POST" action="<?php echo site_url('admin/categories/create'); ?>">
+                            <form method="POST" action="<?php echo site_url('admin/categories/create'); ?>" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="input-style-1">
@@ -31,6 +31,12 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
+                                        <div class="input-style-1">
+                                            <label>Image</label>
+                                            <input type="file" class="bg-transparent" name="image" />
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-12">
                                         <div class="select-style-1">
                                             <label>Parent</label>
                                             <div class="select-position">
@@ -45,14 +51,14 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12">
+                                    </div> -->
+                                    <div class="col-12 mb-4">
                                         <label style="font-size: 14px; font-weight: 500; color: #262d3f; display: block; margin-bottom: 10px;">Status</label>
-                                        <div class="form-check radio-style mb-20">
+                                        <div class="form-check form-check-inline radio-style mb-20">
                                             <input class="form-check-input" type="radio" value="1" name="status" checked>
                                             <label class="form-check-label" for="status">Active</label>
                                         </div>
-                                        <div class="form-check radio-style mb-20">
+                                        <div class="form-check form-check-inline radio-style mb-20">
                                             <input class="form-check-input" type="radio" value="0" name="status">
                                             <label class="form-check-label" for="status">Not Active</label>
                                         </div>

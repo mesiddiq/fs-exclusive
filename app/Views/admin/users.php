@@ -31,28 +31,52 @@
                                                 <th><h6>Name</h6></th>
                                                 <th><h6>Email</h6></th>
                                                 <th><h6>Contact</h6></th>
+                                                <th><h6>Role</h6></th>
+                                                <th><h6>Status</h6></th>
                                                 <th class="text-center"><h6>Action</h6></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($users as $key => $user): ?>
                                             <tr>
-                                                <td class="text-center"><p><?php echo $key+1; ?></p></td>
-                                                <td><p><?php echo $user["name"]; ?></p></td>
-                                                <td><p><?php echo $user["email"]; ?></p></td>
-                                                <td><p><?php echo $user["contact"]; ?></p></td>
-                                                <td class="text-center">
-                                                    <div class="action d-inline-block">
+                                                <td class="text-center align-middle"><p><?php echo $key+1; ?></p></td>
+                                                <td class="align-middle"><p><?php echo $user["name"]; ?></p></td>
+                                                <td class="align-middle"><p><?php echo $user["email"]; ?></p></td>
+                                                <td class="align-middle"><p><?php echo $user["contact"]; ?></p></td>
+                                                <?php
+                                                $role = $this->db->table("roles")->where("id", $user["role"])->get()->getRowArray();
+                                                ?>
+                                                <td class="align-middle"><p><?php echo $role["name"]; ?></p></td>
+                                                <td class="align-middle">
+                                                    <?php if ($user["status"] == 0) { ?>
+                                                    <span class="status-btn warning-btn">Pending</span>
+                                                    <?php } elseif ($user["status"] == 1) { ?>
+                                                    <span class="status-btn success-btn">Verified</span>
+                                                    <?php } ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <div class="action justify-content-end">
                                                         <a href="<?php echo site_url('admin/users/edit/'.$user['id']); ?>">
-                                                            <button class="text-primary">
+                                                            <button class="text-dark link-btn">
                                                                 <i class="lni lni-pencil"></i>
                                                             </button>
                                                         </a>
-                                                        <a href="">
-                                                            <button class="text-danger">
+                                                        <a href="javascript:;" onclick="deleteModal('<?php echo site_url('admin/users/delete/'.$user['id']); ?>')">
+                                                            <button class="text-dark delete-btn ml-10">
                                                                 <i class="lni lni-trash-can"></i>
                                                             </button>
                                                         </a>
+                                                        <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="lni lni-more-alt"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
+                                                            <li class="dropdown-item">
+                                                                <a href="#0" class="text-gray">Mark as Read</a>
+                                                            </li>
+                                                            <li class="dropdown-item">
+                                                                <a href="#0" class="text-gray">Reply</a>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>

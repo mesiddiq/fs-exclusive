@@ -58,60 +58,17 @@
     <!-- Categories Start -->
     <div class="container-fluid pt-5">
         <div class="row px-xl-5 pb-3">
+            <?php foreach ($categories as $key => $category): ?>
             <div class="col-lg-4 col-md-6 pb-1">
-                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
-                    <p class="text-right">15 Products</p>
-                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
-                        <img class="img-fluid" src="assets/img/cat-1.jpg" alt="">
+                <div class="cat-item d-flex flex-column border mb-4">
+                    <!-- <p class="text-right">15 Products</p> -->
+                    <a href="<?php echo site_url('category/'.$category['slug'].'/'.$category['id']); ?>" class="cat-img position-relative overflow-hidden">
+                        <img class="img-fluid" src="<?php echo site_url('uploads/category/'.$category['image']); ?>" alt="<?php echo $category["name"]; ?>">
                     </a>
-                    <h5 class="font-weight-semi-bold m-0">Men's dresses</h5>
                 </div>
+                <h5 class="font-weight-semi-bold m-0 text-center"><?php echo $category["name"]; ?></h5>
             </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
-                    <p class="text-right">15 Products</p>
-                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
-                        <img class="img-fluid" src="assets/img/cat-2.jpg" alt="">
-                    </a>
-                    <h5 class="font-weight-semi-bold m-0">Women's dresses</h5>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
-                    <p class="text-right">15 Products</p>
-                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
-                        <img class="img-fluid" src="assets/img/cat-3.jpg" alt="">
-                    </a>
-                    <h5 class="font-weight-semi-bold m-0">Baby's dresses</h5>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
-                    <p class="text-right">15 Products</p>
-                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
-                        <img class="img-fluid" src="assets/img/cat-4.jpg" alt="">
-                    </a>
-                    <h5 class="font-weight-semi-bold m-0">Accerssories</h5>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
-                    <p class="text-right">15 Products</p>
-                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
-                        <img class="img-fluid" src="assets/img/cat-5.jpg" alt="">
-                    </a>
-                    <h5 class="font-weight-semi-bold m-0">Bags</h5>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
-                    <p class="text-right">15 Products</p>
-                    <a href="<?php echo site_url('shop'); ?>" class="cat-img position-relative overflow-hidden mb-3">
-                        <img class="img-fluid" src="assets/img/cat-6.jpg" alt="">
-                    </a>
-                    <h5 class="font-weight-semi-bold m-0">Shoes</h5>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
     <!-- Categories End -->
@@ -145,143 +102,51 @@
     <!-- Offer End -->
 
 
+    <?php foreach ($categories as $key => $category): ?>
     <!-- Products Start -->
     <div class="container-fluid pt-5">
         <div class="text-center mb-4">
-            <h2 class="section-title px-5"><span class="px-2">Trandy Products</span></h2>
+            <h2 class="section-title px-5"><span class="px-2"><?php echo $category["name"]; ?></span></h2>
         </div>
         <div class="row px-xl-5 pb-3">
+            <?php
+            $products = $this->db->table("products")->where("category", $category["id"])->get()->getResultArray();
+            foreach ($products as $key => $product): ?>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <a href="<?php echo site_url('product/'.$product['slug'].'/'.$product['id']); ?>">
                 <div class="card product-item border-0 mb-4">
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-1.jpeg'); ?>" alt="">
+                        <?php
+                        $featuredimage = $this->db->table("productimages")->where(array("productID" => $product["id"], "featured" => 1))->get()->getResultArray();
+                        if (count($featuredimage) > 0): ?>
+                        <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/'.$featuredimage[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
+                        <?php else:
+                        $image = $this->db->table("productimages")->where(array("productID" => $product["id"]))->get()->getResultArray();
+                        ?>
+                        <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/'.$image[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
+                        <?php endif; ?>
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
+                        <h6 class="text-truncate mb-3"><?php echo $product["name"]; ?></h6>
                         <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                            <?php if ($product["isDiscount"] == 1): ?>
+                            <h6>$<?php echo $product["discountedPrice"]; ?></h6><h6 class="text-muted ml-2"><del>$<?php echo $product["price"]; ?></del></h6>
+                            <?php else: ?>
+                            <h6>$<?php echo $product["price"]; ?></h6>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="<?php echo site_url('product/'.$product['slug'].'/'.$product['id']); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     </div>
                 </div>
+            </a>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-2.jpeg'); ?>" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-3.jpeg'); ?>" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-4.jpeg'); ?>" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-5.jpeg'); ?>" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-1.jpeg'); ?>" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-2.jpeg'); ?>" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" src="<?php echo site_url('assets/img/product-3.jpeg'); ?>" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="<?php echo site_url('detail'); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
     <!-- Products End -->
+    <?php endforeach; ?>
 
 
     <!-- Subscribe Start -->

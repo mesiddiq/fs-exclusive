@@ -43,6 +43,18 @@
     <script src="<?php echo site_url('assets/js/main.js'); ?>"></script>
 
     <?php include 'modal.php'; ?>
+
+    <script type="text/javascript">
+        function slugify($text) {
+            $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+            $text = trim($text, '-');
+            $text = strtolower($text);
+            //$text = preg_replace('~[^-\w]+~', '', $text);
+            if (empty($text))
+            return 'n-a';
+            return $text;
+        }
+    </script>
     
 </body>
 </html>

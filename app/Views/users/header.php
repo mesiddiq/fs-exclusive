@@ -21,7 +21,7 @@
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
                     <select id="ccnge" class="mx-auto pl-2" style="border: none; border-radius: 5px;" onchange="countrychange();">
-                    <?php
+                        <?php
                         $countries = $this->db->table("country")->get()->getResultArray();
                         foreach ($countries as $country):
                             $country_id = 1; ?>
@@ -91,9 +91,11 @@
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle" data-toggle="dropdown">Categories</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a href="javascript:;" class="dropdown-item">Kids</a>
-                            <a href="javascript:;" class="dropdown-item">Teens</a>
-                            <a href="javascript:;" class="dropdown-item">Womens</a>
+                            <?php
+                            $categories = $this->db->table("category")->where(array("parent" => NULL, "status" => 1))->get()->getResultArray();
+                            foreach ($categories as $key => $category): ?>
+                            <a href="<?php echo site_url('category/'.$category['slug'].'/'.$category['id']); ?>" class="dropdown-item"><?php echo $category["name"]; ?></a>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                     <a href="<?php echo site_url('contact'); ?>" class="nav-item nav-link">Contact</a>

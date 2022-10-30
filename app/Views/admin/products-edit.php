@@ -136,7 +136,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card-style settings-card-2 mb-30">
-                            <form method="POST" id="regForm" action="<?php echo site_url('admin/products/create'); ?>">
+                            <form method="POST" id="regForm" action="<?php echo site_url('admin/products/update/'.$product['id']); ?>" enctype="multipart/form-data">
                                 <div class="tab">
                                     <div class="row align-items-center justify-content-center">
                                         <div class="col-12">
@@ -146,7 +146,7 @@
                                             foreach ($countries as $key => $country):
                                             ?>
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="<?php echo $country['id']; ?>" name="country" <?php echo $key == 0 ? 'checked' : ''; ?>>
+                                                <input class="form-check-input" type="radio" value="<?php echo $country['id']; ?>" name="country" <?php echo $country["id"] == $product["country"] ? 'checked' : ''; ?>>
                                                 <label class="form-check-label" for="country"><?php echo $country['name']; ?></label>
                                             </div>
                                             <?php endforeach; ?>
@@ -159,7 +159,7 @@
                                             <h3 class="mb-4">Product Info</h3>
                                             <div class="input-style-1">
                                                 <label>Name</label>
-                                                <input type="text" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="name" placeholder="Name" />
+                                                <input type="text" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="name" placeholder="Name" value="<?php echo $product["name"]; ?>" />
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -167,12 +167,11 @@
                                                 <label>Category</label>
                                                 <div class="select-position">
                                                     <select name="category" class="form-required" onchange="this.className = 'form-required'">
-                                                        <option value="">Select</option>
                                                         <?php
                                                         $categories = $this->db->table("category")->where(array('status' => 1, 'parent' => NULL))->get()->getResultArray();
                                                         foreach ($categories as $key => $category):
                                                         ?>
-                                                        <option value="<?php echo $category['id']; ?>"><?php echo $category["name"]; ?></option>
+                                                        <option value="<?php echo $category['id']; ?>" <?php echo $category["id"] == $product["category"] ? 'checked' : ''; ?>><?php echo $category["name"]; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -181,7 +180,7 @@
                                         <div class="col-12">
                                             <div class="input-style-1">
                                                 <label>Short Description</label>
-                                                <textarea class="bg-transparent" placeholder="Short Description" name="shortDescription" rows="5"></textarea>
+                                                <textarea class="bg-transparent" placeholder="Short Description" name="shortDescription" rows="5"><?php echo $product["shortDescription"]; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -234,12 +233,12 @@
                                                     </div>
                                                     <div id="quill-editor"></div>
                                                 </div>
-                                                <textarea class="bg-transparent d-none" placeholder="Description" name="description" id="description" rows="5"></textarea>
+                                                <textarea class="bg-transparent d-none" placeholder="Description" name="description" id="description" rows="5"><?php echo $product["description"]; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-check checkbox-style mb-20">
-                                                <input class="form-check-input" type="checkbox" value="1" name="isTopProduct" id="isTopProduct">
+                                                <input class="form-check-input" type="checkbox" value="1" name="isTopProduct" id="isTopProduct" <?php echo $product["isTopProduct"] == 1 ? 'checked' : ''; ?>>
                                                 <label class="form-check-label" for="isTopProduct">Check if Top Product</label>
                                             </div>
                                         </div>
@@ -253,20 +252,24 @@
                                         <div class="col-6">
                                             <div class="input-style-1">
                                                 <label>Price</label>
-                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="price" placeholder="Price" />
+                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="price" placeholder="Price" value="<?php echo $product["price"]; ?>" />
                                             </div>
                                         </div>
                                         <div class="col-6">
+                                            <?php if ($product["isDiscount"] == 1): ?>
+                                            <div class="input-style-1 special-price" style="display: block;">
+                                            <?php else: ?>
                                             <div class="input-style-1 special-price" style="display: none;">
+                                            <?php endif; ?>
                                                 <label>Special Price</label>
-                                                <input type="number" class="bg-transparent" oninput="this.className = 'bg-transparent form-required'" name="discountedPrice" placeholder="Price" />
+                                                <input type="number" class="bg-transparent" oninput="this.className = 'bg-transparent form-required'" name="discountedPrice" placeholder="Special Price" value="<?php echo $product["discountedPrice"]; ?>" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-check checkbox-style mb-20">
-                                                <input class="form-check-input" type="checkbox" value="1" name="isDiscount" id="isDiscount">
+                                                <input class="form-check-input" type="checkbox" value="1" name="isDiscount" id="isDiscount" <?php echo $product["isDiscount"] == 1 ? 'checked' : ''; ?>>
                                                 <label class="form-check-label" for="isDiscount">Check if special price is applicable</label>
                                             </div>
                                         </div>
@@ -283,17 +286,30 @@
                                                 <input type="file" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="image[]" placeholder="Price" multiple />
                                             </div>
                                         </div>
+                                        <?php
+                                        $images = $this->db->table("productimages")->where("productID", $product["id"])->get()->getResultArray();
+                                        if (count($images) > 0):
+                                        foreach ($images as $key => $image): ?>
+                                        <div class="col-3 mb-4 text-center" id="image<?php echo $image['id']; ?>">
+                                            <img src="<?php echo site_url("uploads/products/".$image['name']) ?>" class="img-fluid px-2 py-2 border">
+                                            <a href="javascript:;" class="deleteProductImage" data-imageid="<?php echo $image["id"]; ?>"><button type="button" class="btn danger-btn mt-2">Delete</button></a>
+                                        </div>
+                                        <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="tab">
                                     <div class="row">
                                         <div class="col-12">
+                                            <h3 class="mb-4">Status</h3>
+                                        </div>
+                                        <div class="col-12">
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="0" name="status" checked>
+                                                <input class="form-check-input" type="radio" value="0" name="status" <?php echo $product["status"] == 0 ? 'checked' : ''; ?>>
                                                 <label class="form-check-label" for="country">Pending</label>
                                             </div>
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="1" name="status">
+                                                <input class="form-check-input" type="radio" value="1" name="status" <?php echo $product["status"] == 1 ? 'checked' : ''; ?>>
                                                 <label class="form-check-label" for="country">Publish</label>
                                             </div>
                                         </div>
@@ -319,6 +335,7 @@
 
         <script type="text/javascript">
             // your javascript goes here
+            var description = "<?php echo json_decode($product['description']); ?>";
             document.addEventListener("DOMContentLoaded", function () {
                 const editor = new Quill("#quill-editor", {
                     modules: {
@@ -327,6 +344,7 @@
                     placeholder: "Type something",
                     theme: "snow",
                 });
+                editor.container.firstChild.innerHTML = description;
                 editor.on('text-change', function(delta, oldDelta, source) {
                     if (source == 'api') {
                         console.log("An API call triggered this change.");

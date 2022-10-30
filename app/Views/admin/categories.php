@@ -47,9 +47,7 @@
                                                 </div>
                                                 <h4><?php echo $category["name"]; ?></h4>
                                                 <div class="d-flex gap-3 kanban-meta">
-                                                    <p
-                                                        class="d-flex align-items-center text-sm text-gray"
-                                                        >
+                                                    <p class="d-flex align-items-center text-sm text-gray">
                                                         <span class="pe-1">
                                                             <i class="lni lni-alarm-clock"></i>
                                                         </span>

@@ -25,6 +25,7 @@ class Login extends BaseController
             $this->session->set("userId", $user["id"]);
             $this->session->set("userName", $user["name"]);
             $this->session->set("userEmail", $user["email"]);
+            $this->session->set("userImage", $user["image"]);
             $this->session->set("userRole", $user["role"]);
             echo true;
         }

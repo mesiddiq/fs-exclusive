@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
-use App\Models\ProductImageModel;
 
 class Admin extends BaseController
 {
@@ -15,7 +14,6 @@ class Admin extends BaseController
         $this->UserModel = new UserModel();
         $this->CategoryModel = new CategoryModel();
         $this->ProductModel = new ProductModel();
-        $this->ProductImageModel = new ProductImageModel();
     }
 
     public function index()
@@ -28,6 +26,19 @@ class Admin extends BaseController
             }
         } else {
             return redirect()->to(site_url());
+        }
+    }
+
+    public function login()
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                return redirect()->to("admin/dashboard");
+            } else {
+                return view(site_url());
+            }
+        } else {
+            return view(site_url());
         }
     }
 
@@ -60,7 +71,6 @@ class Admin extends BaseController
                     return view($view . "/index", $page_data);
                 } elseif ($param1 == "create") {
                     $data["name"] = $this->request->getPost("name");
-                    $data["slug"] = $this->slugify($this->request->getPost("name"));
                     $data["parent"] = $this->request->getPost("parent");
                     $data["status"] = $this->request->getPost("status");
                     $data["author"] = (int) $this->session->get("userId");
@@ -71,10 +81,10 @@ class Admin extends BaseController
                         $target_dir = FCPATH . "uploads/category/";
                         $file = $_FILES['image']['name'];
                         $path = pathinfo($file);
-                        $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
+                        $filename = strtotime(date("d-M-Y H:i:s"));
                         $ext = $path['extension'];
                         $temp_name = $_FILES['image']['tmp_name'];
-                        $path_filename_ext = $target_dir.$filename.".".$ext;
+                        echo $path_filename_ext = $target_dir.$filename.".".$ext;
  
                         // Check if file already exists
                         if (file_exists($path_filename_ext)) {
@@ -88,8 +98,9 @@ class Admin extends BaseController
                     } else {
                         $data["image"] = NULL;
                     }
+                    var_dump($data);
                     $create = $this->CategoryModel->insert($data);
-                    return redirect()->to("admin/categories");
+                    // return redirect()->to("admin/categories");
                 } elseif ($param1 == "edit") {
                     $page_data["category"] = $this->CategoryModel->where('id', $param2)->get()->getRowArray();
                     $view = "admin";
@@ -99,7 +110,6 @@ class Admin extends BaseController
                     return view($view . "/index", $page_data);
                 } elseif ($param1 == "update") {
                     $data["name"] = $this->request->getPost("name");
-                    $data["slug"] = $this->slugify($this->request->getPost("name"));
                     $data["parent"] = $this->request->getPost("parent");
                     $data["status"] = $this->request->getPost("status");
                     $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
@@ -109,10 +119,10 @@ class Admin extends BaseController
                         $target_dir = FCPATH . "uploads/category/";
                         $file = $_FILES['image']['name'];
                         $path = pathinfo($file);
-                        $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
+                        $filename = strtotime(date("d-M-Y H:i:s"));
                         $ext = $path['extension'];
                         $temp_name = $_FILES['image']['tmp_name'];
-                        $path_filename_ext = $target_dir.$filename.".".$ext;
+                        echo $path_filename_ext = $target_dir.$filename.".".$ext;
  
                         // Check if file already exists
                         if (file_exists($path_filename_ext)) {
@@ -156,7 +166,6 @@ class Admin extends BaseController
                     return view($view . "/index", $page_data);
                 } elseif ($param1 == "create") {
                     $data["name"] = $this->request->getPost("name");
-                    $data["slug"] = $this->slugify($this->request->getPost("name"));
                     $data["shortDescription"] = $this->request->getPost("shortDescription");
                     $data["description"] = json_encode($this->request->getPost("description"));
                     $data["category"] = $this->request->getPost("category");
@@ -164,35 +173,9 @@ class Admin extends BaseController
                     $data["isDiscount"] = (int) $this->request->getPost("isDiscount");
                     $data["price"] = $this->request->getPost("price");
                     $data["discountedPrice"] = $this->request->getPost("discountedPrice");
-                    $data["isTopProduct"] = (int) $this->request->getPost("isTopProduct");
                     $data["status"] = (int) $this->request->getPost("status");
                     $data["author"] = (int) $this->session->get("userId");
                     $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
-
-                    if (($_FILES['image']['name'] != "")) {
-                        for ($i=0; $i < count($_FILES['image']['name']) ; $i++) { 
-                            // Where the file is going to be stored
-                            $target_dir = FCPATH . "uploads/products/";
-                            $file = $_FILES['image']['name'][$i];
-                            $path = pathinfo($file);
-                            $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
-                            $ext = $path['extension'];
-                            $temp_name = $_FILES['image']['tmp_name'][$i];
-                            $path_filename_ext = $target_dir.$filename.".".$ext;
-     
-                            // Check if file already exists
-                            if (!file_exists($path_filename_ext)) {
-                                move_uploaded_file($temp_name, $path_filename_ext);
-                                $image = [
-                                    'name' => $filename.".".$ext,
-                                    'productID'  => $param2,
-                                    'createdAt'  => strtotime(date("d-M-Y H:i:s")),
-                                ];
-                                $this->ProductImageModel->insert($image);
-                                echo "Congratulations! File Uploaded Successfully.";
-                            }
-                        }
-                    }
 
                     $create = $this->ProductModel->insert($data);
                     return redirect()->to("admin/products");
@@ -205,52 +188,15 @@ class Admin extends BaseController
                     return view($view . "/index", $page_data);
                 } elseif ($param1 == "update") {
                     $data["name"] = $this->request->getPost("name");
-                    $data["slug"] = $this->slugify($this->request->getPost("name"));
-                    $data["shortDescription"] = $this->request->getPost("shortDescription");
-                    $data["description"] = json_encode($this->request->getPost("description"));
-                    $data["category"] = $this->request->getPost("category");
-                    $data["country"] = (int) $this->request->getPost("country");
-                    $data["isDiscount"] = (int) $this->request->getPost("isDiscount");
-                    $data["price"] = $this->request->getPost("price");
-                    $data["discountedPrice"] = $this->request->getPost("discountedPrice");
-                    $data["isTopProduct"] = (int) $this->request->getPost("isTopProduct");
-                    $data["status"] = (int) $this->request->getPost("status");
+                    $data["parent"] = $this->request->getPost("parent");
+                    $data["status"] = $this->request->getPost("status");
                     $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
-
-                    if (($_FILES['image']['name'] != "")) {
-                        for ($i=0; $i < count($_FILES['image']['name']) ; $i++) { 
-                            // Where the file is going to be stored
-                            $target_dir = FCPATH . "uploads/products/";
-                            $file = $_FILES['image']['name'][$i];
-                            $path = pathinfo($file);
-                            $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
-                            $ext = $path['extension'];
-                            $temp_name = $_FILES['image']['tmp_name'][$i];
-                            $path_filename_ext = $target_dir.$filename.".".$ext;
-     
-                            // Check if file already exists
-                            if (!file_exists($path_filename_ext)) {
-                                move_uploaded_file($temp_name, $path_filename_ext);
-                                $image = [
-                                    'name' => $filename.".".$ext,
-                                    'productID'  => $param2,
-                                    'createdAt'  => strtotime(date("d-M-Y H:i:s")),
-                                ];
-                                $this->ProductImageModel->insert($image);
-                                echo "Congratulations! File Uploaded Successfully.";
-                            }
-                        }
-                    }
                     
                     $update = $this->db->table('products')->where('id', $param2)->update($data);
                     return redirect()->to("admin/products");
                 } elseif ($param1 == "delete") {
                     $delete = $this->db->table('products')->where('id', $param2)->delete();
                     return redirect()->to("admin/products");
-                } elseif ($param1 == "deleteImage") {
-                    $id = $this->request->getPost("id");
-                    $this->ProductImageModel->delete($id);
-                    echo true;
                 } else {
                     $page_data["products"] = $this->ProductModel->findAll();
                     $view = "admin";
@@ -343,16 +289,6 @@ class Admin extends BaseController
         } else {
             return redirect()->to(site_url());
         }
-    }
-
-    function slugify($text) {
-        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
-        $text = trim($text, '-');
-        $text = strtolower($text);
-        //$text = preg_replace('~[^-\w]+~', '', $text);
-        if (empty($text))
-        return 'n-a';
-        return $text;
     }
 
 }

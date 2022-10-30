@@ -37,6 +37,11 @@ abstract class BaseController extends Controller
      */
     protected $helpers = [];
 
+    public function __construct()
+    {
+        helper(['common']);
+    }
+
     /**
      * Constructor.
      */

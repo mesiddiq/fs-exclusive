@@ -38,7 +38,7 @@
         (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
     );
 
-    $(".special-price").hide();
+    // Toggle product special price
     $("#isDiscount").on("change", function() {
         if ($(this).is(":checked")) {
             $(".special-price").show();
@@ -47,14 +47,5 @@
             $(".special-price").hide();
             $(".special-price input").removeClass("form-required");
         }
-    });
-    $("#quill-editor .ql-editor p").on("change", function() {
-        alert("hi");
-        var hvalue = $(this).html();
-        alert(hvalue);
-    });
-    $(document).ready(function() {
-        $('#productdemo').text('The replaced text.');
-
     });
 })();

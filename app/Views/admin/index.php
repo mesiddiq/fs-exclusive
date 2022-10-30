@@ -42,15 +42,20 @@
     <script src="<?php echo site_url('admin/js/world-merc.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/polyfill.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/quill.min.js'); ?>"></script>
+    <?php if ($page_name == "products" || $page_name == "users") { ?>
     <script src="<?php echo site_url('admin/js/datatable.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/Sortable.min.js'); ?>"></script>
+    <?php } ?>
     <script src="<?php echo site_url('admin/js/main.js'); ?>"></script>
 
+    <?php include 'modal.php'; ?>
+    <?php if ($page_name == "products" || $page_name == "users") { ?>
     <script>
         const dataTable = new simpleDatatables.DataTable("#table", {
             searchable: true,
         });
     </script>
+    <?php } ?>
 
     <?php if ($page_name == "dashboard") { ?>
     <script>
@@ -557,6 +562,23 @@
             },
         });
         // =========== chart four end
+    </script>
+    <?php } ?>
+
+    <?php if ($page_name == "products-edit") { ?>
+    <script type="text/javascript">
+        // Delete product image
+        $(".deleteProductImage").on("click", function() {
+            var id = $(this).data("imageid");
+            $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('admin/products/deleteImage'); ?>",
+                data: {id: id},
+                success: function(res) {
+                    $("#image" + id).remove();
+                }
+            });
+        });
     </script>
     <?php } ?>
 
