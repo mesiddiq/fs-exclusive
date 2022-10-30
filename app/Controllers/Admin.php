@@ -232,9 +232,9 @@ class Admin extends BaseController
                             if (!file_exists($path_filename_ext)) {
                                 move_uploaded_file($temp_name, $path_filename_ext);
                                 $image = [
-                                    'name' => $filename.".".$ext,
-                                    'productID'  => $param2,
-                                    'createdAt'  => strtotime(date("d-M-Y H:i:s")),
+                                    "name" => $filename.".".$ext,
+                                    "productID"  => $param2,
+                                    "createdAt"  => strtotime(date("d-M-Y H:i:s")),
                                 ];
                                 $this->ProductImageModel->insert($image);
                                 echo "Congratulations! File Uploaded Successfully.";
@@ -242,11 +242,24 @@ class Admin extends BaseController
                         }
                     }
                     
-                    $update = $this->db->table('products')->where('id', $param2)->update($data);
+                    $update = $this->db->table("products")->where("id", $param2)->update($data);
                     return redirect()->to("admin/products");
                 } elseif ($param1 == "delete") {
-                    $delete = $this->db->table('products')->where('id', $param2)->delete();
+                    $delete = $this->db->table("products")->where("id", $param2)->delete();
                     return redirect()->to("admin/products");
+                } elseif ($param1 == "setImageFeatured") {
+                    $id = $this->request->getPost("id");
+                    $productID = $this->request->getPost("productID");
+
+                    $productImages = $this->db->table("productimages")->where("productID", $productID)->get()->getResultArray();
+                    foreach ($productImages as $key => $productImage) {
+                        if ($id == $productImage["id"]) {
+                            $this->db->table("productimages")->where("id", $productImage["id"])->update(array("featured" => 1));
+                        } else {
+                            $this->db->table("productimages")->where("id", $productImage["id"])->update(array("featured" => NULL));
+                        }
+                    }
+                    echo true;
                 } elseif ($param1 == "deleteImage") {
                     $id = $this->request->getPost("id");
                     $this->ProductImageModel->delete($id);

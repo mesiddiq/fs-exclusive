@@ -40,7 +40,7 @@ class Login extends BaseController
         $data['email'] = $this->request->getPost("email");
         $data['contact'] = "";
         $data['password'] = sha1($this->request->getPost("password"));
-        $data['role'] = 1;
+        $data['role'] = 3;
         $data['createdAt'] = strtotime(date('d-M-Y H:i:s'));
 
         $checkEmail = $UserModel->where('email', $data['email'])->first();

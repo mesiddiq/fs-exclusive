@@ -283,7 +283,7 @@
                                         <div class="col-12">
                                             <div class="input-style-1">
                                                 <label>Product Image</label>
-                                                <input type="file" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="image[]" placeholder="Price" multiple />
+                                                <input type="file" class="bg-transparent" oninput="this.className = 'bg-transparent'" name="image[]" placeholder="Price" multiple />
                                             </div>
                                         </div>
                                         <?php
@@ -292,7 +292,18 @@
                                         foreach ($images as $key => $image): ?>
                                         <div class="col-3 mb-4 text-center" id="image<?php echo $image['id']; ?>">
                                             <img src="<?php echo site_url("uploads/products/".$image['name']) ?>" class="img-fluid px-2 py-2 border">
-                                            <a href="javascript:;" class="deleteProductImage" data-imageid="<?php echo $image["id"]; ?>"><button type="button" class="btn danger-btn mt-2">Delete</button></a>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <a href="javascript:;" class="deleteProductImage" data-imageid="<?php echo $image["id"]; ?>"><button type="button" class="btn danger-btn mt-2"><small>Delete</small></button></a>
+                                                </div>
+                                                <div class="col-8 text-end">
+                                                    <?php if ($image["featured"] == 1): ?>
+                                                    <a href="javascript:;"><button type="button" class="btn success-btn mt-2"><small><i class="lni lni-checkmark"></i> Featured</small></button></a>
+                                                    <?php else: ?>
+                                                    <a href="javascript:;" class="setImageFeatured" data-imageid="<?php echo $image["id"]; ?>" data-productid="<?php echo $image["productID"]; ?>"><button type="button" class="btn primary-btn mt-2"><small>Set Featured</small></button></a>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
                                         </div>
                                         <?php endforeach; ?>
                                         <?php endif; ?>

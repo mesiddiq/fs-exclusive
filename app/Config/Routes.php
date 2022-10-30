@@ -45,8 +45,8 @@ $routes->set404Override(function(){
  */
 $routes->get('/', 'Home::index');
 $routes->get('/shop', 'Home::shop');
-$routes->get('/category/(:alpha)/(:num)', 'Home::detail');
-$routes->get('/product/(:any)/(:num)', 'Home::detail');
+$routes->get('/category/(:any)/(:num)', 'Home::category/$1/$2');
+$routes->get('/product/(:any)/(:num)', 'Home::product/$1/$2');
 $routes->get('/cart', 'Home::cart');
 $routes->get('/checkout', 'Home::checkout');
 $routes->get('/contact', 'Home::contact');

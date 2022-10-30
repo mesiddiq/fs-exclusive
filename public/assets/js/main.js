@@ -4,7 +4,7 @@
     var site_url = "http://fs.localhost/";
     
     // Dropdown on mouse hover
-    $(document).ready(function () {
+    $(document).ready(function() {
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
                 $('.navbar .dropdown').on('mouseover', function () {
@@ -125,7 +125,7 @@
     
     
     // Back to top button
-    $(window).scroll(function () {
+    $(window).scroll(function() {
         if ($(this).scrollTop() > 100) {
             $('.back-to-top').fadeIn('slow');
         } else {
@@ -192,7 +192,7 @@
 
 
     // Product Quantity
-    $('.quantity button').on('click', function () {
+    $('.quantity button').on('click', function() {
         var button = $(this);
         var oldValue = button.parent().parent().find('input').val();
         if (button.hasClass('btn-plus')) {
@@ -205,6 +205,22 @@
             }
         }
         button.parent().parent().find('input').val(newVal);
+    });
+
+    // Product Image Full Screen
+    $("#product-carousel .carousel-item img").on("click", function() {
+        var src = $(this).attr('src');
+        $('<div>').css({
+            background: 'RGBA(0,0,0,.5) url('+src+') no-repeat center',
+            backgroundSize: 'contain',
+            width:'100%', height:'100%',
+            position:'fixed',
+            zIndex:'10000',
+            top:'0', left:'0',
+            cursor: 'zoom-out'
+        }).click(function() {
+            $(this).remove();
+        }).appendTo('body');
     });
     
 })(jQuery);

@@ -575,7 +575,29 @@
                 url: "<?php echo site_url('admin/products/deleteImage'); ?>",
                 data: {id: id},
                 success: function(res) {
-                    $("#image" + id).remove();
+                    if (res) {
+                        $("#image" + id).remove();
+                    } else {
+                        alert("Something went wrong");
+                    }
+                }
+            });
+        });
+
+        // Set image featured
+        $(".setImageFeatured").on("click", function() {
+            var id = $(this).data("imageid");
+            var productid = $(this).data("productid");
+            $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('admin/products/setImageFeatured'); ?>",
+                data: {id: id, productID: productid},
+                success: function(res) {
+                    if (res) {
+                        $("#image" + id + " .text-end").html('<a href="javascript:;"><button type="button" class="btn success-btn mt-2"><small><i class="lni lni-checkmark"></i> Featured</small></button></a>');
+                    } else {
+                        alert("Something went wrong");
+                    }
                 }
             });
         });
