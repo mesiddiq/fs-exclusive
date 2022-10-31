@@ -19,13 +19,6 @@
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
 
-        // $(".show-modal").click(function(){
-        //     $("#registerModal").modal({
-        //         backdrop: 'static',
-        //         keyboard: false
-        //     });
-        // });
-
         $(".showRegisterModal").on("click", function() {
             $("#loginModal").modal("hide");
             $("#registerModal").modal("show");
@@ -121,6 +114,56 @@
                 });
             }
         });
+
+        // Product Image Full Screen
+        $("#product-carousel .carousel-item img").on("click", function() {
+            var src = $(this).attr("src");
+            $("<div>").css({
+                background: "RGBA(0,0,0,.5) url(" + src + ") no-repeat center",
+                backgroundSize: "contain",
+                width:"100%", height:"100%",
+                position:"fixed",
+                zIndex:"10000",
+                top:"0", left:"0",
+                cursor: "zoom-out"
+            }).click(function() {
+                $(this).remove();
+            }).appendTo("body");
+        });
+
+        $(".setCountry").on("click", function() {
+            var country = $(this).data("country");
+            $.ajax({
+                method: "POST",
+                url: site_url + "country",
+                data: {country: country},
+                success: function(res) {
+                    console.log(res);
+                    if (res == 1) {
+                        window.location.replace(site_url + "uk");
+                    } else if (res == 2) {
+                        window.location.replace(site_url + "my");
+                    }
+                }
+            });
+        });
+
+        $("#changeCountry").on("change", function() {
+            var country = $(this).val();
+            $.ajax({
+                method: "POST",
+                url: site_url + "country",
+                data: {country: country},
+                success: function(res) {
+                    console.log(res);
+                    if (res == 1) {
+                        window.location.replace(site_url + "uk");
+                    } else if (res == 2) {
+                        window.location.replace(site_url + "my");
+                    }
+                }
+            });
+        });
     });
     
     
@@ -205,22 +248,6 @@
             }
         }
         button.parent().parent().find('input').val(newVal);
-    });
-
-    // Product Image Full Screen
-    $("#product-carousel .carousel-item img").on("click", function() {
-        var src = $(this).attr('src');
-        $('<div>').css({
-            background: 'RGBA(0,0,0,.5) url('+src+') no-repeat center',
-            backgroundSize: 'contain',
-            width:'100%', height:'100%',
-            position:'fixed',
-            zIndex:'10000',
-            top:'0', left:'0',
-            cursor: 'zoom-out'
-        }).click(function() {
-            $(this).remove();
-        }).appendTo('body');
     });
     
 })(jQuery);

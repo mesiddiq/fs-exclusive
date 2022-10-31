@@ -11,7 +11,7 @@
                         $productImages = $this->db->table("productimages")->orderBy("featured DESC")->where("productID", $product["id"])->get()->getResultArray();
                         foreach ($productImages as $key => $productImage): ?>
                         <div class="carousel-item <?php echo $key == 0 ? 'active' : ''; ?>">
-                            <img class="w-100 h-100" src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="Image">
+                            <a href="javascript:;"><img class="w-100 h-100" src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="<?php echo $product["name"]; ?>"></a>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -37,9 +37,9 @@
                     <small class="pt-1">(50 Reviews)</small>
                 </div>
                 <?php if ($product["isDiscount"] == 1): ?>
-                <h3 class="font-weight-semi-bold mb-4">$<?php echo $product["discountedPrice"]; ?><del class="text-muted ml-2">$<?php echo $product["price"]; ?></del></h3>
+                <h3 class="font-weight-semi-bold mb-4"><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?><del class="text-muted ml-2"><?php echo $sessCountry["currency"] . $product["price"]; ?></del></h3>
                 <?php else: ?>
-                <h3 class="font-weight-semi-bold mb-4">$<?php echo $product["price"]; ?></h3>
+                <h3 class="font-weight-semi-bold mb-4"><?php echo $sessCountry["currency"] . $product["price"]; ?></h3>
                 <?php endif; ?>
                 <p class="mb-4"><?php echo $product["shortDescription"]; ?></p>
                 <div class="d-flex align-items-center mb-4 pt-2">

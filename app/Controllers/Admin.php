@@ -217,7 +217,7 @@ class Admin extends BaseController
                     $data["status"] = (int) $this->request->getPost("status");
                     $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
 
-                    if (($_FILES['image']['name'] != "")) {
+                    if (($_FILES['image']['name'][0] != "")) {
                         for ($i=0; $i < count($_FILES['image']['name']) ; $i++) { 
                             // Where the file is going to be stored
                             $target_dir = FCPATH . "uploads/products/";

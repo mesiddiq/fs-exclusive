@@ -76,7 +76,7 @@
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="<?php echo site_url('assets/img/PAY LOGOOOOO final.png'); ?>" alt="">
+                <img class="img-fluid" src="<?php echo site_url('assets/img/payments.png'); ?>" alt="">
             </div>
         </div>
     </div>

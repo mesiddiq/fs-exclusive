@@ -27,6 +27,11 @@
     <?php
     $this->db = \Config\Database::connect();
     $this->session = \Config\Services::session();
+    if ($this->session->get("country") != NULL) {
+        $sessCountry = $this->db->table("country")->where("id", $this->session->get("country"))->get()->getRowArray();
+    } else {
+        $sessCountry = "";
+    }
     include 'header.php';
     include $page_name . '.php';
     include 'footer.php';
@@ -55,6 +60,14 @@
             return $text;
         }
     </script>
+    <?php if ($page_name == "main"): ?>
+    <script type="text/javascript">
+        $("#countryModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    </script>
+    <?php endif; ?>
     
 </body>
 </html>

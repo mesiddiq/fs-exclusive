@@ -49,6 +49,12 @@
                                                 <div class="d-flex gap-3 kanban-meta">
                                                     <p class="d-flex align-items-center text-sm text-gray">
                                                         <span class="pe-1">
+                                                            <i class="lni lni-flag"></i>
+                                                        </span>
+                                                        <?php
+                                                        $country = $this->db->table("country")->where("id", $category["country"])->get()->getRowArray();
+                                                        echo $country['name']; ?>
+                                                        <span class="ps-2 pe-1">
                                                             <i class="lni lni-alarm-clock"></i>
                                                         </span>
                                                         <?php echo date('d M, Y', $category['createdAt']); ?>

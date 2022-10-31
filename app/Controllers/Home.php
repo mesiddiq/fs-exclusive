@@ -20,10 +20,21 @@ class Home extends BaseController
 
     public function index()
     {
-        $view = "users";
-        $page_data['page_name'] = "home";
+        if ($this->session->get("country") == NULL) {
+            $view = "users";
 
-        return view($view . "/index", $page_data);
+            return view($view . "/main");
+        } else {
+            $sessCountry = $this->db->table("country")->where("id", $this->session->get("country"))->get()->getRowArray();
+            return redirect()->to(site_url(strtolower($sessCountry["code"])));
+        }
+    }
+
+    public function country()
+    {
+        $country = (int) $this->request->getPost("country");
+        $this->session->set("country", $country);
+        echo $this->session->get("country");
     }
 
     public function shop()

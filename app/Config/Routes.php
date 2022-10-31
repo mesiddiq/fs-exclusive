@@ -44,15 +44,28 @@ $routes->set404Override(function(){
  * --------------------------------------------------------------------
  */
 $routes->get('/', 'Home::index');
-$routes->get('/shop', 'Home::shop');
-$routes->get('/category/(:any)/(:num)', 'Home::category/$1/$2');
-$routes->get('/product/(:any)/(:num)', 'Home::product/$1/$2');
-$routes->get('/cart', 'Home::cart');
-$routes->get('/checkout', 'Home::checkout');
-$routes->get('/contact', 'Home::contact');
+$routes->post('/country', 'Home::country');
 $routes->post('/login', 'Login::index');
 $routes->post('/register', 'Login::register');
 $routes->get('/logout', 'Login::logout');
+
+// United Kingdom
+$routes->get('/uk', 'Uk::index');
+$routes->get('/uk/shop', 'Uk::shop');
+$routes->get('/uk/category/(:any)/(:num)', 'Uk::category/$1/$2');
+$routes->get('/uk/product/(:any)/(:num)', 'Uk::product/$1/$2');
+$routes->get('/uk/cart', 'Uk::cart');
+$routes->get('/uk/checkout', 'Uk::checkout');
+$routes->get('/uk/contact', 'Uk::contact');
+
+// Malaysia
+$routes->get('/my', 'My::index');
+$routes->get('/my/shop', 'My::shop');
+$routes->get('/my/category/(:any)/(:num)', 'My::category/$1/$2');
+$routes->get('/my/product/(:any)/(:num)', 'My::product/$1/$2');
+$routes->get('/my/cart', 'My::cart');
+$routes->get('/my/checkout', 'My::checkout');
+$routes->get('/my/contact', 'My::contact');
 
 /*
  * --------------------------------------------------------------------

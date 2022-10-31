@@ -24,6 +24,17 @@
                         <div class="card-style settings-card-2 mb-30">
                             <form method="POST" action="<?php echo site_url('admin/categories/create'); ?>" enctype="multipart/form-data">
                                 <div class="row">
+                                    <div class="col-12 mb-4">
+                                        <label style="font-size: 14px; font-weight: 500; color: #262d3f; display: block; margin-bottom: 10px;">Country</label>
+                                        <div class="form-check form-check-inline radio-style mb-20">
+                                            <input class="form-check-input" type="radio" value="1" name="country" checked>
+                                            <label class="form-check-label" for="country">United Kingdom</label>
+                                        </div>
+                                        <div class="form-check form-check-inline radio-style mb-20">
+                                            <input class="form-check-input" type="radio" value="2" name="country">
+                                            <label class="form-check-label" for="country">Malaysia</label>
+                                        </div>
+                                    </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>Name</label>
