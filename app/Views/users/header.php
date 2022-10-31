@@ -2,7 +2,7 @@
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row top-bar py-2 px-xl-5">
-            <div class="col-lg-6 d-none d-lg-block">
+            <div class="col-4 col-lg-6">
                 <div class="d-inline-flex align-items-center">
                     <a class="text-light px-2" href="javascript:;">
                         <i class="fab fa-facebook-f"></i>
@@ -11,14 +11,11 @@
                         <i class="fab fa-twitter"></i>
                     </a>
                     <a class="text-light px-2" href="javascript:;">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a class="text-light px-2" href="javascript:;">
                         <i class="fab fa-instagram"></i>
                     </a>
                 </div>
             </div>
-            <div class="col-lg-6 text-center text-lg-right">
+            <div class="col-8 col-lg-6 text-right">
                 <div class="d-inline-flex align-items-center">
                     <select id="changeCountry" class="mx-auto pl-2" style="border: none; border-radius: 5px;">
                         <?php
@@ -52,7 +49,7 @@
         <div class="row justify-content-between">
             <div class="col-md-8 order-md-last">
                 <div class="row">
-                    <div class="col-4 col-md-6 text-center">
+                    <div class="col-12 col-md-6 text-center">
                         <a href="<?php echo site_url(strtolower($sessCountry["code"])); ?>" class="text-decoration-none"><img src="<?php echo site_url('assets/img/logo.png'); ?>"></a>
                     </div>
                     <div class="col-md-6 d-md-flex justify-content-end my-auto">
@@ -65,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8 col-md-4 d-flex my-auto justify-content-start py-3">
+            <div class="col-12 col-md-4 d-flex my-auto justify-content-center justify-content-lg-start py-3">
                 <a href="javascript:;" class="btn border mr-1">
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
@@ -80,8 +77,8 @@
         
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light bg-dark" id="ftco-navbar">
         <div class="container-fluid">
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
+            <button type="button" class="navbar-toggler text-white" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span> Menu
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav m-auto">
