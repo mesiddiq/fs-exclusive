@@ -49,14 +49,6 @@ $this->session = \Config\Services::session();
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
-                    <select id="ccnge" class="mx-auto pl-2" style="border: none; border-radius: 5px;" onchange="countrychange();">
-                        <?php
-                        $countries = $this->db->table("country")->get()->getResultArray();
-                        foreach ($countries as $country):
-                            $country_id = 1; ?>
-                            <option value="<?php echo $country['id'] ?>" <?php echo ($country_id == $country['id'] ? 'selected' : '') ?>><?php echo $country['code'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
                     <?php if ($this->session->get("logged_in") == true): ?>
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle text-light py-0" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->get("userName"); ?></a>
@@ -191,7 +183,33 @@ $this->session = \Config\Services::session();
     <!-- Template Javascript -->
     <script src="<?php echo site_url('assets/js/main.js'); ?>"></script>
 
-    <?php include 'modal.php'; ?>
+    <!-- Country Modal Start -->
+    <div class="modal fade" id="countryModal" tabindex="-1" role="dialog" aria-labelledby="countryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body px-5">
+                    <div class="text-center mt-4">
+                        <h4>Select Location</h4>
+                    </div>
+                    <div class="row my-5">
+                        <div class="col-6 text-center">
+                            <a href="javascript:;">
+                                <img src="<?php echo site_url('assets/img/london.png'); ?>" class="setCountry img-fluid" data-country="1" width="100px">
+                                <p class="text-dark mt-3">United Kingdom</p>
+                            </a>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a href="javascript:;">
+                                <img src="<?php echo site_url('assets/img/malaysia.png'); ?>" class="setCountry img-fluid" data-country="2" width="100px">
+                                <p class="text-dark mt-3">Malaysia</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Country Modal End -->
 
     <script type="text/javascript">
         $("#countryModal").modal({

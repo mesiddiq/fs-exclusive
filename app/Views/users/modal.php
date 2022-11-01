@@ -1,33 +1,4 @@
     
-    <!-- Country Modal Start -->
-    <div class="modal fade" id="countryModal" tabindex="-1" role="dialog" aria-labelledby="countryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body px-5">
-                    <div class="text-center mt-4">
-                        <h4>Select Location</h4>
-                    </div>
-                    <div class="row my-5">
-                        <div class="col-6 text-center">
-                            <a href="javascript:;">
-                                <img src="<?php echo site_url('assets/img/london.png'); ?>" class="setCountry img-fluid" data-country="1" width="100px">
-                                <p class="text-dark mt-3">United Kingdom</p>
-                            </a>
-                        </div>
-                        <div class="col-6 text-center">
-                            <a href="javascript:;">
-                                <img src="<?php echo site_url('assets/img/malaysia.png'); ?>" class="setCountry img-fluid" data-country="2" width="100px">
-                                <p class="text-dark mt-3">Malaysia</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Country Modal End -->
-
-
     <!-- Cart Modal Start -->
     <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
