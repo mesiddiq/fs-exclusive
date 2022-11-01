@@ -47,6 +47,13 @@ $routes->get('/', 'Home::index');
 $routes->post('/country', 'Home::country');
 $routes->post('/login', 'Login::index');
 $routes->post('/register', 'Login::register');
+$routes->get('/cart', 'Home::cart');
+$routes->post('/addToCart', 'Home::addToCart');
+$routes->post('/removeFromCart', 'Home::removeFromCart');
+$routes->post('/deleteUserCart', 'Home::deleteUserCart');
+$routes->get('/checkout', 'Home::checkout');
+$routes->post('/addAddress', 'Home::addAddress');
+$routes->post('/placeOrder', 'Home::placeOrder');
 $routes->get('/logout', 'Login::logout');
 
 // United Kingdom
@@ -54,8 +61,6 @@ $routes->get('/uk', 'Uk::index');
 $routes->get('/uk/shop', 'Uk::shop');
 $routes->get('/uk/category/(:any)/(:num)', 'Uk::category/$1/$2');
 $routes->get('/uk/product/(:any)/(:num)', 'Uk::product/$1/$2');
-$routes->get('/uk/cart', 'Uk::cart');
-$routes->get('/uk/checkout', 'Uk::checkout');
 $routes->get('/uk/contact', 'Uk::contact');
 
 // Malaysia
@@ -63,8 +68,6 @@ $routes->get('/my', 'My::index');
 $routes->get('/my/shop', 'My::shop');
 $routes->get('/my/category/(:any)/(:num)', 'My::category/$1/$2');
 $routes->get('/my/product/(:any)/(:num)', 'My::product/$1/$2');
-$routes->get('/my/cart', 'My::cart');
-$routes->get('/my/checkout', 'My::checkout');
 $routes->get('/my/contact', 'My::contact');
 
 /*
@@ -72,24 +75,33 @@ $routes->get('/my/contact', 'My::contact');
  * Backend
  * --------------------------------------------------------------------
  */
-$routes->get('/admin', 'Home::index');
+$routes->get('/admin', 'Admin::index');
 $routes->get('/admin/login', 'Admin::login');
+// Dashboard
 $routes->get('/admin/dashboard', 'Admin::dashboard');
+// Categories
 $routes->get('/admin/categories', 'Admin::categories');
 $routes->get('/admin/categories/(:alpha)', 'Admin::categories/$1');
 $routes->post('/admin/categories/(:alpha)', 'Admin::categories/$1');
 $routes->get('/admin/categories/(:alpha)/(:num)', 'Admin::categories/$1/$2');
 $routes->post('/admin/categories/(:alpha)/(:num)', 'Admin::categories/$1/$2');
+// Products
 $routes->get('/admin/products', 'Admin::products');
 $routes->get('/admin/products/(:alpha)', 'Admin::products/$1');
 $routes->post('/admin/products/(:alpha)', 'Admin::products/$1');
 $routes->get('/admin/products/(:alpha)/(:num)', 'Admin::products/$1/$2');
 $routes->post('/admin/products/(:alpha)/(:num)', 'Admin::products/$1/$2');
+// Orders
+$routes->get('/admin/orders', 'Admin::orders');
+$routes->get('/admin/orders/(:alpha)/(:num)', 'Admin::orders/$1/$2');
+// Users
 $routes->get('/admin/users', 'Admin::users');
 $routes->get('/admin/users/(:alpha)', 'Admin::users/$1');
 $routes->post('/admin/users/(:alpha)', 'Admin::users/$1');
 $routes->get('/admin/users/(:alpha)/(:num)', 'Admin::users/$1/$2');
 $routes->post('/admin/users/(:alpha)/(:num)', 'Admin::users/$1/$2');
+// Others
+$routes->post('/admin/updateAdminProductCountryId', 'Admin::updateAdminProductCountryId');
 
 /*
  * --------------------------------------------------------------------

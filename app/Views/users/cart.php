@@ -3,13 +3,8 @@
 
     <!-- Page Header Start -->
     <div class="container-fluid bg-secondary mb-5">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
-            <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
-                <p class="m-0 px-2">-</p>
-                <p class="m-0">Shopping Cart</p>
-            </div>
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 150px;">
+            <h1 class="font-weight-semi-bold text-uppercase my-3">Cart</h1>
         </div>
     </div>
     <!-- Page Header End -->
@@ -30,141 +25,81 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
+                        <?php
+                        $subTotal = 0;
+                        $discount = 0;
+                        if (count($cart) > 0):
+                        foreach ($cart as $key => $cart):
+                        $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
+                        if ($product["isDiscount"] == 1) {
+                            $subTotal += $cart["productQty"] * $product["discountedPrice"];
+                        } else {
+                            $subTotal += $cart["productQty"] * $product["price"];
+                        }
+                        $productImage = $this->db->table("productimages")->orderBy("featured DESC")->where("productID", $product["id"])->get()->getRowArray();
+                        ?>
                         <tr>
-                            <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
+                            <td class="align-middle"><img src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="<?php echo $product["name"]; ?>" style="width: 50px;"> <?php echo $product["name"]; ?></td>
                             <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
+                                <?php if ($product["isDiscount"] == 1): ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?></strong><del class="text-muted ml-2"><?php echo $sessCountry["currency"] . $product["price"]; ?></del>
+                                <?php else: ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $product["price"]; ?></strong>
+                                <?php endif; ?>
+                            </td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 50px;">
+                                    <!-- <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary text-white btn-minus" >
                                         <i class="fa fa-minus"></i>
                                         </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
+                                    </div> -->
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="<?php echo $cart["productQty"]; ?>" readonly>
+                                    <!-- <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary text-white btn-plus">
                                             <i class="fa fa-plus"></i>
                                         </button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary text-white"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="img/product-2.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
                             <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                                <?php if ($product["isDiscount"] == 1): ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $cart["productPrice"]; ?></strong>
+                                <?php else: ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $cart["productPrice"]; ?></strong>
+                                <?php endif; ?>
                             </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary text-white"><i class="fa fa-times"></i></button></td>
+                            <td class="align-middle"><button class="btn btn-sm btn-primary removeFromCart text-white" data-id="<?php echo $cart["id"]; ?>"><i class="fa fa-times"></i></button></td>
                         </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
                         <tr>
-                            <td class="align-middle"><img src="img/product-3.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary text-white"><i class="fa fa-times"></i></button></td>
+                            <td colspan="5">No products found</td>
                         </tr>
-                        <tr>
-                            <td class="align-middle"><img src="img/product-4.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary text-white"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="img/product-5.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary text-white btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary text-white"><i class="fa fa-times"></i></button></td>
-                        </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
+                <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>"><button class="btn btn-primary text-white my-3">Continue Shopping</button></a>
             </div>
             <div class="col-lg-4">
-                <form class="mb-5" action="">
-                    <div class="input-group">
-                        <input type="text" class="form-control p-4" placeholder="Coupon Code">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary text-white">Apply Coupon</button>
-                        </div>
-                    </div>
-                </form>
                 <div class="card border-secondary mb-5">
                     <div class="card-header bg-secondary border-0">
-                        <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                        <h4 class="font-weight-semi-bold m-0">Summary</h4>
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium">$150</h6>
+                            <h6 class="font-weight-medium"><?php echo $sessCountry["currency"] . $subTotal; ?></h6>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
+                            <h6 class="font-weight-medium">Discount</h6>
+                            <h6 class="font-weight-medium"><?php echo $sessCountry["currency"] . $discount; ?></h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold">$160</h5>
+                            <h5 class="font-weight-bold"><?php echo $sessCountry["currency"] . ($subTotal - $discount); ?></h5>
                         </div>
                         <a href="<?php echo site_url('checkout'); ?>"><button class="btn btn-block btn-primary text-white my-3 py-3">Proceed To Checkout</button></a>
                     </div>

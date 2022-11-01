@@ -48,4 +48,10 @@
             $(".special-price input").removeClass("form-required");
         }
     });
+
+    // Datatable
+    const dataTable = new simpleDatatables.DataTable("#table", {
+        searchable: true,
+    });
+
 })();

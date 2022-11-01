@@ -43,20 +43,20 @@
                 <?php endif; ?>
                 <p class="mb-4"><?php echo $product["shortDescription"]; ?></p>
                 <div class="d-flex align-items-center mb-4 pt-2">
-                    <div class="input-group quantity mr-3" style="width: 130px;">
+                    <div class="input-group quantity mr-3">
                         <div class="input-group-btn">
                             <button class="btn btn-primary text-white btn-minus" >
-                            <i class="fa fa-minus"></i>
+                                <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary text-center" value="1">
+                        <input type="text" class="form-control bg-secondary text-center" name="productQty" value="1" readonly>
                         <div class="input-group-btn">
                             <button class="btn btn-primary text-white btn-plus">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <a href="<?php echo site_url('cart'); ?>"><button class="btn btn-primary text-white px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button></a>
+                    <button type="button" id="addToCart" class="btn btn-primary text-white px-3" data-productid="<?php echo $product["id"]; ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                 </div>
                 <div class="d-flex pt-2">
                     <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>

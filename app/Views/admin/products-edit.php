@@ -138,22 +138,6 @@
                         <div class="card-style settings-card-2 mb-30">
                             <form method="POST" id="regForm" action="<?php echo site_url('admin/products/update/'.$product['id']); ?>" enctype="multipart/form-data">
                                 <div class="tab">
-                                    <div class="row align-items-center justify-content-center">
-                                        <div class="col-12">
-                                            <h3 class="mb-4">Country</h3>
-                                            <?php
-                                            $countries = $this->db->table("country")->get()->getResultArray();
-                                            foreach ($countries as $key => $country):
-                                            ?>
-                                            <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="<?php echo $country['id']; ?>" name="country" <?php echo $country["id"] == $product["country"] ? 'checked' : ''; ?>>
-                                                <label class="form-check-label" for="country"><?php echo $country['name']; ?></label>
-                                            </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab">
                                     <div class="row">
                                         <div class="col-12">
                                             <h3 class="mb-4">Product Info</h3>
@@ -287,7 +271,7 @@
                                             </div>
                                         </div>
                                         <?php
-                                        $images = $this->db->table("productimages")->where("productID", $product["id"])->get()->getResultArray();
+                                        $images = $this->db->table("productimages")->where("productId", $product["id"])->get()->getResultArray();
                                         if (count($images) > 0):
                                         foreach ($images as $key => $image): ?>
                                         <div class="col-3 mb-4 text-center" id="image<?php echo $image['id']; ?>">
@@ -300,7 +284,7 @@
                                                     <?php if ($image["featured"] == 1): ?>
                                                     <a href="javascript:;"><button type="button" class="btn success-btn mt-2"><small><i class="lni lni-checkmark"></i> Featured</small></button></a>
                                                     <?php else: ?>
-                                                    <a href="javascript:;" class="setImageFeatured" data-imageid="<?php echo $image["id"]; ?>" data-productid="<?php echo $image["productID"]; ?>"><button type="button" class="btn primary-btn mt-2"><small>Set Featured</small></button></a>
+                                                    <a href="javascript:;" class="setImageFeatured" data-imageid="<?php echo $image["id"]; ?>" data-productid="<?php echo $image["productId"]; ?>"><button type="button" class="btn primary-btn mt-2"><small>Set Featured</small></button></a>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -329,7 +313,7 @@
                                 <div style="overflow:auto;" id="nextprevious">
                                     <div style="float:right;"> <button type="button" id="prevBtn" class="main-btn primary-btn btn-hover" onclick="nextPrev(-1)">Previous</button> <button type="button" class="main-btn primary-btn btn-hover" id="nextBtn" onclick="nextPrev(1)">Next</button> </div>
                                 </div>
-                                <div class="all-steps" id="all-steps"> <span class="step"></span> <span class="step"></span> <span class="step"></span> <span class="step"></span> <span class="step"></span> </div>
+                                <div class="all-steps" id="all-steps"> <span class="step"></span> <span class="step"></span> <span class="step"></span> <span class="step"></span> </div>
                             </form>
                         </div>
                         <!-- end card -->
@@ -362,7 +346,6 @@
                     } else if (source == 'user') {
                         var text = editor.root.innerHTML;
                         document.getElementById('description').innerHTML = text;
-                        console.log(editor.root.innerHTML);
                     }
                 });
             });
@@ -383,7 +366,7 @@
                     document.getElementById("prevBtn").style.display = "inline";
                 }
 
-                if (n == 5) {
+                if (n == 4) {
                     document.getElementById("nextBtn").innerHTML = "Submit";
                     document.getElementById("nextBtn").setAttribute("type", "submit");
                 } else {

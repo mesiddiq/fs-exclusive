@@ -3340,6 +3340,10 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
+.input-group.quantity {
+  width: 130px;
+}
+
 .input-group > .form-control,
 .input-group > .form-control-plaintext,
 .input-group > .custom-select,
@@ -9618,7 +9622,8 @@ a.text-dark:hover, a.text-dark:focus {
 }
 @media (min-width: 992px) {
   .searchform {
-    width: 300px;
+    /*width: 300px;*/
+    width: 90%;
   }
 }
 .searchform .form-control {
@@ -9674,4 +9679,21 @@ a.text-dark:hover, a.text-dark:focus {
 }
 .top-bar {
   background-color: #d2b482;
+}
+.select-address {
+  background: transparent;
+  text-align: left;
+  border: 2px solid rgba(111, 111, 111, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+}
+.select-address input[type="radio"] {
+  position: absolute;
+  top: 17px;
+  cursor: pointer;
+}
+.select-address label {
+  padding-left: 17px;
+  margin-bottom: 0px;
+  color: #000000;
 }

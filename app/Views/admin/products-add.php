@@ -146,10 +146,11 @@
                                             foreach ($countries as $key => $country):
                                             ?>
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="<?php echo $country['id']; ?>" name="country" <?php echo $key == 0 ? 'checked' : ''; ?>>
+                                                <input class="form-check-input" type="radio" value="<?php echo $country['id']; ?>" name="country" <?php echo $key == 0 ? 'checked' : ''; ?> onchange="updateAdminProductCountryId(this.value)">
                                                 <label class="form-check-label" for="country"><?php echo $country['name']; ?></label>
                                             </div>
                                             <?php endforeach; ?>
+                                            <p id="demo"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -169,7 +170,7 @@
                                                     <select name="category" class="form-required" onchange="this.className = 'form-required'">
                                                         <option value="">Select</option>
                                                         <?php
-                                                        $categories = $this->db->table("category")->where(array('status' => 1, 'parent' => NULL))->get()->getResultArray();
+                                                        $categories = $this->db->table("category")->where(array('status' => 1, 'parent' => NULL, "country" => $_SESSION["adminProductCountryId"]))->get()->getResultArray();
                                                         foreach ($categories as $key => $category):
                                                         ?>
                                                         <option value="<?php echo $category['id']; ?>"><?php echo $category["name"]; ?></option>
@@ -403,5 +404,21 @@
                 var i, x = document.getElementsByClassName("step");
                 for (i = 0; i < x.length; i++) { x[i].className = x[i].className.replace(" active", ""); }
                 x[n].className += " active";
+            }
+
+            function updateAdminProductCountryId(id) {
+                $.ajax({
+                    method: "POST",
+                    url: "<?php echo site_url('admin/updateAdminProductCountryId'); ?>",
+                    data: {id: id},
+                    success: function(res) {
+                        var res1 = JSON.parse(res);
+                        let text = "<option value=''>Select</option>";
+                        for (let i = 0; i < res1.length; i++) {
+                          text += "<option value='" + res1[i].id + "'>" + res1[i].name + "</option>" + "<br>";
+                        }
+                        $("[name=category]").html(text);
+                    }
+                });
             }
         </script>

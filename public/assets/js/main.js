@@ -164,9 +164,90 @@
                 }
             });
         });
+
+        // Add Address
+        $("#addressForm").on("submit", function() {
+            var name = $("[name='name']").val();
+            var email = $("[name='email']").val();
+            var contact = $("[name='contact']").val();
+            var address = $("[name='address']").val();
+            var address2 = $("[name='address2']").val();
+            var city = $("[name='city']").val();
+            var state = $("[name='state']").val();
+            var zipcode = $("[name='zipcode']").val();
+
+            if (zipcode == "") {
+                $("[name='zipcode']").addClass("is-invalid");
+                $("[name='zipcode']").focus();
+            }
+
+            if (state == "") {
+                $("[name='state']").addClass("is-invalid");
+                $("[name='state']").focus();
+            }
+
+            if (city == "") {
+                $("[name='city']").addClass("is-invalid");
+                $("[name='city']").focus();
+            }
+
+            if (address == "") {
+                $("[name='address']").addClass("is-invalid");
+                $("[name='address']").focus();
+            }
+
+            if (contact == "") {
+                $("[name='contact']").addClass("is-invalid");
+                $("[name='contact']").focus();
+            }
+
+            if (email == "") {
+                $("[name='email']").addClass("is-invalid");
+                $("[name='email']").focus();
+            }
+
+            if (name == "") {
+                $("[name='name']").addClass("is-invalid");
+                $("[name='name']").focus();
+            }
+
+            if (name != "" && email != "" && contact != "" && address != "" && city != "" && state != "" && zipcode != "") {
+                $.ajax({
+                    method: "POST",
+                    url: site_url + "addAddress",
+                    data: {
+                        name: name,
+                        email: email,
+                        contact: contact,
+                        address: address,
+                        address2: address2,
+                        city: city,
+                        state: state,
+                        zipcode: zipcode,
+                    },
+                    success: function(res) {
+                        if (res) {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        });
     });
+
+
+    // Slugify URL
+    function slugify($text) {
+        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+        $text = trim($text, '-');
+        $text = strtolower($text);
+        //$text = preg_replace('~[^-\w]+~', '', $text);
+        if (empty($text))
+        return 'n-a';
+        return $text;
+    }
     
-    
+
     // Back to top button
     $(window).scroll(function() {
         if ($(this).scrollTop() > 100) {
@@ -235,19 +316,87 @@
 
 
     // Product Quantity
-    $('.quantity button').on('click', function() {
+    $(".quantity button").on("click", function() {
         var button = $(this);
-        var oldValue = button.parent().parent().find('input').val();
-        if (button.hasClass('btn-plus')) {
+        var oldValue = button.parent().parent().find("input").val();
+        if (button.hasClass("btn-plus")) {
             var newVal = parseFloat(oldValue) + 1;
         } else {
-            if (oldValue > 0) {
+            if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
             } else {
-                newVal = 0;
+                newVal = 1;
             }
         }
-        button.parent().parent().find('input').val(newVal);
+        button.parent().parent().find("input").val(newVal);
+    });
+
+
+    // Add to Cart
+    $("#addToCart").on("click", function() {
+        var productId = $(this).data("productid");
+        var productQty = $("input[name='productQty']").val();
+        $.ajax({
+            method: "POST",
+            url: site_url + "addToCart",
+            data: {productId: productId, productQty: productQty},
+            success: function(res) {
+                if (res) {
+                    $("#cartModal").modal("show");
+                }
+            }
+        });
+    });
+
+
+    // Remove from Cart
+    $(".removeFromCart").on("click", function() {
+        var button = $(this);
+        var id = $(this).data("id");
+        $("#deleteModal").modal("show");
+        $("#deleteCartItem").on("click", function() {
+            $.ajax({
+                method: "POST",
+                url: site_url + "removeFromCart",
+                data: {id: id},
+                success: function(res) {
+                    if (res) {
+                        location.reload();
+                    }
+                }
+            });
+        });
+    });
+
+
+    // Place Order
+    $("#placeOrder").on("click", function() {
+        var addressId = $("[name='deliveryAddress']").val();
+        var paymentMethod = $("[name='paymentMethod']").val();
+        var subtotal = $("[name=subtotal]").text();
+        var discount = $("[name=discount]").text();
+        var total = $("[name=total]").text();
+
+        if (addressId != "") {
+            $.ajax({
+                method: "POST",
+                url: site_url + "placeOrder",
+                data: {addressId: addressId, paymentMethod: paymentMethod, subtotal: subtotal, discount: discount, total: total},
+                success: function(res) {
+                    if (res) {
+                        $.ajax({
+                            method: "POST",
+                            url: site_url + "deleteUserCart",
+                            success: function(cartRes) {
+                                if (cartRes) {
+                                    $("#orderModal").modal("show");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
     });
     
 })(jQuery);

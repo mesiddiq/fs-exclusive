@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <?php if ($page_name == "main" || $page_name == "home"): ?>
     <title>FS Exclusive</title>
+    <?php else: ?>
+    <title><?php echo ucfirst($page_name); ?> | FS Exclusive</title>
+    <?php endif; ?>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -48,18 +52,7 @@
     <script src="<?php echo site_url('assets/js/main.js'); ?>"></script>
 
     <?php include 'modal.php'; ?>
-
-    <script type="text/javascript">
-        function slugify($text) {
-            $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
-            $text = trim($text, '-');
-            $text = strtolower($text);
-            //$text = preg_replace('~[^-\w]+~', '', $text);
-            if (empty($text))
-            return 'n-a';
-            return $text;
-        }
-    </script>
+    
     <?php if ($page_name == "main"): ?>
     <script type="text/javascript">
         $("#countryModal").modal({

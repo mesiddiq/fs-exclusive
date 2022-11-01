@@ -47,12 +47,12 @@
 
     <div class="container-fluid py-2 px-xl-5">
         <div class="row justify-content-between">
-            <div class="col-md-8 order-md-last">
+            <div class="col-md-9">
                 <div class="row">
-                    <div class="col-12 col-md-6 text-center">
+                    <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-start">
                         <a href="<?php echo site_url(strtolower($sessCountry["code"])); ?>" class="text-decoration-none"><img src="<?php echo site_url('assets/img/logo.png'); ?>"></a>
                     </div>
-                    <div class="col-md-6 d-md-flex justify-content-end my-auto">
+                    <div class="col-md-8 d-md-flex justify-content-center my-auto">
                         <form action="search-result.php" class="searchform order-lg-last">
                             <div class="form-group d-flex">
                                 <input type="text" class="form-control pl-3" placeholder="Search" style="height: auto;">
@@ -62,7 +62,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4 d-flex my-auto justify-content-center justify-content-lg-start py-3">
+            <div class="col-12 col-md-3 d-flex my-auto justify-content-center justify-content-lg-end py-3">
+                <?php
+                if ($this->session->get("logged_in") == true):
+                $cartCount = $this->db->table("cart")->where("userId", $_SESSION["userId"])->countAll();
+                $wishlistCount = $this->db->table("wishlist")->where("userId", $_SESSION["userId"])->countAll();
+                ?>
+                <a href="javascript:;" class="btn border mr-1">
+                    <i class="fas fa-heart text-primary"></i>
+                    <span class="badge"><?php echo $wishlistCount; ?></span>
+                </a>
+                <a href="<?php echo site_url('cart'); ?>" class="btn border">
+                    <i class="fas fa-shopping-cart text-primary"></i>
+                    <span class="badge"><?php echo $cartCount; ?></span>
+                </a>
+                <?php else: ?>
                 <a href="javascript:;" class="btn border mr-1">
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
@@ -71,6 +85,7 @@
                     <i class="fas fa-shopping-cart text-primary"></i>
                     <span class="badge">0</span>
                 </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>

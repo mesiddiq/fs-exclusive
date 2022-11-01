@@ -6,6 +6,7 @@ use App\Models\UserModel;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\ProductImageModel;
+use App\Models\OrdersModel;
 
 class Admin extends BaseController
 {
@@ -16,6 +17,7 @@ class Admin extends BaseController
         $this->CategoryModel = new CategoryModel();
         $this->ProductModel = new ProductModel();
         $this->ProductImageModel = new ProductImageModel();
+        $this->OrdersModel = new OrdersModel();
     }
 
     public function index()
@@ -152,6 +154,7 @@ class Admin extends BaseController
                     $view = "admin";
                     $page_data["page_title"] = "Add Products";
                     $page_data["page_name"] = "products-add";
+                    $this->session->set("adminProductCountryId", 1);
                     
                     return view($view . "/index", $page_data);
                 } elseif ($param1 == "create") {
@@ -185,7 +188,7 @@ class Admin extends BaseController
                                 move_uploaded_file($temp_name, $path_filename_ext);
                                 $image = [
                                     'name' => $filename.".".$ext,
-                                    'productID'  => $param2,
+                                    'productId'  => $param2,
                                     'createdAt'  => strtotime(date("d-M-Y H:i:s")),
                                 ];
                                 $this->ProductImageModel->insert($image);
@@ -209,7 +212,7 @@ class Admin extends BaseController
                     $data["shortDescription"] = $this->request->getPost("shortDescription");
                     $data["description"] = json_encode($this->request->getPost("description"));
                     $data["category"] = $this->request->getPost("category");
-                    $data["country"] = (int) $this->request->getPost("country");
+                    // $data["country"] = (int) $this->request->getPost("country");
                     $data["isDiscount"] = (int) $this->request->getPost("isDiscount");
                     $data["price"] = $this->request->getPost("price");
                     $data["discountedPrice"] = $this->request->getPost("discountedPrice");
@@ -233,7 +236,7 @@ class Admin extends BaseController
                                 move_uploaded_file($temp_name, $path_filename_ext);
                                 $image = [
                                     "name" => $filename.".".$ext,
-                                    "productID"  => $param2,
+                                    "productId"  => $param2,
                                     "createdAt"  => strtotime(date("d-M-Y H:i:s")),
                                 ];
                                 $this->ProductImageModel->insert($image);
@@ -269,6 +272,41 @@ class Admin extends BaseController
                     $view = "admin";
                     $page_data["page_title"] = "Products";
                     $page_data["page_name"] = "products";
+
+                    return view($view . "/index", $page_data);
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+
+    public function updateAdminProductCountryId()
+    {
+        $id = $this->request->getPost("id");
+        $this->session->set("adminProductCountryId", $id);
+        $categories = $this->CategoryModel->where("id", $_SESSION["adminProductCountryId"])->get()->getResultArray();
+        echo json_encode($categories);
+    }
+
+    public function orders($param1='', $param2='')
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "view") {
+                    $page_data["order"] = $this->OrdersModel->where('id', $param2)->get()->getRowArray();
+                    $view = "admin";
+                    $page_data["page_title"] = "View Order";
+                    $page_data["page_name"] = "orders-view";
+                    
+                    return view($view . "/index", $page_data);
+                } else {
+                    $page_data["orders"] = $this->OrdersModel->findAll();
+                    $view = "admin";
+                    $page_data["page_title"] = "Orders";
+                    $page_data["page_name"] = "orders";
 
                     return view($view . "/index", $page_data);
                 }

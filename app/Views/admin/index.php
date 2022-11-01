@@ -15,7 +15,9 @@
     <link rel="stylesheet" href="<?php echo site_url('admin/css/quill/snow.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/fullcalendar.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/morris.css'); ?>" />
+    <?php if ($page_name == "products" || $page_name == "orders" || $page_name == "users") { ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/datatable.css'); ?>" />
+    <?php } ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/main.css'); ?>" />
 </head>
 <body>
@@ -42,23 +44,55 @@
     <script src="<?php echo site_url('admin/js/world-merc.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/polyfill.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/quill.min.js'); ?>"></script>
-    <?php if ($page_name == "products" || $page_name == "users") { ?>
+    <?php if ($page_name == "products" || $page_name == "orders" || $page_name == "users") { ?>
     <script src="<?php echo site_url('admin/js/datatable.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/Sortable.min.js'); ?>"></script>
     <?php } ?>
     <script src="<?php echo site_url('admin/js/main.js'); ?>"></script>
 
     <?php include 'modal.php'; ?>
-    <?php if ($page_name == "products" || $page_name == "users") { ?>
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#table", {
-            searchable: true,
+
+    <?php if ($page_name == "products-edit") { ?>
+    <script type="text/javascript">
+        // Delete product image
+        $(".deleteProductImage").on("click", function() {
+            var id = $(this).data("imageid");
+            $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('admin/products/deleteImage'); ?>",
+                data: {id: id},
+                success: function(res) {
+                    if (res) {
+                        $("#image" + id).remove();
+                    } else {
+                        alert("Something went wrong");
+                    }
+                }
+            });
+        });
+
+        // Set image featured
+        $(".setImageFeatured").on("click", function() {
+            var id = $(this).data("imageid");
+            var productid = $(this).data("productid");
+            $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('admin/products/setImageFeatured'); ?>",
+                data: {id: id, productID: productid},
+                success: function(res) {
+                    if (res) {
+                        $("#image" + id + " .text-end").html('<a href="javascript:;"><button type="button" class="btn success-btn mt-2"><small><i class="lni lni-checkmark"></i> Featured</small></button></a>');
+                    } else {
+                        alert("Something went wrong");
+                    }
+                }
+            });
         });
     </script>
     <?php } ?>
 
     <?php if ($page_name == "dashboard") { ?>
-    <script>
+    <script type="text/javascript">
         // ======== jvectormap activation
         var markers = [
             { name: "Egypt", coords: [26.8206, 30.8025] },
@@ -562,45 +596,6 @@
             },
         });
         // =========== chart four end
-    </script>
-    <?php } ?>
-
-    <?php if ($page_name == "products-edit") { ?>
-    <script type="text/javascript">
-        // Delete product image
-        $(".deleteProductImage").on("click", function() {
-            var id = $(this).data("imageid");
-            $.ajax({
-                method: "POST",
-                url: "<?php echo site_url('admin/products/deleteImage'); ?>",
-                data: {id: id},
-                success: function(res) {
-                    if (res) {
-                        $("#image" + id).remove();
-                    } else {
-                        alert("Something went wrong");
-                    }
-                }
-            });
-        });
-
-        // Set image featured
-        $(".setImageFeatured").on("click", function() {
-            var id = $(this).data("imageid");
-            var productid = $(this).data("productid");
-            $.ajax({
-                method: "POST",
-                url: "<?php echo site_url('admin/products/setImageFeatured'); ?>",
-                data: {id: id, productID: productid},
-                success: function(res) {
-                    if (res) {
-                        $("#image" + id + " .text-end").html('<a href="javascript:;"><button type="button" class="btn success-btn mt-2"><small><i class="lni lni-checkmark"></i> Featured</small></button></a>');
-                    } else {
-                        alert("Something went wrong");
-                    }
-                }
-            });
-        });
     </script>
     <?php } ?>
 

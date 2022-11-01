@@ -78,9 +78,9 @@
     <div class="container-fluid offer pt-5">
         <div class="row px-xl-5">
             <div class="col-md-6 pb-4">
-                <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
+                <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-4 px-4">
                     <img src="assets/img/offer-1.png" alt="">
-                    <div class="position-relative" style="z-index: 1;">
+                    <div class="position-relative text-right" style="z-index: 1;">
                         <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
                         <h1 class="mb-4 font-weight-semi-bold">Spring Collection</h1>
                         <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
@@ -88,9 +88,9 @@
                 </div>
             </div>
             <div class="col-md-6 pb-4">
-                <div class="position-relative bg-secondary text-center text-md-left text-white mb-2 py-5 px-5">
+                <div class="position-relative bg-secondary text-center text-md-left text-white mb-2 py-4 px-4">
                     <img src="assets/img/offer-2.png" alt="">
-                    <div class="position-relative" style="z-index: 1;">
+                    <div class="position-relative text-left" style="z-index: 1;">
                         <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
                         <h1 class="mb-4 font-weight-semi-bold">Winter Collection</h1>
                         <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
@@ -117,11 +117,11 @@
                     <div class="card product-item border-0 mb-4">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                             <?php
-                            $featuredimage = $this->db->table("productimages")->where(array("productID" => $product["id"], "featured" => 1))->get()->getResultArray();
+                            $featuredimage = $this->db->table("productimages")->where(array("productId" => $product["id"], "featured" => 1))->get()->getResultArray();
                             if (count($featuredimage) > 0): ?>
                             <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/' . $featuredimage[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
                             <?php else:
-                            $image = $this->db->table("productimages")->where(array("productID" => $product["id"]))->get()->getResultArray();
+                            $image = $this->db->table("productimages")->where(array("productId" => $product["id"]))->get()->getResultArray();
                             ?>
                             <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/' . $image[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
                             <?php endif; ?>
