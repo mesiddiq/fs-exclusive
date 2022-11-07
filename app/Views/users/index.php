@@ -61,6 +61,43 @@
         });
     </script>
     <?php endif; ?>
+
+    <script type="text/javascript">
+        function relativeDays(timestamp) {
+            const rtf = new Intl.RelativeTimeFormat('en', {
+                numeric: 'auto',
+            });
+            const oneDayInMs = 1000 * 60 * 60 * 24;
+            const daysDifference = Math.round(
+                (timestamp - new Date().getTime()) / oneDayInMs,
+            );
+
+            return rtf.format(daysDifference, 'day');
+        }
+        setTimeout(function() {
+            // console.log(relativeDays(new Date().getTime()));
+        }, 5000);
+
+        // var s = <?php // echo json_encode($recentOrders) ?>;
+        // var i = 0;
+
+        // (function loop() {
+        //     console.log(s[i]["id"]);
+        //     $("#recent-sold").html(
+        //         "<div class='card recent-sold'>" +
+        //         "<div class='card-body'>" +
+        //         "<p><strong class='text-dark'>Mohamed Siddiq</strong> purchased <strong class='text-dark'>New Hijab</strong></p>" +
+        //         "<small><em>2 days ago</em></small>" +
+        //         "</div>" +
+        //         "</div>"
+        //     );
+        //     if (++i < s.length) {
+        //         setTimeout(loop, 3000);  // call myself in 3 seconds time if required
+        //     }
+        // })();
+
+    </script>
+    <?php // endforeach; ?>
     
 </body>
 </html>

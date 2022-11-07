@@ -9354,6 +9354,10 @@ a.text-dark:hover, a.text-dark:focus {
   text-decoration: none !important;
 }
 
+.text-decoration-underline {
+  text-decoration: underline !important;
+}
+
 .text-break {
   word-break: break-word !important;
   word-wrap: break-word !important;
@@ -9544,6 +9548,10 @@ a.text-dark:hover, a.text-dark:focus {
   right: 0;
 }
 
+.offer .btn:hover {
+  color: #ffffff;
+}
+
 .cat-item .cat-img img,
 .product-item .product-img img {
   transition: .5s;
@@ -9573,6 +9581,23 @@ a.text-dark:hover, a.text-dark:focus {
   bottom: 10px;
   z-index: 11;
   /* animation: action 1s infinite alternate; */
+}
+
+.recent-sold {
+  width: 300px;
+  position: fixed;
+  /*display: none;*/
+  /* right: 30px; */
+  left: 10px;
+  /* bottom: 30px; */
+  bottom: 10px;
+  z-index: 11;
+  border-radius: 5px;
+  /* animation: action 1s infinite alternate; */
+}
+
+.recent-sold .card-body {
+  /*padding: 0.5rem;*/
 }
 
 @keyframes action {
@@ -9696,4 +9721,15 @@ a.text-dark:hover, a.text-dark:focus {
   padding-left: 17px;
   margin-bottom: 0px;
   color: #000000;
+}
+.custom-product {
+  position: fixed;
+  z-index: 9;
+  top: 50%;
+  transform: rotate(-90deg);
+  right: -75px;
+  background-color: #d2b482;
+}
+.custom-product:hover {
+  background-color: #000000;
 }

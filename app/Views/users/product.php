@@ -4,7 +4,7 @@
     <!-- Shop Detail Start -->
     <div class="container-fluid py-5">
         <div class="row px-xl-5">
-            <div class="col-lg-5 pb-5">
+            <div class="col-lg-4 pb-5">
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner border">
                         <?php
@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-7 pb-5">
+            <div class="col-lg-8 pb-5">
                 <h3 class="font-weight-semi-bold"><?php echo $product["name"]; ?></h3>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
@@ -58,19 +58,32 @@
                     </div>
                     <button type="button" id="addToCart" class="btn btn-primary text-white px-3" data-productid="<?php echo $product["id"]; ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                 </div>
+                <div class="d-flex">
+                    <?php
+                    if ($this->session->get("logged_in") == true):
+                    $checkWishlist = $this->db->table("wishlist")->where(array("userId" => $this->session->get("userId"), "productId" => $product["id"]))->get()->getResultArray();
+                    if (count($checkWishlist) > 0): ?>
+                    <a href="javascript:;" id="toggleWishlist" data-productid="<?php echo $product['id']; ?>" data-loggedin="<?php echo isset($_SESSION['logged_in']) ? $_SESSION["logged_in"] : '0'; ?>" style="color: #d2b482;"><p class="text-decoration-underline font-weight-medium">Added to Wishlist</p></a>
+                    <?php else: ?>
+                    <a href="javascript:;" id="toggleWishlist" data-productid="<?php echo $product['id']; ?>" data-loggedin="<?php echo isset($_SESSION['logged_in']) ? $_SESSION["logged_in"] : '0'; ?>"><p class="text-dark text-decoration-underline font-weight-medium">Add to Wishlist</p></a>
+                    <?php endif; ?>
+                    <?php else: ?>
+                    <a href="javascript:;" id="toggleWishlist"><p class="text-dark text-decoration-underline font-weight-medium">Add to Wishlist</p></a>
+                    <?php endif; ?>
+                </div>
                 <div class="d-flex pt-2">
-                    <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
+                    <p class="text-dark font-weight-medium mb-0 mr-2">Share:</p>
                     <div class="d-inline-flex">
                         <a class="text-dark px-2" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='<?php echo current_url(); ?> + encodeURIComponent(document.URL) + '&t=' + encodeURIComponent(document.URL)); return false;">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a class="text-dark px-2" href="https://twitter.com/home?status=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Tweet" onclick="window.open('https://twitter.com/intent/tweet?text='<?php echo current_url(); ?> + encodeURIComponent(document.title) + ':%20' + encodeURIComponent(document.URL)); return false;">
+                        <a class="text-dark px-2" href="https://twitter.com/home?status=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Tweet on Twitter" onclick="window.open('https://twitter.com/intent/tweet?text='<?php echo current_url(); ?> + encodeURIComponent(document.title) + ':%20' + encodeURIComponent(document.URL)); return false;">
                             <i class="fab fa-twitter"></i>
                         </a>
                         <a class="text-dark px-2" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on LinkedIn" onclick="window.open('http://www.linkedin.com/shareArticle?mini=true&amp;url=<?php echo current_url(); ?> + encodeURIComponent(document.URL)); return false;">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a class="text-dark px-2" href="https://wa.me/?text=<?php echo current_url(); ?>" target="_blank" rel="nofollow">
+                        <a class="text-dark px-2" href="https://wa.me/?text=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on WhatsApp">
                             <i class="fab fa-whatsapp"></i>
                         </a>
                     </div>
@@ -145,3 +158,14 @@
         </div>
     </div>
     <!-- Shop Detail End -->
+
+    <script type="text/javascript">
+        function copyToClipboard(element) {
+            var text = $(this).data("link");
+            alert(text);
+            $("body").append(text);
+            text.val($(element).text()).select();
+            document.execCommand("copy");
+            text.remove();
+        }
+    </script>

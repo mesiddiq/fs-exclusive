@@ -7,6 +7,7 @@ use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\ProductImageModel;
 use App\Models\OrdersModel;
+use App\Models\CustomModel;
 
 class Admin extends BaseController
 {
@@ -18,6 +19,7 @@ class Admin extends BaseController
         $this->ProductModel = new ProductModel();
         $this->ProductImageModel = new ProductImageModel();
         $this->OrdersModel = new OrdersModel();
+        $this->CustomModel = new CustomModel();
     }
 
     public function index()
@@ -76,7 +78,7 @@ class Admin extends BaseController
                         $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
                         $ext = $path['extension'];
                         $temp_name = $_FILES['image']['tmp_name'];
-                        $path_filename_ext = $target_dir.$filename.".".$ext;
+                        $path_filename_ext = $target_dir . $filename . "." . $ext;
  
                         // Check if file already exists
                         if (file_exists($path_filename_ext)) {
@@ -84,7 +86,7 @@ class Admin extends BaseController
                             $data["image"] = NULL;
                         } else {
                             move_uploaded_file($temp_name,$path_filename_ext);
-                            $data["image"] = $filename.".".$ext;
+                            $data["image"] = $filename . "." . $ext;
                             echo "Congratulations! File Uploaded Successfully.";
                         }
                     } else {
@@ -114,7 +116,7 @@ class Admin extends BaseController
                         $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
                         $ext = $path['extension'];
                         $temp_name = $_FILES['image']['tmp_name'];
-                        $path_filename_ext = $target_dir.$filename.".".$ext;
+                        $path_filename_ext = $target_dir . $filename . "." . $ext;
  
                         // Check if file already exists
                         if (file_exists($path_filename_ext)) {
@@ -122,7 +124,7 @@ class Admin extends BaseController
                             $data["image"] = $this->request->getPost("imageName");
                         } else {
                             move_uploaded_file($temp_name, $path_filename_ext);
-                            $data["image"] = $filename.".".$ext;
+                            $data["image"] = $filename . "." . $ext;
                             echo "Congratulations! File Uploaded Successfully.";
                         }
                     } else {
@@ -181,13 +183,13 @@ class Admin extends BaseController
                             $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
                             $ext = $path['extension'];
                             $temp_name = $_FILES['image']['tmp_name'][$i];
-                            $path_filename_ext = $target_dir.$filename.".".$ext;
+                            $path_filename_ext = $target_dir . $filename . "." . $ext;
      
                             // Check if file already exists
                             if (!file_exists($path_filename_ext)) {
                                 move_uploaded_file($temp_name, $path_filename_ext);
                                 $image = [
-                                    'name' => $filename.".".$ext,
+                                    'name' => $filename . "." . $ext,
                                     'productId'  => $param2,
                                     'createdAt'  => strtotime(date("d-M-Y H:i:s")),
                                 ];
@@ -229,13 +231,13 @@ class Admin extends BaseController
                             $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
                             $ext = $path['extension'];
                             $temp_name = $_FILES['image']['tmp_name'][$i];
-                            $path_filename_ext = $target_dir.$filename.".".$ext;
+                            $path_filename_ext = $target_dir . $filename . "." . $ext;
      
                             // Check if file already exists
                             if (!file_exists($path_filename_ext)) {
                                 move_uploaded_file($temp_name, $path_filename_ext);
                                 $image = [
-                                    "name" => $filename.".".$ext,
+                                    "name" => $filename . "." . $ext,
                                     "productId"  => $param2,
                                     "createdAt"  => strtotime(date("d-M-Y H:i:s")),
                                 ];
@@ -318,6 +320,33 @@ class Admin extends BaseController
         }
     }
 
+    public function requirements($param1='', $param2='')
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "view") {
+                    $page_data["requirement"] = $this->CustomModel->where('id', $param2)->get()->getRowArray();
+                    $view = "admin";
+                    $page_data["page_title"] = "View Requirements";
+                    $page_data["page_name"] = "requirements-view";
+                    
+                    return view($view . "/index", $page_data);
+                } else {
+                    $page_data["requirements"] = $this->CustomModel->findAll();
+                    $view = "admin";
+                    $page_data["page_title"] = "Requirements";
+                    $page_data["page_name"] = "requirements";
+
+                    return view($view . "/index", $page_data);
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+
     public function users($param1='', $param2='')
     {
         if ($this->session->get("logged_in") == true) {
@@ -359,7 +388,7 @@ class Admin extends BaseController
                         $filename = strtotime(date("d-M-Y H:i:s"));
                         $ext = $path['extension'];
                         $temp_name = $_FILES['image']['tmp_name'];
-                        echo $path_filename_ext = $target_dir.$filename.".".$ext;
+                        echo $path_filename_ext = $target_dir . $filename . "." . $ext;
  
                         // Check if file already exists
                         if (file_exists($path_filename_ext)) {
@@ -367,7 +396,7 @@ class Admin extends BaseController
                             $data["image"] = $this->request->getPost("imageName");
                         } else {
                             move_uploaded_file($temp_name, $path_filename_ext);
-                            $data["image"] = $filename.".".$ext;
+                            $data["image"] = $filename . "." . $ext;
                             echo "Congratulations! File Uploaded Successfully.";
                         }
                     } else {

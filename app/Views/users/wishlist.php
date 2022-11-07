@@ -4,12 +4,7 @@
     <!-- Page Header Start -->
     <div class="container-fluid bg-secondary mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 150px">
-            <h1 class="font-weight-semi-bold text-uppercase my-3">
-                <?php
-                $category = $this->db->table("category")->where("id", $categoryID)->get()->getRowArray();
-                echo $category["name"];
-                ?>
-            </h1>
+            <h1 class="font-weight-semi-bold text-uppercase my-3">Wishlist</h1>
         </div>
     </div>
     <!-- Page Header End -->
@@ -18,43 +13,27 @@
     <!-- Shop Start -->
     <div class="container-fluid pt-5">
         <div class="row px-xl-5">
-            <!-- Shop Sidebar Start -->
-            <div class="col-lg-3 col-md-12">
-                <!-- Price Start -->
-                <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by category</h5>
-                    <form>
-                        <?php foreach ($categories as $key => $category): ?>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="category-<?php echo $category['id'];?>" name="category" value="<?php echo $category['slug']; ?>" onclick="filter()" <?php echo $categoryID == $category["id"] ? 'checked' : '' ?>>
-                            <label class="custom-control-label" for="category-<?php echo $category['id'];?>"><?php echo $category["name"]; ?></label>
-                            <!-- <span class="badge border font-weight-normal">1000</span> -->
-                        </div>
-                        <?php endforeach; ?>
-                    </form>
-                </div>
-                <!-- Price End -->
-            </div>
-            <!-- Shop Sidebar End -->
 
             <!-- Shop Product Start -->
-            <div class="col-lg-9 col-md-12">
+            <div class="col-lg-12 col-md-12">
                 <div class="row pb-3">
                     <?php
-                    if (count($products) > 0):
-                    foreach ($products as $key => $product): ?>
-                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/'.$product['slug'].'/'.$product['id']); ?>">
+                    if (count($wishlists) > 0):
+                    foreach ($wishlists as $key => $wishlist):
+                    $product = $this->db->table("products")->where("id", $wishlist["productId"])->get()->getRowArray();
+                    ?>
+                    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/' . $product['slug'] . '/' . $product['id']); ?>">
                             <div class="card product-item border-0 mb-4">
                                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                                     <?php
-                                    $featuredimage = $this->db->table("productimages")->where(array("productID" => $product["id"], "featured" => 1))->get()->getResultArray();
+                                    $featuredimage = $this->db->table("productimages")->where(array("productId" => $product["id"], "featured" => 1))->get()->getResultArray();
                                     if (count($featuredimage) > 0): ?>
-                                    <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/'.$featuredimage[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
+                                    <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/' . $featuredimage[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
                                     <?php else:
-                                    $image = $this->db->table("productimages")->where(array("productID" => $product["id"]))->get()->getResultArray();
+                                    $image = $this->db->table("productimages")->where(array("productId" => $product["id"]))->get()->getResultArray();
                                     ?>
-                                    <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/'.$image[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
+                                    <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/' . $image[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
                                     <?php endif; ?>
                                 </div>
                                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
@@ -68,7 +47,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between bg-light border">
-                                    <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/'.$product['slug'].'/'.$product['id']); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                                    <a href="javascript:;" data-productid="<?php echo $product['id']; ?>" data-loggedin="<?php echo isset($_SESSION['logged_in']) ? $_SESSION["logged_in"] : '0'; ?>" class="btn btn-sm text-dark toggleWishlist m-auto">Remove from Wishlist</a>
                                 </div>
                             </div>
                         </a>
@@ -97,7 +76,8 @@
                     </div> -->
                     <?php else: ?>
                     <div class="col-12 pb-1 text-center">
-                        <h2>Sorry..!<br>No products added</h2>
+                        <h2>Sorry..!<br>No products found</h2>
+                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . "/shop"); ?>"><button class="btn btn-primary text-white py-2 px-4" type="button">View more products</button></a>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -111,13 +91,16 @@
         function filter() {
             let url = get_url();
             window.location.replace(url);
+            // console.log(url);
         }
 
         function get_url() {
-            var urlPrefix = "<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>";
+            var urlPrefix = window.location.href;
             var urlSuffix = "";
             var categoryArr = [];
-
+            
+            // var selectedCategory = '<?php // echo $_GET["category"]; ?>';
+            // categoryArr = selectedCategory.split(',');
             // Get selected category
             $('[name=category]').each(function() {
 
@@ -125,12 +108,18 @@
                     console.log("array " + categoryArr)
                     categoryArr.push($(this).attr('value'));
                 }
-            });
 
+                /*if (categoryArr.includes($(this).attr('value')) == false) {
+                    // selectedCategory += ','+$(this).attr('value');
+                    categoryArr.push($(this).attr('value'));
+                    console.log($(this).attr('value'))
+                }*/
+            });
             var selectedCategory = categoryArr.join();
             console.log("selectedCate " + selectedCategory)
+            // console.log(selectedCategory);
 
-            urlSuffix = "?category="+selectedCategory;
+            urlSuffix = "/category="+selectedCategory;
             var url = urlPrefix+urlSuffix;
             selectedCategory = "";
             return url;

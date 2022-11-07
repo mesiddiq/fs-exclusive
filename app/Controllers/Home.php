@@ -7,8 +7,11 @@ use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\ProductImageModel;
 use App\Models\CartModel;
+use App\Models\WishlistModel;
 use App\Models\AddressModel;
 use App\Models\OrdersModel;
+use App\Models\EmailModel;
+use App\Models\CustomModel;
 
 class Home extends BaseController
 {
@@ -20,8 +23,11 @@ class Home extends BaseController
         $this->ProductModel = new ProductModel();
         $this->ProductImageModel = new ProductImageModel();
         $this->CartModel = new CartModel();
+        $this->WishlistModel = new WishlistModel();
         $this->AddressModel = new AddressModel();
         $this->OrdersModel = new OrdersModel();
+        $this->EmailModel = new EmailModel();
+        $this->CustomModel = new CustomModel();
     }
 
     public function index()
@@ -79,30 +85,58 @@ class Home extends BaseController
             $price = $product["price"];
         }
 
-        $checkCart = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "productId" => $this->request->getPost("productId")))->get()->getResultArray();
+        if ($this->session->get("logged_in")) {
+            $checkCart = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "productId" => $this->request->getPost("productId")))->get()->getResultArray();
 
-        if (count($checkCart) > 0) {
-            $newQty = $checkCart[0]["productQty"] + $this->request->getPost("productQty");
-            $newPrice = $checkCart[0]["productPrice"] + ($this->request->getPost("productQty") * $price);
-            $this->db->table("cart")->where("id", $checkCart[0]["id"])->update(array("productQty" => $newQty, "productPrice" => $newPrice));
+            if (count($checkCart) > 0) {
+                $newQty = $checkCart[0]["productQty"] + $this->request->getPost("productQty");
+                $newPrice = $checkCart[0]["productPrice"] + ($this->request->getPost("productQty") * $price);
+                $this->db->table("cart")->where("id", $checkCart[0]["id"])->update(array("productQty" => $newQty, "productPrice" => $newPrice));
+            } else {
+                $data["userId"] = $this->session->get("userId");
+                $data["productId"] = $this->request->getPost("productId");
+                $data["productQty"] = $this->request->getPost("productQty");
+                $data["productPrice"] = $this->request->getPost("productQty") * $price;
+                $data["country"] = $this->session->get("country");
+                $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                $this->CartModel->insert($data);
+            }
+
+            echo "cart";
         } else {
-            $data["userId"] = $this->session->get("userId");
+            if (!isset($_SESSION["cartItems"])) {
+                $_SESSION["cartItems"] = array();
+            }
+
+            $sessCartItems = $this->session->get("cartItems");
+
             $data["productId"] = $this->request->getPost("productId");
             $data["productQty"] = $this->request->getPost("productQty");
             $data["productPrice"] = $this->request->getPost("productQty") * $price;
             $data["country"] = $this->session->get("country");
             $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
 
-            $this->CartModel->insert($data);
+            // if (count($_SESSION["cartItems"]) > 0) {
+            //     foreach ($_SESSION["cartItems"] as $key => $sessCartItem) {
+            //         if ($sessCartItem["productId"] == $this->request->getPost("productId")) {
+            //             $_SESSION["cartItems"][$key]["productQty"] = $sessCartItem["productQty"] + $this->request->getPost("productQty");
+            //             $_SESSION["cartItems"][$key]["productPrice"] = $sessCartItem["productPrice"] + ($this->request->getPost("productQty") * $price);
+            //         }
+            //     }
+            // } else {
+                array_push($_SESSION["cartItems"], $data);
+            // }
+
+            echo "checkout";
         }
 
-        echo json_encode($checkCart);
     }
 
     public function cart()
     {
         $view = "users";
-        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $_SESSION["userId"], "country" => $_SESSION["country"]))->get()->getResultArray();
+        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
         $page_data['page_name'] = "cart";
         
         return view($view . "/index", $page_data);
@@ -117,11 +151,19 @@ class Home extends BaseController
         echo true;
     }
 
+    public function removeFromSessionCart()
+    {
+        $id = $this->request->getPost("id");
+
+        unset($_SESSION["cartItems"][$id]);
+        echo true;
+    }
+
     public function checkout()
     {
         $view = "users";
-        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $_SESSION["userId"], "country" => $_SESSION["country"]))->get()->getResultArray();
-        $page_data["addresses"] = $this->AddressModel->orderBy("id DESC")->where(array("userId" => $_SESSION["userId"], "country" => $_SESSION["country"]))->get()->getResultArray();
+        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
+        $page_data["addresses"] = $this->AddressModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
         $page_data['page_name'] = "checkout";
         
         return view($view . "/index", $page_data);
@@ -129,7 +171,57 @@ class Home extends BaseController
 
     public function addAddress()
     {
-        $data["userId"] = $this->session->get("userId");
+        if ($this->session->get("logged_in")) {
+            $data["userId"] = $this->session->get("userId");
+        } else {
+            $checkEmail = $this->UserModel->where("email", $this->request->getPost("email"))->first();
+
+            if ($checkEmail != NULL) {
+                $this->session->set("logged_in", true);
+                $this->session->set("userId", $checkEmail["id"]);
+                $this->session->set("userName", $checkEmail["name"]);
+                $this->session->set("userEmail", $checkEmail["email"]);
+                $this->session->set("userRole", $checkEmail["role"]);
+                foreach ($this->session->get("cartItems") as $key => $value) {
+                    $this->CartModel->insert(array(
+                        "userId" => $this->session->get("userId"),
+                        "productId" => $value["productId"],
+                        "productQty" => $value["productQty"],
+                        "productPrice" => $value["productPrice"],
+                        "country" => $value["country"],
+                        "createdAt" => $value["createdAt"],
+                    ));
+                }
+                $data["userId"] = $checkEmail["id"];
+            } else {
+                $this->UserModel->insert(array(
+                    "name" => $this->request->getPost("name"),
+                    "email" => $this->request->getPost("email"),
+                    "role" => 3,
+                    "status" => 0,
+                    "verificationCode" => substr(md5(time()), 0, 15),
+                    "createdAt" => strtotime(date('d-M-Y H:i:s'))
+                ));
+                $checkRegEmail = $this->UserModel->where("email", $this->request->getPost("email"))->first();
+                $this->session->set("logged_in", true);
+                $this->session->set("userId", $checkRegEmail["id"]);
+                $this->session->set("userName", $checkRegEmail["name"]);
+                $this->session->set("userEmail", $checkRegEmail["email"]);
+                $this->session->set("userRole", $checkRegEmail["role"]);
+                foreach ($this->session->get("cartItems") as $key => $value) {
+                    $this->CartModel->insert(array(
+                        "userId" => $this->session->get("userId"),
+                        "productId" => $value["productId"],
+                        "productQty" => $value["productQty"],
+                        "productPrice" => $value["productPrice"],
+                        "country" => $value["country"],
+                        "createdAt" => $value["createdAt"],
+                    ));
+                }
+                $data["userId"] = $checkRegEmail["id"];
+            }
+        }
+
         $data["name"] = $this->request->getPost("name");
         $data["email"] = $this->request->getPost("email");
         $data["contact"] = $this->request->getPost("contact");
@@ -146,7 +238,7 @@ class Home extends BaseController
 
     public function placeOrder($value='')
     {
-        $cart = $this->CartModel->orderBy("id DESC")->where(array("userId" => $_SESSION["userId"], "country" => $_SESSION["country"]))->get()->getResultArray();
+        $cart = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
 
         $data["userId"] = $this->session->get("userId");
         $data["addressId"] = $this->request->getPost("addressId");
@@ -164,16 +256,76 @@ class Home extends BaseController
         echo true;
     }
 
+    public function customProduct()
+    {
+        $data["name"] = $this->request->getPost("name");
+        $data["email"] = $this->request->getPost("email");
+        $data["contact"] = $this->request->getPost("contact");
+        $data["contact2"] = $this->request->getPost("contact2");
+        $data["address"] = $this->request->getPost("address");
+        $data["address2"] = $this->request->getPost("address2");
+        $data["city"] = $this->request->getPost("city");
+        $data["state"] = $this->request->getPost("state");
+        $data["country"] = $this->request->getPost("country");
+        $data["zipcode"] = $this->request->getPost("zipcode");
+        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+        $imagesArr = array();
+
+        if (($_FILES['images']['name']!="")) {
+            // Where the file is going to be stored
+            $target_dir = FCPATH . "uploads/custom/";
+            for ($i=0; $i < count($_FILES['images']['name']); $i++) { 
+                $file = $_FILES['images']['name'][$i];
+                $path = pathinfo($file);
+                $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
+                $ext = $path['extension'];
+                $temp_name = $_FILES['images']['tmp_name'][$i];
+                $path_filename_ext = $target_dir . $filename . "." . $ext;
+
+                // Check if file already exists
+                if (file_exists($path_filename_ext)) {
+                    $data["images"] = NULL;
+                } else {
+                    $move_uploaded_file = move_uploaded_file($temp_name, $path_filename_ext);
+                    array_push($imagesArr, $filename . "." . $ext);
+                    $data["images"] = json_encode($imagesArr);
+                }
+            }
+        } else {
+            $data["images"] = NULL;
+        }
+
+        $this->CustomModel->insert($data);
+        return redirect()->to(site_url());
+    }
+
     public function deleteUserCart()
     {
-        $userCart = $this->CartModel->where("userId", $_SESSION["userId"])->get()->getResultArray();
+        $userCart = $this->CartModel->where("userId", $this->session->get("userId"))->get()->getResultArray();
 
         foreach ($userCart as $key => $userCart) {
             $this->CartModel->delete($userCart["id"]);
         }
 
+        $this->session->set("cartItems", array());
+
         echo true;
 
+    }
+
+    public function toggleWishlist()
+    {
+        $productId = $this->request->getPost("productId");
+
+        $check = $this->WishlistModel->where(array("userId" => $this->session->get("userId"), "productId" => $productId))->get()->getResultArray();
+
+        if (count($check) > 0) {
+            $this->WishlistModel->delete($check[0]["id"]);
+            echo "removed";
+        } else {
+            $this->WishlistModel->insert(array("userId" => $this->session->get("userId"), "productId" => $productId, "country" => $this->session->get("country"), "createdAt" => strtotime(date("d-M-Y H:i:s"))));
+            echo "added";
+        }
     }
 
     public function contact()
@@ -182,5 +334,12 @@ class Home extends BaseController
         $page_data['page_name'] = "contact";
         
         return view($view . "/index", $page_data);
+    }
+
+    public function sendMail()
+    {
+        // $res = $this->EmailModel->sendMail("This is a test message", "Test Mail", "mdsiddiq1495@gmail.com");
+        // var_dump($res);
+        echo substr(md5(time()), 0, 15);
     }
 }

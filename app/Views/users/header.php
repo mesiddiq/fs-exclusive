@@ -29,9 +29,11 @@
                         <a href="javascript:;" class="nav-link dropdown-toggle text-light py-0" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->get("userName"); ?></a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <?php if ($this->session->get("userRole") === "1"): ?>
-                            <a href="<?php echo site_url("admin/dashboard"); ?>" class="dropdown-item"><i class="fa fa-tachometer-alt"></i> Dashboard</a>
+                            <a href="<?php echo site_url("admin/dashboard"); ?>" class="dropdown-item">Dashboard</a>
                             <?php endif; ?>
-                            <a href="<?php echo site_url("logout"); ?>" class="dropdown-item"><i class="fa fa-sign-out-alt"></i> Logout</a>
+                            <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/wishlist'); ?>" class="dropdown-item">Wishlist</a>
+                            <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/orders'); ?>" class="dropdown-item">Orders</a>
+                            <a href="<?php echo site_url("logout"); ?>" class="dropdown-item">Logout</a>
                         </div>
                     </div>
                     <?php else: ?>
@@ -53,9 +55,9 @@
                         <a href="<?php echo site_url(strtolower($sessCountry["code"])); ?>" class="text-decoration-none"><img src="<?php echo site_url('assets/img/logo.png'); ?>"></a>
                     </div>
                     <div class="col-md-8 d-md-flex justify-content-center my-auto">
-                        <form action="search-result.php" class="searchform order-lg-last">
+                        <form method="GET" action="<?php echo site_url(strtolower($sessCountry["code"]) . '/search'); ?>" class="searchform order-lg-last">
                             <div class="form-group d-flex">
-                                <input type="text" class="form-control pl-3" placeholder="Search" style="height: auto;">
+                                <input type="text" class="form-control pl-3" name="keyword" placeholder="Search" style="height: auto;">
                                 <button type="submit" placeholder="" class="form-control search"><span class="fa fa-search"></span></button>
                             </div>
                         </form>
@@ -65,10 +67,10 @@
             <div class="col-12 col-md-3 d-flex my-auto justify-content-center justify-content-lg-end py-3">
                 <?php
                 if ($this->session->get("logged_in") == true):
-                $cartCount = $this->db->table("cart")->where("userId", $_SESSION["userId"])->countAll();
-                $wishlistCount = $this->db->table("wishlist")->where("userId", $_SESSION["userId"])->countAll();
+                $cartCount = $this->db->table("cart")->where(array("userId" => $_SESSION["userId"], "country" => $sessCountry["id"]))->countAllResults();
+                $wishlistCount = $this->db->table("wishlist")->where(array("userId" => $_SESSION["userId"], "country" => $sessCountry["id"]))->countAllResults();
                 ?>
-                <a href="javascript:;" class="btn border mr-1">
+                <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/wishlist'); ?>" class="btn border mr-1">
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge"><?php echo $wishlistCount; ?></span>
                 </a>
@@ -81,9 +83,16 @@
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
                 </a>
-                <a href="javascript:;" class="btn border">
+                <?php
+                if (isset($_SESSION['cartItems']) && $_SESSION['cartItems'] != NULL) {
+                    $sessCartCount = count($_SESSION['cartItems']);
+                } else {
+                    $sessCartCount = 0;
+                }
+                ?>
+                <a href="<?php echo site_url('cart'); ?>" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge"><?php echo $sessCartCount; ?></span>
                 </a>
                 <?php endif; ?>
             </div>

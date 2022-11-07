@@ -183,6 +183,36 @@ $this->session = \Config\Services::session();
     <!-- Template Javascript -->
     <script src="<?php echo site_url('assets/js/main.js'); ?>"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function(){
+            if (navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(showLocation);
+            } else{ 
+                $('#location').html('Geolocation is not supported by this browser.');
+            }
+        });
+
+        function showLocation(position){
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            alert(latitude);
+            alert(longitude);
+            // $.ajax({
+            //     type:'POST',
+            //     url:'<?php echo site_url('home/getLocation'); ?>',
+            //     data:'latitude='+latitude+'&longitude='+longitude,
+            //     success:function(msg){
+            //         // if(msg){
+            //         //    $("#location").html(msg);
+            //         // }else{
+            //         //     $("#location").html('Not Available');
+            //         // }
+            //         alert(msg);
+            //     }
+            // });
+        }
+    </script>
+
     <!-- Country Modal Start -->
     <div class="modal fade" id="countryModal" tabindex="-1" role="dialog" aria-labelledby="countryModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

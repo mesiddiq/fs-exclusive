@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="<?php echo site_url('admin/css/quill/snow.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/fullcalendar.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/morris.css'); ?>" />
-    <?php if ($page_name == "products" || $page_name == "orders" || $page_name == "users") { ?>
+    <?php if ($page_name == "products" || $page_name == "orders" || $page_name == "requirements" || $page_name == "users") { ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/datatable.css'); ?>" />
     <?php } ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/main.css'); ?>" />
@@ -44,7 +44,7 @@
     <script src="<?php echo site_url('admin/js/world-merc.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/polyfill.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/quill.min.js'); ?>"></script>
-    <?php if ($page_name == "products" || $page_name == "orders" || $page_name == "users") { ?>
+    <?php if ($page_name == "products" || $page_name == "orders" || $page_name == "requirements" || $page_name == "users") { ?>
     <script src="<?php echo site_url('admin/js/datatable.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/Sortable.min.js'); ?>"></script>
     <?php } ?>

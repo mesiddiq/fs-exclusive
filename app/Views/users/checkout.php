@@ -32,7 +32,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <button type="button" class="btn btn-primary text-white font-weight-bold my-3 py-3 px-4" data-toggle="modal" data-target="#addressModal"><i class="fa fa-plus-circle pr-2"></i> Add New Address</button>
+                            <button type="button" class="btn btn-primary text-white font-weight-bold showAddressModal my-3 py-3 px-4"><i class="fa fa-plus-circle pr-2"></i> Add New Address</button>
                         </div>
                     </div>
                 </div>
@@ -47,6 +47,7 @@
                         <?php
                         $subTotal = 0;
                         $discount = 0;
+                        if ($this->session->get("logged_in")):
                         foreach ($cart as $key => $cart):
                         $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
                         if ($product["isDiscount"] == 1) {
@@ -64,6 +65,28 @@
                             <?php endif; ?>
                         </div>
                         <?php endforeach; ?>
+                        <?php else: ?>
+                        <?php
+                        if ($this->session->get("cartItems")):
+                        foreach ($this->session->get("cartItems") as $key => $sessCart):
+                        $sessCartproduct = $this->db->table("products")->where("id", $sessCart["productId"])->get()->getRowArray();
+                        if ($sessCartproduct["isDiscount"] == 1) {
+                            $subTotal += $sessCart["productQty"] * $sessCartproduct["discountedPrice"];
+                        } else {
+                            $subTotal += $sessCart["productQty"] * $sessCartproduct["price"];
+                        }
+                        ?>
+                        <div class="d-flex justify-content-between">
+                            <p><?php echo $sessCartproduct["name"] . " x " . $sessCart["productQty"]; ?></p>
+                            <?php if ($sessCartproduct["isDiscount"] == 1): ?>
+                            <p><?php echo $sessCountry["currency"] . ($sessCart["productQty"] * $sessCartproduct["discountedPrice"]); ?></p>
+                            <?php else: ?>
+                            <p><?php echo $sessCountry["currency"] . ($sessCart["productQty"] * $sessCartproduct["price"]); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                        <?php endif; ?>
                         <hr class="mt-0">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>

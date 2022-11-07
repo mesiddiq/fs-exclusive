@@ -84,3 +84,9 @@
 
     <!-- Back to Top -->
     <a href="javascript:;" class="btn btn-primary text-white back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <!-- Back to Top -->
+    <a href="javascript:;" class="btn text-white custom-product" id="showcustomProductModal">Create Your Product</a>
+
+    <!-- Recent Sold -->
+    <div id="recent-sold"></div>

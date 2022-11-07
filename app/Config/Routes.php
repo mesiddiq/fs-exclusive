@@ -45,29 +45,46 @@ $routes->set404Override(function(){
  */
 $routes->get('/', 'Home::index');
 $routes->post('/country', 'Home::country');
-$routes->post('/login', 'Login::index');
-$routes->post('/register', 'Login::register');
 $routes->get('/cart', 'Home::cart');
 $routes->post('/addToCart', 'Home::addToCart');
 $routes->post('/removeFromCart', 'Home::removeFromCart');
+$routes->post('/removeFromSessionCart', 'Home::removeFromSessionCart');
 $routes->post('/deleteUserCart', 'Home::deleteUserCart');
+$routes->post('/toggleWishlist', 'Home::toggleWishlist');
 $routes->get('/checkout', 'Home::checkout');
 $routes->post('/addAddress', 'Home::addAddress');
 $routes->post('/placeOrder', 'Home::placeOrder');
+$routes->post('/customProduct', 'Home::customProduct');
+$routes->get('/sendmail', 'Home::sendMail');
+// Login
+$routes->post('/login', 'Login::index');
+$routes->post('/register', 'Login::register');
+$routes->post('/forgot', 'Login::forgot');
+$routes->get('/reset', 'Login::reset');
+$routes->post('/change', 'Login::change');
 $routes->get('/logout', 'Login::logout');
 
 // United Kingdom
 $routes->get('/uk', 'Uk::index');
 $routes->get('/uk/shop', 'Uk::shop');
+$routes->get('/uk/search', 'Uk::search');
+$routes->post('/uk/search', 'Uk::search');
 $routes->get('/uk/category/(:any)/(:num)', 'Uk::category/$1/$2');
 $routes->get('/uk/product/(:any)/(:num)', 'Uk::product/$1/$2');
+$routes->get('/uk/wishlist', 'Uk::wishlist');
+$routes->get('/uk/orders', 'Uk::orders');
+$routes->get('/uk/order/(:num)', 'Uk::order/$1');
 $routes->get('/uk/contact', 'Uk::contact');
 
 // Malaysia
 $routes->get('/my', 'My::index');
 $routes->get('/my/shop', 'My::shop');
+$routes->get('/my/search', 'My::search');
 $routes->get('/my/category/(:any)/(:num)', 'My::category/$1/$2');
 $routes->get('/my/product/(:any)/(:num)', 'My::product/$1/$2');
+$routes->get('/my/wishlist', 'My::wishlist');
+$routes->get('/my/orders', 'My::orders');
+$routes->get('/my/order/(:num)', 'My::order/$1');
 $routes->get('/my/contact', 'My::contact');
 
 /*
@@ -94,6 +111,9 @@ $routes->post('/admin/products/(:alpha)/(:num)', 'Admin::products/$1/$2');
 // Orders
 $routes->get('/admin/orders', 'Admin::orders');
 $routes->get('/admin/orders/(:alpha)/(:num)', 'Admin::orders/$1/$2');
+// Requirements
+$routes->get('/admin/requirements', 'Admin::requirements');
+$routes->get('/admin/requirements/(:alpha)/(:num)', 'Admin::requirements/$1/$2');
 // Users
 $routes->get('/admin/users', 'Admin::users');
 $routes->get('/admin/users/(:alpha)', 'Admin::users/$1');

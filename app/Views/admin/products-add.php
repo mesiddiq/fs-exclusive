@@ -136,7 +136,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card-style settings-card-2 mb-30">
-                            <form method="POST" id="regForm" action="<?php echo site_url('admin/products/create'); ?>">
+                            <form method="POST" id="regForm" action="<?php echo site_url('admin/products/create'); ?>" enctype="multipart/form-data">
                                 <div class="tab">
                                     <div class="row align-items-center justify-content-center">
                                         <div class="col-12">
@@ -170,7 +170,7 @@
                                                     <select name="category" class="form-required" onchange="this.className = 'form-required'">
                                                         <option value="">Select</option>
                                                         <?php
-                                                        $categories = $this->db->table("category")->where(array('status' => 1, 'parent' => NULL, "country" => $_SESSION["adminProductCountryId"]))->get()->getResultArray();
+                                                        $categories = $this->db->table("category")->where(array("status" => 1, "parent" => NULL, "country" => $_SESSION["adminProductCountryId"]))->get()->getResultArray();
                                                         foreach ($categories as $key => $category):
                                                         ?>
                                                         <option value="<?php echo $category['id']; ?>"><?php echo $category["name"]; ?></option>

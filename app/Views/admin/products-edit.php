@@ -152,7 +152,7 @@
                                                 <div class="select-position">
                                                     <select name="category" class="form-required" onchange="this.className = 'form-required'">
                                                         <?php
-                                                        $categories = $this->db->table("category")->where(array('status' => 1, 'parent' => NULL))->get()->getResultArray();
+                                                        $categories = $this->db->table("category")->where(array("status" => 1, "parent" => NULL, "country" => $product["country"]))->get()->getResultArray();
                                                         foreach ($categories as $key => $category):
                                                         ?>
                                                         <option value="<?php echo $category['id']; ?>" <?php echo $category["id"] == $product["category"] ? 'checked' : ''; ?>><?php echo $category["name"]; ?></option>

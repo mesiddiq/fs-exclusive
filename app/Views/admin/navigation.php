@@ -55,6 +55,26 @@
                         <span class="text">Orders</span>
                     </a>
                 </li>
+                <li class="nav-item <?php echo $uri[4] == 'orders' ? 'active' : ''; ?>">
+                    <a href="<?php echo site_url('admin/orders'); ?>">
+                        <span class="icon">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.58341 8.70841L6.87508 12.8334H2.29175L4.58341 8.70841ZM2.75008 3.66675H6.41675V7.33341H2.75008V3.66675ZM4.58341 18.3334C5.06964 18.3334 5.53596 18.1403 5.87978 17.7964C6.22359 17.4526 6.41675 16.9863 6.41675 16.5001C6.41675 16.0139 6.22359 15.5475 5.87978 15.2037C5.53596 14.8599 5.06964 14.6667 4.58341 14.6667C4.09718 14.6667 3.63087 14.8599 3.28705 15.2037C2.94324 15.5475 2.75008 16.0139 2.75008 16.5001C2.75008 16.9863 2.94324 17.4526 3.28705 17.7964C3.63087 18.1403 4.09718 18.3334 4.58341 18.3334ZM8.25008 4.58341V6.41675H19.2501V4.58341H8.25008ZM8.25008 17.4167H19.2501V15.5834H8.25008V17.4167ZM8.25008 11.9167H19.2501V10.0834H8.25008V11.9167Z"></path>
+                            </svg>
+                        </span>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="nav-item <?php echo $uri[4] == 'requirements' ? 'active' : ''; ?>">
+                    <a href="<?php echo site_url('admin/requirements'); ?>">
+                        <span class="icon">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.66675 4.58325V16.4999H19.2501V4.58325H3.66675ZM5.50008 14.6666V6.41659H8.25008V14.6666H5.50008ZM10.0834 14.6666V11.4583H12.8334V14.6666H10.0834ZM17.4167 14.6666H14.6667V11.4583H17.4167V14.6666ZM10.0834 9.62492V6.41659H17.4167V9.62492H10.0834Z"></path>
+                            </svg>
+                        </span>
+                        <span class="text">Requirements</span>
+                    </a>
+                </li>
                 <li class="nav-item <?php echo $uri[4] == 'users' ? 'active' : ''; ?>">
                     <a href="<?php echo site_url('admin/users'); ?>">
                         <span class="icon">

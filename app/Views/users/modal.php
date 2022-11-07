@@ -7,13 +7,30 @@
                     <div class="text-center mt-4">
                         <h4><i class="fa fa-check-circle"></i></h4>
                         <h4>Added to cart</h4>
-                        <button class="btn btn-primary text-white my-4" onclick="location.reload()" aria-label="Close">Got it!</button>
+                        <a href="javascript:;"><button class="btn btn-primary text-white my-4" onclick="location.reload()">Got it!</button></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Cart Modal End -->
+
+
+    <!-- Wishlist Modal Start -->
+    <div class="modal fade" id="wishlistModal" tabindex="-1" role="dialog" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body px-5">
+                    <div class="text-center mt-4">
+                        <h4><i class="fa fa-check-circle"></i></h4>
+                        <h4 id="wishlistModalMessage"></h4>
+                        <button class="btn btn-primary text-white my-4" onclick="location.reload()">Got it!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Wishlist Modal End -->
 
 
     <!-- Delete Modal Start -->
@@ -72,7 +89,7 @@
                         </div>
                     </form>
                     <div class="mb-4 text-center">
-                        <a href="javascript:;">Forgot Password?</a>
+                        <a href="javascript:;" class="showForgotModal">Forgot Password?</a>
                     </div>
                     <hr>
                     <div class="mb-4 text-center">
@@ -98,7 +115,7 @@
                     <div class="mb-4 text-center">
                         <h2>Sign Up</h2>
                     </div>
-                    <div id="registerError" class="text-danger" style="position: absolute; margin-top: -12px;"></div>
+                    <div id="registerError" style="position: absolute; margin-top: -12px;"></div>
                     <form method="POST" action="javascript:;" class="authForm" id="registerForm" novalidate="novalidate">
                         <div class="input-group mt-5 mb-4">
                             <div class="input-group-prepend">
@@ -136,6 +153,60 @@
     <!-- Register Modal End -->
 
 
+    <!-- Forgot Password Modal Start -->
+    <div class="modal fade" id="forgotModal" tabindex="-1" role="dialog" aria-labelledby="forgotModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header pb-0" style="border-bottom: none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body px-5">
+                    <div class="mb-4 text-center">
+                        <h2>Forgot Password</h2>
+                    </div>
+                    <form method="POST" action="javascript:;" class="authForm" id="forgotForm" novalidate="novalidate">
+                        <div class="input-group mt-5 mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="email" class="form-control" name="email" id="forgotEmail" placeholder="Email" aria-label="Email">
+                            <small id="forgotEmailError" class="text-danger" style="position: absolute; top: 40px; left: 50px;"></small>
+                        </div>
+                        <div id="forgotError" style="position: absolute; margin-top: -12px;"></div>
+                        <div class="mt-5 mb-4">
+                            <button class="btn btn-primary btn-block text-white py-2 px-4" type="submit">Submit</button>
+                        </div>
+                    </form>
+                    <hr>
+                    <div class="mb-4 text-center">
+                        Go back to <a href="javascript:;" class="showLoginModal">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Forgot Password Modal End -->
+
+
+    <!-- Reset Password Modal Start -->
+    <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body px-5">
+                    <div class="text-center mt-4">
+                        <h4 id="resetModalIcon"><i class="fa fa-check-circle"></i></h4>
+                        <h4 id="resetModalMessage"></h4>
+                        <a href="<?php echo site_url(); ?>"><button class="btn btn-primary text-white my-4" aria-label="Close">Got it!</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Reset Password Modal End -->
+
+
     <!-- Address Modal Start -->
     <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -149,39 +220,39 @@
                     <div class="mb-3 text-center">
                         <h2>Add New Address</h2>
                     </div>
-                    <form method="POST" action="javascript:;" id="addressForm">
+                    <form method="POST" action="javascript:;" id="addressForm" novalidate="novalidate">
                         <div class="row">
                             <div class="col-12 form-group">
                                 <label class="text-dark">Name</label>
-                                <input class="form-control" type="text" name="name" oninput="this.className='form-control'" placeholder="John">
+                                <input class="form-control" type="text" name="name" id="addressName" oninput="this.className='form-control'" placeholder="John">
                             </div>
                             <div class="col-6 form-group">
                                 <label class="text-dark">Email</label>
-                                <input class="form-control" type="text" name="email" oninput="this.className='form-control'" placeholder="example@email.com">
+                                <input class="form-control" type="email" name="email" id="addressEmail" oninput="this.className='form-control'" placeholder="example@email.com">
                             </div>
                             <div class="col-6 form-group">
                                 <label class="text-dark">Mobile</label>
-                                <input class="form-control" type="text" name="contact" oninput="this.className='form-control'" placeholder="+123 456 789">
+                                <input class="form-control" type="text" name="contact" id="addressContact" oninput="this.className='form-control'" placeholder="+123 456 789">
                             </div>
                             <div class="col-12 form-group">
                                 <label class="text-dark">Address Line 1</label>
-                                <input class="form-control" type="text" name="address" oninput="this.className='form-control'" placeholder="House No., Building Name">
+                                <input class="form-control" type="text" name="address" id="addressAddress" oninput="this.className='form-control'" placeholder="House No., Building Name">
                             </div>
                             <div class="col-12 form-group">
                                 <label class="text-dark">Address Line 2 (Optional)</label>
-                                <input class="form-control" type="text" name="address2" placeholder="Road Name, Area, Colony">
+                                <input class="form-control" type="text" name="address2" id="addressAddress2" placeholder="Road Name, Area, Colony">
                             </div>
                             <div class="col-6 form-group">
                                 <label class="text-dark">City</label>
-                                <input class="form-control" type="text" name="city" oninput="this.className='form-control'" placeholder="Albany">
+                                <input class="form-control" type="text" name="city" id="addressCity" oninput="this.className='form-control'" placeholder="Albany">
                             </div>
                             <div class="col-6 form-group">
                                 <label class="text-dark">State</label>
-                                <input class="form-control" type="text" name="state" oninput="this.className='form-control'" placeholder="New York">
+                                <input class="form-control" type="text" name="state" id="addressState" oninput="this.className='form-control'" placeholder="New York">
                             </div>
                             <div class="col-6 form-group">
                                 <label class="text-dark">ZIP Code</label>
-                                <input class="form-control" type="text" name="zipcode" oninput="this.className='form-control'" placeholder="12345">
+                                <input class="form-control" type="text" name="zipcode" id="addressZipcode" oninput="this.className='form-control'" placeholder="12345">
                             </div>
                         </div>
                         <div class="my-4">
@@ -193,6 +264,77 @@
         </div>
     </div>
     <!-- Address Modal End -->
+
+
+    <!-- Custom Product Modal Start -->
+    <div class="modal fade" id="customProductModal" tabindex="-1" role="dialog" aria-labelledby="customProductModalLabel" aria-hidden="true">
+        <div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header pb-0" style="border-bottom: none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body px-5">
+                    <div class="mb-3 text-center">
+                        <h2>Create Your Product</h2>
+                    </div>
+                    <form method="POST" action="<?php echo site_url('customProduct'); ?>" id="customProductForm" novalidate="novalidate" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Name</label>
+                                <input class="form-control" type="text" name="name" id="customProductName" oninput="this.className='form-control'" placeholder="John">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Email</label>
+                                <input class="form-control" type="email" name="email" id="customProductEmail" oninput="this.className='form-control'" placeholder="example@email.com">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Mobile</label>
+                                <input class="form-control" type="text" name="contact" id="customProductContact" oninput="this.className='form-control'" placeholder="+123 456 789">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Alternate Mobile (Optional)</label>
+                                <input class="form-control" type="text" name="contact2" id="customProductContact2" oninput="this.className='form-control'" placeholder="+123 456 789">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Address Line 1</label>
+                                <input class="form-control" type="text" name="address" id="customProductAddress" oninput="this.className='form-control'" placeholder="House No., Building Name">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Address Line 2 (Optional)</label>
+                                <input class="form-control" type="text" name="address2" id="customProductAddress2" placeholder="Road Name, Area, Colony">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">City</label>
+                                <input class="form-control" type="text" name="city" id="customProductCity" oninput="this.className='form-control'" placeholder="Albany">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">State</label>
+                                <input class="form-control" type="text" name="state" id="customProductState" oninput="this.className='form-control'" placeholder="New York">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Country</label>
+                                <input class="form-control" type="text" name="country" id="customProductCountry" oninput="this.className='form-control'" placeholder="United States">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">ZIP Code</label>
+                                <input class="form-control" type="text" name="zipcode" id="customProductZipcode" oninput="this.className='form-control'" placeholder="12345">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label class="text-dark">Upload <small>(Only JPG/PNG images)</small></label>
+                                <input class="form-control" type="file" name="images[]" id="customProductImage"  oninput="this.className='form-control'" accept="image/jpg, image/jpeg, image/png" multiple>
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <button id="customProductFormBtn" class="btn btn-primary text-white py-2 px-4" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Custom Product Modal End -->
 
 
     <!-- Order Modal Start -->

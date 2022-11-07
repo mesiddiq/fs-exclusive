@@ -28,6 +28,7 @@
                         <?php
                         $subTotal = 0;
                         $discount = 0;
+                        if ($this->session->get("logged_in")):
                         if (count($cart) > 0):
                         foreach ($cart as $key => $cart):
                         $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
@@ -39,7 +40,7 @@
                         $productImage = $this->db->table("productimages")->orderBy("featured DESC")->where("productID", $product["id"])->get()->getRowArray();
                         ?>
                         <tr>
-                            <td class="align-middle"><img src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="<?php echo $product["name"]; ?>" style="width: 50px;"> <?php echo $product["name"]; ?></td>
+                            <td class="text-left align-middle"><img src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="<?php echo $product["name"]; ?>" style="width: 50px;"> <a href="<?php echo site_url(strtolower($sessCountry["code"]).'/product/'.$product['slug'].'/'.$product['id']); ?>"><?php echo $product["name"]; ?></a></td>
                             <td class="align-middle">
                                 <?php if ($product["isDiscount"] == 1): ?>
                                 <strong class="text-dark"><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?></strong><del class="text-muted ml-2"><?php echo $sessCountry["currency"] . $product["price"]; ?></del>
@@ -48,18 +49,18 @@
                                 <?php endif; ?>
                             </td>
                             <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 50px;">
-                                    <!-- <div class="input-group-btn">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary text-white btn-minus" >
                                         <i class="fa fa-minus"></i>
                                         </button>
-                                    </div> -->
+                                    </div>
                                     <input type="text" class="form-control form-control-sm bg-secondary text-center" value="<?php echo $cart["productQty"]; ?>" readonly>
-                                    <!-- <div class="input-group-btn">
+                                    <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary text-white btn-plus">
                                             <i class="fa fa-plus"></i>
                                         </button>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </td>
                             <td class="align-middle">
@@ -76,6 +77,60 @@
                         <tr>
                             <td colspan="5">No products found</td>
                         </tr>
+                        <?php endif; ?>
+                        <!-- DB Count Cart Endif -->
+                        <?php else: ?>
+                        <?php
+                        if ($this->session->get("cartItems")):
+                        foreach ($this->session->get("cartItems") as $key => $sessCart):
+                        $sessCartproduct = $this->db->table("products")->where("id", $sessCart["productId"])->get()->getRowArray();
+                        if ($sessCartproduct["isDiscount"] == 1) {
+                            $subTotal += $sessCart["productQty"] * $sessCartproduct["discountedPrice"];
+                        } else {
+                            $subTotal += $sessCart["productQty"] * $sessCartproduct["price"];
+                        }
+                        $sessCartproductImage = $this->db->table("productimages")->orderBy("featured DESC")->where("productID", $sessCartproduct["id"])->get()->getRowArray();
+                        ?>
+                        <tr>
+                            <td class="text-left align-middle"><img src="<?php echo site_url('uploads/products/'.$sessCartproductImage['name']); ?>" alt="<?php echo $sessCartproduct["name"]; ?>" style="width: 50px;"> <a href="<?php echo site_url(strtolower($sessCountry["code"]).'/product/'.$sessCartproduct['slug'].'/'.$sessCartproduct['id']); ?>"><?php echo $sessCartproduct["name"]; ?></a></td>
+                            <td class="align-middle">
+                                <?php if ($sessCartproduct["isDiscount"] == 1): ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCartproduct["discountedPrice"]; ?></strong><del class="text-muted ml-2"><?php echo $sessCountry["currency"] . $sessCartproduct["price"]; ?></del>
+                                <?php else: ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCartproduct["price"]; ?></strong>
+                                <?php endif; ?>
+                            </td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <!-- <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary text-white btn-minus" >
+                                        <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div> -->
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="<?php echo $sessCart["productQty"]; ?>" readonly>
+                                    <!-- <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary text-white btn-plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div> -->
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <?php if ($sessCartproduct["isDiscount"] == 1): ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCart["productPrice"]; ?></strong>
+                                <?php else: ?>
+                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCart["productPrice"]; ?></strong>
+                                <?php endif; ?>
+                            </td>
+                            <td class="align-middle"><button class="btn btn-sm btn-primary removeFromSessionCart text-white" data-id="<?php echo $key; ?>"><i class="fa fa-times"></i></button></td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                        <tr>
+                            <td colspan="5">No products found</td>
+                        </tr>
+                        <?php endif; ?>
+                        <!-- Session Count Cart Endif -->
                         <?php endif; ?>
                     </tbody>
                 </table>

@@ -5,6 +5,12 @@
     
     // Dropdown on mouse hover
     $(document).ready(function() {
+        // setTimeout(function() {
+        //     $('.recent-sold').fadeIn('slow');
+        // }, 5000);
+        // setTimeout(function() {
+        //     $('.recent-sold').fadeOut('slow');
+        // }, 15000);
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
                 $('.navbar .dropdown').on('mouseover', function () {
@@ -19,6 +25,11 @@
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
 
+        $(".showForgotModal").on("click", function() {
+            $("#loginModal").modal("hide");
+            $("#forgotModal").modal("show");
+        });
+
         $(".showRegisterModal").on("click", function() {
             $("#loginModal").modal("hide");
             $("#registerModal").modal("show");
@@ -26,7 +37,16 @@
 
         $(".showLoginModal").on("click", function() {
             $("#registerModal").modal("hide");
+            $("#forgotModal").modal("hide");
             $("#loginModal").modal("show");
+        });
+
+        $(".showAddressModal").on("click", function() {
+            $("#addressModal").modal("show");
+        });
+
+        $("#showcustomProductModal").on("click", function() {
+            $("#customProductModal").modal("show");
         });
 
         // Login Form
@@ -57,8 +77,8 @@
                     data: {email: email, password: password},
                     success: function(logRes) {
                         if (logRes) {
-                            window.location.replace(currLoc);
                             $("#loginError").text("");
+                            window.location.replace(currLoc);
                         } else {
                             $("#loginError").text("Invalid credentials");
                         }
@@ -103,15 +123,200 @@
                     data: {name: name, email: email, password: password},
                     success: function(regRes) {
                         if (regRes == "Exists") {
-                            $("#registerError").text("Email already exists");
+                            $("#registerError").removeClass("text-success").addClass("text-danger").text("Email already exists");
                         } else if (regRes == "Wrong") {
-                            $("#registerError").text("Something went wrong. Please try again");
+                            $("#registerError").removeClass("text-success").addClass("text-danger").text("Something went wrong. Please try again");
                         } else if (regRes) {
-                            window.location.replace(currLoc);
-                            $("#registerError").text("");
+                            $("#registerError").removeClass("text-danger").addClass("text-success").text("Please verify your email address");
+                            setTimeout(function() {
+                                window.location.replace(currLoc);
+                            }, 5000);
                         }
                     }
                 });
+            }
+        });
+
+        // Forgot Password Form
+        $("#forgotForm").on("submit", function(e) {
+            e.preventDefault();
+            var email = $("#forgotEmail").val();
+            var currLoc = $(location).attr('href');
+
+            if (email == "") {
+                $("#forgotEmail").focus();
+                $("#forgotEmailError").text("This field is required");
+            } else {
+                $("#forgotEmailError").text("");
+            }
+
+            if (email != "") {
+                $.ajax({
+                    method: "POST",
+                    url: site_url + "forgot",
+                    data: {email: email},
+                    success: function(forRes) {
+                        alert(forRes);
+                        if (forRes == true) {
+                            $("#forgotError").removeClass("text-danger").addClass("text-success").text("Email sent");
+                        } else {
+                            $("#forgotError").removeClass("text-success").addClass("text-danger").text(forRes);
+                        }
+                    }
+                });
+            }
+        });
+
+        // Reset Form
+        $("#resetForm").on("submit", function(e) {
+            e.preventDefault();
+            var password = $("#resetPassword").val();
+            var confirmPassword = $("#resetConfirmPassword").val();
+
+            if (confirmPassword == "") {
+                $("#resetConfirmPassword").focus();
+                $("#resetConfirmPasswordError").text("* This field is required");
+            } else {
+                $("#resetConfirmPasswordError").text("");
+            }
+
+            if (password == "") {
+                $("#resetPassword").focus();
+                $("#resetPasswordError").text("* This field is required");
+            } else {
+                $("#resetPasswordError").text("");
+            }
+
+            if (password != "" && confirmPassword != "") {
+                if (password != confirmPassword) {
+                    $("#resetConfirmPasswordError").text("Password don't match");
+                } else {
+                    $.ajax({
+                        method: "POST",
+                        url: site_url + "change",
+                        data: {password: password},
+                        success: function(resRes) {
+                            if (resRes) {
+                                $("#resetPasswordError").text("");
+                                $("#resetConfirmPasswordError").text("");
+                                $("#resetModalIcon").show();
+                                $("#resetModalMessage").text("Password updated");
+                                $("#resetModal").modal("show");
+                            } else {
+                                $("#resetPasswordError").text("");
+                                $("#resetConfirmPasswordError").text("");
+                                $("#resetModalIcon").hide();
+                                $("#resetModalMessage").text("Something went wrong. Try later");
+                                $("#resetModal").modal("show");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        // Custom Product Form
+        $("#customProductFormBtn").on("click", function(e) {
+            e.preventDefault();
+            var name = $("#customProductName").val();
+            var email = $("#customProductEmail").val();
+            var contact = $("#customProductContact").val();
+            var contact2 = $("#customProductContact2").val();
+            var address = $("#customProductAddress").val();
+            var address2 = $("#customProductAddress2").val();
+            var city = $("#customProductCity").val();
+            var state = $("#customProductState").val();
+            var country = $("#customProductCountry").val();
+            var zipcode = $("#customProductZipcode").val();
+            var image = $("#customProductImage").val();
+            var currLoc = $(location).attr('href');
+
+            if (image == "") {
+                $("#customProductImage").addClass("is-invalid");
+                $("#customProductImage").focus();
+            } else {
+                $("#customProductImage").removeClass("is-invalid");
+            }
+
+            if (zipcode == "") {
+                $("#customProductZipcode").addClass("is-invalid");
+                $("#customProductZipcode").focus();
+            } else {
+                $("#customProductZipcode").removeClass("is-invalid");
+            }
+
+            if (country == "") {
+                $("#customProductCountry").addClass("is-invalid");
+                $("#customProductCountry").focus();
+            } else {
+                $("#customProductCountry").removeClass("is-invalid");
+            }
+
+            if (state == "") {
+                $("#customProductState").addClass("is-invalid");
+                $("#customProductState").focus();
+            } else {
+                $("#customProductState").removeClass("is-invalid");
+            }
+
+            if (city == "") {
+                $("#customProductCity").addClass("is-invalid");
+                $("#customProductCity").focus();
+            } else {
+                $("#customProductCity").removeClass("is-invalid");
+            }
+
+            if (address == "") {
+                $("#customProductAddress").addClass("is-invalid");
+                $("#customProductAddress").focus();
+            } else {
+                $("#customProductAddress").removeClass("is-invalid");
+            }
+
+            if (contact == "") {
+                $("#customProductContact").addClass("is-invalid");
+                $("#customProductContact").focus();
+            } else {
+                $("#customProductContact").removeClass("is-invalid");
+            }
+
+            if (email == "") {
+                $("#customProductEmail").addClass("is-invalid");
+                $("#customProductEmail").focus();
+            } else {
+                $("#customProductEmail").removeClass("is-invalid");
+            }
+
+            if (name == "") {
+                $("#customProductName").addClass("is-invalid");
+                $("#customProductName").focus();
+            } else {
+                $("#customProductName").removeClass("is-invalid");
+            }
+
+            if (name != "" && email != "" && contact != "" && address != "" && city != "" && state != "" && country != "" && zipcode != "") {
+                $("#customProductForm").submit();
+            //     $.ajax({
+            //         method: "POST",
+            //         url: site_url + "customProduct",
+            //         data: {
+            //             name: name,
+            //             email: email,
+            //             contact: contact,
+            //             contact2: contact2,
+            //             address: address,
+            //             address2: address2,
+            //             city: city,
+            //             state: state,
+            //             country: country,
+            //             zipcode: zipcode,
+            //         },
+            //         success: function(cusRes) {
+            //             if (cusRes) {
+            //                 location.reload();
+            //             }
+            //         }
+            //     });
             }
         });
 
@@ -167,48 +372,48 @@
 
         // Add Address
         $("#addressForm").on("submit", function() {
-            var name = $("[name='name']").val();
-            var email = $("[name='email']").val();
-            var contact = $("[name='contact']").val();
-            var address = $("[name='address']").val();
-            var address2 = $("[name='address2']").val();
-            var city = $("[name='city']").val();
-            var state = $("[name='state']").val();
-            var zipcode = $("[name='zipcode']").val();
+            var name = $("#addressName").val();
+            var email = $("#addressEmail").val();
+            var contact = $("#addressContact").val();
+            var address = $("#addressAddress").val();
+            var address2 = $("#addressAddress2").val();
+            var city = $("#addressCity").val();
+            var state = $("#addressState").val();
+            var zipcode = $("#addressZipcode").val();
 
             if (zipcode == "") {
-                $("[name='zipcode']").addClass("is-invalid");
-                $("[name='zipcode']").focus();
+                $("#addressZipcode").addClass("is-invalid");
+                $("#addressZipcode").focus();
             }
 
             if (state == "") {
-                $("[name='state']").addClass("is-invalid");
-                $("[name='state']").focus();
+                $("#addressState").addClass("is-invalid");
+                $("#addressState").focus();
             }
 
             if (city == "") {
-                $("[name='city']").addClass("is-invalid");
-                $("[name='city']").focus();
+                $("#addressCity").addClass("is-invalid");
+                $("#addressCity").focus();
             }
 
             if (address == "") {
-                $("[name='address']").addClass("is-invalid");
-                $("[name='address']").focus();
+                $("#addressAddress").addClass("is-invalid");
+                $("#addressAddress").focus();
             }
 
             if (contact == "") {
-                $("[name='contact']").addClass("is-invalid");
-                $("[name='contact']").focus();
+                $("#addressContact").addClass("is-invalid");
+                $("#addressContact").focus();
             }
 
             if (email == "") {
-                $("[name='email']").addClass("is-invalid");
-                $("[name='email']").focus();
+                $("#addressEmail").addClass("is-invalid");
+                $("#addressEmail").focus();
             }
 
             if (name == "") {
-                $("[name='name']").addClass("is-invalid");
-                $("[name='name']").focus();
+                $("#addressName").addClass("is-invalid");
+                $("#addressName").focus();
             }
 
             if (name != "" && email != "" && contact != "" && address != "" && city != "" && state != "" && zipcode != "") {
@@ -225,8 +430,8 @@
                         state: state,
                         zipcode: zipcode,
                     },
-                    success: function(res) {
-                        if (res) {
+                    success: function(addRes) {
+                        if (addRes) {
                             location.reload();
                         }
                     }
@@ -273,19 +478,19 @@
         smartSpeed: 1000,
         responsive: {
             0:{
-                items:2
+                items:1
             },
             576:{
-                items:3
+                items:2
             },
             768:{
-                items:4
+                items:2
             },
             992:{
-                items:5
+                items:3
             },
             1200:{
-                items:6
+                items:3
             }
         }
     });
@@ -340,12 +545,42 @@
             method: "POST",
             url: site_url + "addToCart",
             data: {productId: productId, productQty: productQty},
-            success: function(res) {
-                if (res) {
+            success: function(cartRes) {
+                if (cartRes == "cart") {
+                    $("#cartModal").modal("show");
+                } else if (cartRes == "checkout") {
+                    $("#cartModal button").removeAttr("onclick");
+                    $("#cartModal a").attr("href", site_url + "checkout");
                     $("#cartModal").modal("show");
                 }
             }
         });
+    });
+
+
+    // Toggle Wishlist
+    $("#toggleWishlist, .toggleWishlist").on("click", function() {
+        var productId = $(this).data("productid");
+        var loggedIn = $(this).data("loggedin");
+
+        if (loggedIn) {
+            $.ajax({
+                method: "POST",
+                url: site_url + "toggleWishlist",
+                data: {productId: productId},
+                success: function(res) {
+                    if (res == "added") {
+                        $("#wishlistModalMessage").text("Added to Wishlist");
+                        $("#wishlistModal").modal("show");
+                    } else if (res == "removed") {
+                        $("#wishlistModalMessage").text("Removed from Wishlist");
+                        $("#wishlistModal").modal("show");
+                    }
+                }
+            });
+        } else {
+            $("#loginModal").modal("show");
+        }
     });
 
 
@@ -358,6 +593,26 @@
             $.ajax({
                 method: "POST",
                 url: site_url + "removeFromCart",
+                data: {id: id},
+                success: function(res) {
+                    if (res) {
+                        location.reload();
+                    }
+                }
+            });
+        });
+    });
+
+
+    // Remove from Cart
+    $(".removeFromSessionCart").on("click", function() {
+        var button = $(this);
+        var id = $(this).data("id");
+        $("#deleteModal").modal("show");
+        $("#deleteCartItem").on("click", function() {
+            $.ajax({
+                method: "POST",
+                url: site_url + "removeFromSessionCart",
                 data: {id: id},
                 success: function(res) {
                     if (res) {
