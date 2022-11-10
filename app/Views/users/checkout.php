@@ -23,16 +23,22 @@
                         <div class="col-6">
                             <div class="select-address">
                                 <input type="radio" name="deliveryAddress" value="<?php echo $address['id']; ?>" <?php echo $key == 0 ? 'checked' : ''; ?>>
-                                <label for="address1"><strong><?php echo $address["name"]; ?></strong><br>
-                                1/1, Test address street, Chennai, Tamil Nadu - 600001<br>
-                                <?php echo $address["contact"]; ?></label>
+                                <label for="address<?php echo $address["id"]; ?>"><strong><?php echo $address["name"]; ?></strong><br>
+                                <?php echo $address["address"]; ?>
+                                <?php echo $address["address2"] != NULL ? ", " . $address["address2"] . ", " : ", "; ?>
+                                <?php echo $address["city"] . ", "; ?>
+                                <?php echo $address["state"] . " - "; ?>
+                                <?php echo $address["zipcode"]; ?><br>
+                                <?php echo $address["contact"]; ?><br>
+                                <a href="javascript:;" class="showEditAddressModal" data-addressid="<?php echo $address['id']; ?>">Edit</a></label>
                             </div>
                         </div>
                         <?php endforeach; ?>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <button type="button" class="btn btn-primary text-white font-weight-bold showAddressModal my-3 py-3 px-4"><i class="fa fa-plus-circle pr-2"></i> Add New Address</button>
+                            <p>Already having an account? <a href="javascript:;" data-toggle="modal" data-target="#loginModal">Login</a></p>
+                            <button type="button" id="showAddAddressModal" class="btn btn-primary text-white font-weight-bold my-3 py-3 px-4"><i class="fa fa-plus-circle pr-2"></i> Add New Address</button>
                         </div>
                     </div>
                 </div>
@@ -59,9 +65,9 @@
                         <div class="d-flex justify-content-between">
                             <p><?php echo $product["name"] . " x " . $cart["productQty"]; ?></p>
                             <?php if ($product["isDiscount"] == 1): ?>
-                            <p><?php echo $sessCountry["currency"] . ($cart["productQty"] * $product["discountedPrice"]); ?></p>
+                            <p><?php echo $this->session->get("countryCurrency") . ($cart["productQty"] * $product["discountedPrice"]); ?></p>
                             <?php else: ?>
-                            <p><?php echo $sessCountry["currency"] . ($cart["productQty"] * $product["price"]); ?></p>
+                            <p><?php echo $this->session->get("countryCurrency") . ($cart["productQty"] * $product["price"]); ?></p>
                             <?php endif; ?>
                         </div>
                         <?php endforeach; ?>
@@ -79,9 +85,9 @@
                         <div class="d-flex justify-content-between">
                             <p><?php echo $sessCartproduct["name"] . " x " . $sessCart["productQty"]; ?></p>
                             <?php if ($sessCartproduct["isDiscount"] == 1): ?>
-                            <p><?php echo $sessCountry["currency"] . ($sessCart["productQty"] * $sessCartproduct["discountedPrice"]); ?></p>
+                            <p><?php echo $this->session->get("countryCurrency") . ($sessCart["productQty"] * $sessCartproduct["discountedPrice"]); ?></p>
                             <?php else: ?>
-                            <p><?php echo $sessCountry["currency"] . ($sessCart["productQty"] * $sessCartproduct["price"]); ?></p>
+                            <p><?php echo $this->session->get("countryCurrency") . ($sessCart["productQty"] * $sessCartproduct["price"]); ?></p>
                             <?php endif; ?>
                         </div>
                         <?php endforeach; ?>
@@ -90,17 +96,17 @@
                         <hr class="mt-0">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium"><?php echo $sessCountry["currency"]; ?><span name="subtotal"><?php echo $subTotal; ?></h6>
+                            <h6 class="font-weight-medium"><?php echo $this->session->get("countryCurrency"); ?><span name="subtotal"><?php echo $subTotal; ?></h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Discount</h6>
-                            <h6 class="font-weight-medium"><?php echo $sessCountry["currency"]; ?><span name="discount"><?php echo $discount; ?></h6>
+                            <h6 class="font-weight-medium"><?php echo $this->session->get("countryCurrency"); ?><span name="discount"><?php echo $discount; ?></h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold"><?php echo $sessCountry["currency"]; ?><span name="total"><?php echo ($subTotal - $discount); ?></h5>
+                            <h5 class="font-weight-bold"><?php echo $this->session->get("countryCurrency"); ?><span name="total"><?php echo ($subTotal - $discount); ?></h5>
                         </div>
                     </div>
                 </div>

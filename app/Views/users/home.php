@@ -62,7 +62,7 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <div class="cat-item d-flex flex-column border mb-4">
                     <!-- <p class="text-right">15 Products</p> -->
-                    <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/category/' . $category['slug'] . '/' . $category['id']); ?>" class="cat-img position-relative overflow-hidden">
+                    <a href="<?php echo site_url('category/' . $category['slug'] . '/' . $category['id']); ?>" class="cat-img position-relative overflow-hidden">
                         <img class="img-fluid" src="<?php echo site_url('uploads/category/' . $category['image']); ?>" alt="<?php echo $category["name"]; ?>">
                     </a>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="position-relative text-right" style="z-index: 1;">
                         <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
                         <h1 class="mb-4 font-weight-semi-bold">Spring Collection</h1>
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                        <a href="<?php echo site_url('shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                     <div class="position-relative text-left" style="z-index: 1;">
                         <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
                         <h1 class="mb-4 font-weight-semi-bold">Winter Collection</h1>
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                        <a href="<?php echo site_url('shop'); ?>" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -110,10 +110,10 @@
         </div>
         <div class="row px-xl-5 pb-3">
             <?php
-            $products = $this->db->table("products")->where(array("category" => $category["id"], "country" => $sessCountry["id"]))->get()->getResultArray();
+            $products = $this->db->table("products")->where(array("category" => $category["id"], "country" => $this->session->get("countryId")))->get()->getResultArray();
             foreach ($products as $key => $product): ?>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/' . $product['slug'] . '/' . $product['id']); ?>">
+                <a href="<?php echo site_url('product/' . $product['slug'] . '/' . $product['id']); ?>">
                     <div class="card product-item border-0 mb-4">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                             <?php
@@ -130,14 +130,14 @@
                             <h6 class="text-truncate mb-3"><?php echo $product["name"]; ?></h6>
                             <div class="d-flex justify-content-center">
                                 <?php if ($product["isDiscount"] == 1): ?>
-                                <h6><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?></h6><h6 class="text-muted ml-2"><del><?php echo $sessCountry["currency"] . $product["price"]; ?></del></h6>
+                                <h6><?php echo $this->session->get("countryCurrency") . $product["discountedPrice"]; ?></h6><h6 class="text-muted ml-2"><del><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></del></h6>
                                 <?php else: ?>
-                                <h6><?php echo $sessCountry["currency"] . $product["price"]; ?></h6>
+                                <h6><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></h6>
                                 <?php endif; ?>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
-                            <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/' . $product['slug'] . '/' . $product['id']); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                            <a href="<?php echo site_url('product/' . $product['slug'] . '/' . $product['id']); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                         </div>
                     </div>
                 </a>

@@ -23,7 +23,7 @@
                     $product = $this->db->table("products")->where("id", $wishlist["productId"])->get()->getRowArray();
                     ?>
                     <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/' . $product['slug'] . '/' . $product['id']); ?>">
+                        <a href="<?php echo site_url(strtolower('product/' . $product['slug'] . '/' . $product['id']); ?>">
                             <div class="card product-item border-0 mb-4">
                                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                                     <?php
@@ -40,9 +40,9 @@
                                     <h6 class="text-truncate mb-3"><?php echo $product["name"]; ?></h6>
                                     <div class="d-flex justify-content-center">
                                         <?php if ($product["isDiscount"] == 1): ?>
-                                        <h6><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?></h6><h6 class="text-muted ml-2"><del><?php echo $sessCountry["currency"] . $product["price"]; ?></del></h6>
+                                        <h6><?php echo $this->session->get("countryCurrency") . $product["discountedPrice"]; ?></h6><h6 class="text-muted ml-2"><del><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></del></h6>
                                         <?php else: ?>
-                                        <h6><?php echo $sessCountry["currency"] . $product["price"]; ?></h6>
+                                        <h6><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></h6>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
                     <?php else: ?>
                     <div class="col-12 pb-1 text-center">
                         <h2>Sorry..!<br>No products found</h2>
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . "/shop"); ?>"><button class="btn btn-primary text-white py-2 px-4" type="button">View more products</button></a>
+                        <a href="<?php echo site_url(strtolower("shop"); ?>"><button class="btn btn-primary text-white py-2 px-4" type="button">View more products</button></a>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -86,42 +86,3 @@
         </div>
     </div>
     <!-- Shop End -->
-
-    <script type="text/javascript">
-        function filter() {
-            let url = get_url();
-            window.location.replace(url);
-            // console.log(url);
-        }
-
-        function get_url() {
-            var urlPrefix = window.location.href;
-            var urlSuffix = "";
-            var categoryArr = [];
-            
-            // var selectedCategory = '<?php // echo $_GET["category"]; ?>';
-            // categoryArr = selectedCategory.split(',');
-            // Get selected category
-            $('[name=category]').each(function() {
-
-                if ($(this).is(':checked')) {
-                    console.log("array " + categoryArr)
-                    categoryArr.push($(this).attr('value'));
-                }
-
-                /*if (categoryArr.includes($(this).attr('value')) == false) {
-                    // selectedCategory += ','+$(this).attr('value');
-                    categoryArr.push($(this).attr('value'));
-                    console.log($(this).attr('value'))
-                }*/
-            });
-            var selectedCategory = categoryArr.join();
-            console.log("selectedCate " + selectedCategory)
-            // console.log(selectedCategory);
-
-            urlSuffix = "/category="+selectedCategory;
-            var url = urlPrefix+urlSuffix;
-            selectedCategory = "";
-            return url;
-        }
-    </script>

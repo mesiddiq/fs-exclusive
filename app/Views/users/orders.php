@@ -50,7 +50,7 @@
                                 </td>
                                 <td class="text-center align-middle">
                                     <div class="action justify-content-end">
-                                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/order/' . $order['id']); ?>" target="_blank">
+                                        <a href="<?php echo site_url(strtolower('orders/view/' . $order['id']); ?>" target="_blank">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </div>
@@ -68,42 +68,3 @@
         </div>
     </div>
     <!-- Shop End -->
-
-    <script type="text/javascript">
-        function filter() {
-            let url = get_url();
-            window.location.replace(url);
-            // console.log(url);
-        }
-
-        function get_url() {
-            var urlPrefix = window.location.href;
-            var urlSuffix = "";
-            var categoryArr = [];
-            
-            // var selectedCategory = '<?php // echo $_GET["category"]; ?>';
-            // categoryArr = selectedCategory.split(',');
-            // Get selected category
-            $('[name=category]').each(function() {
-
-                if ($(this).is(':checked')) {
-                    console.log("array " + categoryArr)
-                    categoryArr.push($(this).attr('value'));
-                }
-
-                /*if (categoryArr.includes($(this).attr('value')) == false) {
-                    // selectedCategory += ','+$(this).attr('value');
-                    categoryArr.push($(this).attr('value'));
-                    console.log($(this).attr('value'))
-                }*/
-            });
-            var selectedCategory = categoryArr.join();
-            console.log("selectedCate " + selectedCategory)
-            // console.log(selectedCategory);
-
-            urlSuffix = "/category="+selectedCategory;
-            var url = urlPrefix+urlSuffix;
-            selectedCategory = "";
-            return url;
-        }
-    </script>

@@ -8,7 +8,7 @@
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner border">
                         <?php
-                        $productImages = $this->db->table("productimages")->orderBy("featured DESC")->where("productID", $product["id"])->get()->getResultArray();
+                        $productImages = $this->db->table("productimages")->orderBy("featured DESC")->where("productId", $product["id"])->get()->getResultArray();
                         foreach ($productImages as $key => $productImage): ?>
                         <div class="carousel-item <?php echo $key == 0 ? 'active' : ''; ?>">
                             <a href="javascript:;"><img class="w-100 h-100" src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="<?php echo $product["name"]; ?>"></a>
@@ -28,20 +28,89 @@
                 <h3 class="font-weight-semi-bold"><?php echo $product["name"]; ?></h3>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star-half-alt"></small>
-                        <small class="far fa-star"></small>
+                        <?php
+                        $avgRating = number_format($rating[0]["rating"], 1);
+                        $result = '';
+
+                        if ($avgRating > 0) {
+                            
+                            for ($i=1; $i <= (int) $avgRating; $i++) { 
+                                $result .= '<small class="fas fa-star mr-1"></small>';
+                            }
+
+                            if (strpos($avgRating, ".") == true) {
+                                $result .= '<small class="fas fa-star-half-alt mr-1"></small>';
+                            }
+                            for ($i= 5; $i > ceil($avgRating); $i--) { 
+                                $result .= '<small class="far fa-star mr-1"></small>';
+                            }
+
+                        } else {
+                            for ($i=1; $i <= 5; $i++) { 
+                                $result .= '<small class="far fa-star mr-1"></small>';
+                            }
+                        }
+                        echo $result;
+                        ?>
                     </div>
-                    <small class="pt-1">(50 Reviews)</small>
+                    <small class="pt-1">(<?php echo count($reviews); ?> Reviews)</small>
                 </div>
                 <?php if ($product["isDiscount"] == 1): ?>
-                <h3 class="font-weight-semi-bold mb-4"><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?><del class="text-muted ml-2"><?php echo $sessCountry["currency"] . $product["price"]; ?></del></h3>
+                <h3 class="font-weight-semi-bold mb-4"><?php echo $this->session->get("countryCurrency") . $product["discountedPrice"]; ?><del class="text-muted ml-2"><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></del></h3>
                 <?php else: ?>
-                <h3 class="font-weight-semi-bold mb-4"><?php echo $sessCountry["currency"] . $product["price"]; ?></h3>
+                <h3 class="font-weight-semi-bold mb-4"><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></h3>
                 <?php endif; ?>
                 <p class="mb-4"><?php echo $product["shortDescription"]; ?></p>
+                <!-- <div class="d-flex mb-3">
+                    <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
+                    <form>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="size-1" name="size">
+                            <label class="custom-control-label" for="size-1">XS</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="size-2" name="size">
+                            <label class="custom-control-label" for="size-2">S</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="size-3" name="size">
+                            <label class="custom-control-label" for="size-3">M</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="size-4" name="size">
+                            <label class="custom-control-label" for="size-4">L</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="size-5" name="size">
+                            <label class="custom-control-label" for="size-5">XL</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="d-flex mb-4">
+                    <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
+                    <form>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="color-1" name="color">
+                            <label class="custom-control-label" for="color-1">Black</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="color-2" name="color">
+                            <label class="custom-control-label" for="color-2">White</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="color-3" name="color">
+                            <label class="custom-control-label" for="color-3">Red</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="color-4" name="color">
+                            <label class="custom-control-label" for="color-4">Blue</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="color-5" name="color">
+                            <label class="custom-control-label" for="color-5">Green</label>
+                        </div>
+                    </form>
+                </div> -->
                 <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group quantity mr-3">
                         <div class="input-group-btn">
@@ -91,68 +160,88 @@
             </div>
         </div>
         <div class="row px-xl-5">
-            <div class="col">
-                <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                    <a class="nav-item nav-link active" data-toggle="tab" href="#description-tab">Description</a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#reviews-tab">Reviews (0)</a>
-                </div>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="description-tab">
-                        <h4 class="mb-3">Product Description</h4>
-                        <?php echo json_decode($product["description"]); ?>
-                    </div>
-                    <div class="tab-pane fade" id="reviews-tab">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
-                                <div class="media mb-4">
-                                    <img src="<?php echo site_url('assets/img/user.jpg'); ?>" alt="Image" class="img-fluid rounded-circle mr-3 mt-1" style="width: 45px;">
-                                    <div class="media-body">
-                                        <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                        <div class="text-primary mb-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
-                                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
-                                    </div>
-                                </div>
+            <div class="col-12">
+                <h4 class="mb-3">Product Description</h4>
+                <?php echo json_decode($product["description"]); ?>
+            </div>
+        </div>
+        <hr />
+        <div class="product-reviews">
+            <div class="row px-xl-5">
+                <div class="col-md-6">
+                    <h4 class="mb-4">Reviews</h4>
+                    <?php
+                    if (count($reviews) > 0):
+                    foreach ($reviews as $key => $review):
+                    $reviewUser = $this->db->table("users")->where("id", $review["userId"])->get()->getRowArray();
+                    if ($review["review"] != NULL):
+                    ?>
+                    <div class="media mb-4">
+                        <img src="<?php echo site_url('assets/img/user.jpg'); ?>" alt="Image" class="img-fluid rounded-circle mr-3 mt-1" style="width: 45px;">
+                        <div class="media-body">
+                            <h6><?php echo $reviewUser["name"]; ?><small> - <em><?php echo date("M d, Y", $review["createdAt"]); ?></em></small></h6>
+                            <div class="text-primary mb-2">
+                                <?php
+                                $result = '';
+                                for ($i=0; $i < $review["rating"]; $i++) {
+                                    $result .= '<i class="fas fa-star mr-1"></i>';
+                                }
+                                for ($i=5; $i > $review["rating"]; $i--) {
+                                    $result .= '<i class="far fa-star mr-1"></i>';
+                                }
+                                echo $result;
+                                ?>
                             </div>
-                            <div class="col-md-6">
-                                <h4 class="mb-4">Leave a review</h4>
-                                <small>Your email address will not be published. Required fields are marked *</small>
-                                <div class="d-flex my-3">
-                                    <p class="mb-0 mr-2">Your Rating * :</p>
-                                    <div class="text-primary">
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                </div>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="message">Your Review *</label>
-                                        <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name">Your Name *</label>
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Your Email *</label>
-                                        <input type="email" class="form-control" id="email">
-                                    </div>
-                                    <div class="form-group mb-0">
-                                        <input type="submit" value="Leave Your Review" class="btn btn-primary text-white px-3">
-                                    </div>
-                                </form>
-                            </div>
+                            <p><?php echo $review["review"]; ?></p>
                         </div>
                     </div>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+                    <?php else: ?>
+                    <p>No reviews added yet</p>
+                    <?php endif; ?>
+                </div>
+                <div class="col-md-6">
+                    <?php
+                    if ($isPurchased == true):
+                    ?>
+                    <h4 class="mb-4">Leave a review</h4>
+                    <form method="POST" action="javascript:;" id="reviewForm">
+                        <div class="my-3">
+                            <p class="mb-2">Your Rating</p>
+                            <div class="text-primary">
+                                <input type="radio" name="rating" value="1" checked>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <input type="radio" name="rating" value="2">
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <input type="radio" name="rating" value="3">
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <input type="radio" name="rating" value="4">
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <input type="radio" name="rating" value="5">
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Review</label>
+                            <textarea id="review" cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group mb-0">
+                            <input type="submit" value="Leave Your Review" class="btn btn-primary text-white px-3">
+                            <span id="reviewMsg" style="padding-left: 20px;"></span>
+                        </div>
+                    </form>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

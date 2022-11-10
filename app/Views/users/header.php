@@ -19,9 +19,9 @@
                 <div class="d-inline-flex align-items-center">
                     <select id="changeCountry" class="mx-auto pl-2" style="border: none; border-radius: 5px;">
                         <?php
-                        $countries = $this->db->table("country")->get()->getResultArray();
+                        $countries = $this->db->table("country")->where("status", 1)->get()->getResultArray();
                         foreach ($countries as $country): ?>
-                            <option value="<?php echo $country['id'] ?>" <?php echo ($sessCountry["id"] == $country["id"] ? "selected" : "") ?>><?php echo $country["code"] ?></option>
+                            <option value="<?php echo $country['id'] ?>" <?php echo ($this->session->get("countryId") == $country["id"] ? "selected" : "") ?>><?php echo $country["code"] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <?php if ($this->session->get("logged_in") == true): ?>
@@ -31,8 +31,8 @@
                             <?php if ($this->session->get("userRole") === "1"): ?>
                             <a href="<?php echo site_url("admin/dashboard"); ?>" class="dropdown-item">Dashboard</a>
                             <?php endif; ?>
-                            <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/wishlist'); ?>" class="dropdown-item">Wishlist</a>
-                            <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/orders'); ?>" class="dropdown-item">Orders</a>
+                            <a href="<?php echo site_url('wishlist'); ?>" class="dropdown-item">Wishlist</a>
+                            <a href="<?php echo site_url('orders'); ?>" class="dropdown-item">Orders</a>
                             <a href="<?php echo site_url("logout"); ?>" class="dropdown-item">Logout</a>
                         </div>
                     </div>
@@ -52,10 +52,10 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-start">
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"])); ?>" class="text-decoration-none"><img src="<?php echo site_url('assets/img/logo.png'); ?>"></a>
+                        <a href="<?php echo site_url(); ?>" class="text-decoration-none"><img src="<?php echo site_url('assets/img/logo.png'); ?>"></a>
                     </div>
                     <div class="col-md-8 d-md-flex justify-content-center my-auto">
-                        <form method="GET" action="<?php echo site_url(strtolower($sessCountry["code"]) . '/search'); ?>" class="searchform order-lg-last">
+                        <form method="GET" action="<?php echo site_url('search'); ?>" class="searchform order-lg-last">
                             <div class="form-group d-flex">
                                 <input type="text" class="form-control pl-3" name="keyword" placeholder="Search" style="height: auto;">
                                 <button type="submit" placeholder="" class="form-control search"><span class="fa fa-search"></span></button>
@@ -67,10 +67,10 @@
             <div class="col-12 col-md-3 d-flex my-auto justify-content-center justify-content-lg-end py-3">
                 <?php
                 if ($this->session->get("logged_in") == true):
-                $cartCount = $this->db->table("cart")->where(array("userId" => $_SESSION["userId"], "country" => $sessCountry["id"]))->countAllResults();
-                $wishlistCount = $this->db->table("wishlist")->where(array("userId" => $_SESSION["userId"], "country" => $sessCountry["id"]))->countAllResults();
+                $cartCount = $this->db->table("cart")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->countAllResults();
+                $wishlistCount = $this->db->table("wishlist")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->countAllResults();
                 ?>
-                <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/wishlist'); ?>" class="btn border mr-1">
+                <a href="<?php echo site_url('wishlist'); ?>" class="btn border mr-1">
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge"><?php echo $wishlistCount; ?></span>
                 </a>
@@ -106,18 +106,18 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav m-auto">
-                    <a href="<?php echo site_url(strtolower($sessCountry["code"])); ?>" class="nav-item nav-link active">Home</a>
+                    <a href="<?php echo site_url(); ?>" class="nav-item nav-link active">Home</a>
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle" data-toggle="dropdown">Categories</a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <?php
-                            $categories = $this->db->table("category")->where(array("parent" => NULL, "status" => 1, "country" => $this->session->get("country")))->get()->getResultArray();
+                            $categories = $this->db->table("category")->where(array("parent" => NULL, "status" => 1, "country" => $this->session->get("countryId")))->get()->getResultArray();
                             foreach ($categories as $key => $category): ?>
-                            <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/category/' . $category['slug'] . '/' . $category['id']); ?>" class="dropdown-item"><?php echo $category["name"]; ?></a>
+                            <a href="<?php echo site_url('category/' . $category['slug'] . '/' . $category['id']); ?>" class="dropdown-item"><?php echo $category["name"]; ?></a>
                             <?php endforeach; ?>
                         </div>
                     </div>
-                    <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/contact'); ?>" class="nav-item nav-link">Contact</a>
+                    <a href="<?php echo site_url('contact'); ?>" class="nav-item nav-link">Contact</a>
                 </div>
             </div>
         </div>

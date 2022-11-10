@@ -8,6 +8,8 @@ use App\Models\ProductModel;
 use App\Models\ProductImageModel;
 use App\Models\OrdersModel;
 use App\Models\CustomModel;
+use App\Models\ReviewModel;
+use App\Models\CountriesModel;
 
 class Admin extends BaseController
 {
@@ -20,6 +22,8 @@ class Admin extends BaseController
         $this->ProductImageModel = new ProductImageModel();
         $this->OrdersModel = new OrdersModel();
         $this->CustomModel = new CustomModel();
+        $this->ReviewModel = new ReviewModel();
+        $this->CountriesModel = new CountriesModel();
     }
 
     public function index()
@@ -320,22 +324,74 @@ class Admin extends BaseController
         }
     }
 
+    public function reviews($param1='', $param2='')
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "add") {
+                    $view = "admin";
+                    $page_data["page_title"] = "Add Review";
+                    $page_data["page_name"] = "reviews-add";
+                    $page_data["users"] = $this->UserModel->where(array("role" => 3))->get()->getResultArray();
+                    $page_data["products"] = $this->ProductModel->where(array("status" => 1))->get()->getResultArray();
+                    
+                    return view($view . "/index", $page_data);
+                } elseif ($param1 == "create") {
+                    $data["userId"] = $this->request->getPost("userId");
+                    $data["productId"] = $this->request->getPost("productId");
+                    $data["rating"] = $this->request->getPost("rating");
+                    $data["review"] = $this->request->getPost("review");
+                    $data["status"] = $this->request->getPost("status");
+                    $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                    $create = $this->ReviewModel->insert($data);
+                    return redirect()->to("admin/reviews");
+                } elseif ($param1 == "edit") {
+                    $view = "admin";
+                    $page_data["page_title"] = "Edit Review";
+                    $page_data["page_name"] = "reviews-edit";
+                    $page_data["review"] = $this->ReviewModel->where('id', $param2)->get()->getRowArray();
+                    
+                    return view($view . "/index", $page_data);
+                } elseif ($param1 == "update") {
+                    $data["rating"] = $this->request->getPost("rating");
+                    $data["review"] = $this->request->getPost("review");
+                    $data["status"] = $this->request->getPost("status");
+
+                    $update = $this->db->table("productreviews")->where("id", $param2)->update($data);
+                    return redirect()->to("admin/reviews");
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Reviews";
+                    $page_data["page_name"] = "reviews";
+                    $page_data["reviews"] = $this->ReviewModel->findAll();
+
+                    return view($view . "/index", $page_data);
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+
     public function requirements($param1='', $param2='')
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "view") {
-                    $page_data["requirement"] = $this->CustomModel->where('id', $param2)->get()->getRowArray();
                     $view = "admin";
                     $page_data["page_title"] = "View Requirements";
                     $page_data["page_name"] = "requirements-view";
+                    $page_data["requirement"] = $this->CustomModel->where('id', $param2)->get()->getRowArray();
                     
                     return view($view . "/index", $page_data);
                 } else {
-                    $page_data["requirements"] = $this->CustomModel->findAll();
                     $view = "admin";
                     $page_data["page_title"] = "Requirements";
                     $page_data["page_name"] = "requirements";
+                    $page_data["requirements"] = $this->CustomModel->findAll();
 
                     return view($view . "/index", $page_data);
                 }
@@ -367,10 +423,10 @@ class Admin extends BaseController
                     $create = $this->UserModel->insert($data);
                     return redirect()->to("admin/users");
                 } elseif ($param1 == "edit") {
-                    $page_data["user"] = $this->UserModel->where('id', $param2)->get()->getRowArray();
                     $view = "admin";
                     $page_data["page_title"] = "Edit User";
                     $page_data["page_name"] = "users-edit";
+                    $page_data["user"] = $this->UserModel->where('id', $param2)->get()->getRowArray();
                     
                     return view($view . "/index", $page_data);
                 } elseif ($param1 == "update") {
@@ -409,14 +465,64 @@ class Admin extends BaseController
                     $delete = $this->db->table('users')->where('id', $param2)->delete();
                     return redirect()->to("admin/users");
                 } else {
-                    $page_data["users"] = $this->UserModel->findAll();
                     $view = "admin";
                     $page_data["page_title"] = "Users";
                     $page_data["page_name"] = "users";
+                    $page_data["users"] = $this->UserModel->findAll();
                     
                     return view($view . "/index", $page_data);
                 }
 
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+
+    public function countries($param1='', $param2='')
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "add") {
+                    $view = "admin";
+                    $page_data["page_title"] = "Add Country";
+                    $page_data["page_name"] = "countries-add";
+                    
+                    return view($view . "/index", $page_data);
+                } elseif ($param1 == "create") {
+                    $data["name"] = $this->request->getPost("name");
+                    $data["code"] = $this->request->getPost("code");
+                    $data["currency"] = $this->request->getPost("currency");
+                    $data["status"] = $this->request->getPost("status");
+                    $data["created"] = $this->session->get("userId");
+
+                    $create = $this->CountriesModel->insert($data);
+                    return redirect()->to("admin/countries");
+                } elseif ($param1 == "edit") {
+                    $view = "admin";
+                    $page_data["page_title"] = "Edit Review";
+                    $page_data["page_name"] = "countries-edit";
+                    $page_data["country"] = $this->CountriesModel->where('id', $param2)->get()->getRowArray();
+                    
+                    return view($view . "/index", $page_data);
+                } elseif ($param1 == "update") {
+                    $data["name"] = $this->request->getPost("name");
+                    $data["code"] = $this->request->getPost("code");
+                    $data["currency"] = $this->request->getPost("currency");
+                    $data["status"] = $this->request->getPost("status");
+
+                    $update = $this->db->table("country")->where("id", $param2)->update($data);
+                    return redirect()->to("admin/countries");
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Countries";
+                    $page_data["page_name"] = "countries";
+                    $page_data["countries"] = $this->CountriesModel->findAll();
+
+                    return view($view . "/index", $page_data);
+                }
             } else {
                 return redirect()->to(site_url());
             }

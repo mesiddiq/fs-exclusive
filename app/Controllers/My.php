@@ -6,6 +6,9 @@ use App\Models\UserModel;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\ProductImageModel;
+use App\Models\WishlistModel;
+use App\Models\OrdersModel;
+use App\Models\ReviewModel;
 
 class My extends BaseController
 {
@@ -16,6 +19,9 @@ class My extends BaseController
         $this->CategoryModel = new CategoryModel();
         $this->ProductModel = new ProductModel();
         $this->ProductImageModel = new ProductImageModel();
+        $this->WishlistModel = new WishlistModel();
+        $this->OrdersModel = new OrdersModel();
+        $this->ReviewModel = new ReviewModel();
     }
 
     public function index()
@@ -49,8 +55,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";
@@ -65,8 +71,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $selectedCategoryID = "all";
@@ -99,8 +105,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";
@@ -113,25 +119,54 @@ class My extends BaseController
 
     public function product($param1='', $param2='')
     {
-        if ($this->session->get("country") == NULL) {
-            return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
-        }
-
         $view = "users";
-        $page_data['page_name'] = "product";
-        $page_data['product'] = $this->ProductModel->where(array("slug" => $param1, "id" => $param2, "country" => $this->session->get("country")))->get()->getRowArray();
+        $page_data["page_name"] = "product";
+        $page_data["product"] = $this->ProductModel->where(array("slug" => $param1, "id" => $param2, "country" => $this->session->get("country")))->get()->getRowArray();
+        $page_data["reviews"] = $this->ReviewModel->where(array("productId" => $param2, "status" => 1))->get()->getResultArray();
+        $page_data["rating"] = $this->db->table("productreviews")->select("AVG(rating) rating")->where(array("productId" => $param2, "status" => 1))->get()->getResultArray();
+        $page_data["isPurchased"] = $this->isPurchased($param2);
+        $this->session->set("productId", $param2);
         
         return view($view . "/index", $page_data);
+    }
+
+    public function isPurchased($productID)
+    {
+        $userId = $this->session->get("userId");
+
+        if ($userId != NULL) {
+            $orders = $this->OrdersModel->where("userId", $userId)->get()->getResultArray();
+            $ordersArr = array();
+            $productsArr = array();
+            $productsIdArr = array();
+            
+            foreach ($orders as $key => $order) {
+                array_push($ordersArr, json_decode($order["products"]));
+            }
+
+            foreach ($ordersArr as $key => $orderArr) {
+                foreach ($orderArr as $key => $value) {
+                    array_push($productsIdArr, $value->productId);
+                }
+            }
+
+            if (in_array($productID, $productsIdArr)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
     }
 
     public function cart()
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";
@@ -144,8 +179,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";
@@ -158,8 +193,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";
@@ -173,8 +208,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";
@@ -188,8 +223,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";
@@ -203,8 +238,8 @@ class My extends BaseController
     {
         if ($this->session->get("country") == NULL) {
             return redirect()->to(site_url());
-        } else if ($this->session->get("country") == 2) {
-            return redirect()->to(site_url("my"));
+        } else if ($this->session->get("country") == 1) {
+            return redirect()->to(site_url("uk"));
         }
 
         $view = "users";

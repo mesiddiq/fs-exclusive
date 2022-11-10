@@ -12,6 +12,7 @@ use App\Models\AddressModel;
 use App\Models\OrdersModel;
 use App\Models\EmailModel;
 use App\Models\CustomModel;
+use App\Models\ReviewModel;
 
 class Home extends BaseController
 {
@@ -28,51 +29,146 @@ class Home extends BaseController
         $this->OrdersModel = new OrdersModel();
         $this->EmailModel = new EmailModel();
         $this->CustomModel = new CustomModel();
+        $this->ReviewModel = new ReviewModel();
     }
 
     public function index()
     {
-        if ($this->session->get("country") == NULL) {
+        if ($this->session->get("countryId") == NULL) {
             $view = "users";
 
             return view($view . "/main");
         } else {
-            $sessCountry = $this->db->table("country")->where("id", $this->session->get("country"))->get()->getRowArray();
-            return redirect()->to(site_url(strtolower($sessCountry["code"])));
+            $sessCountry = $this->db->table("country")->where("id", $this->session->get("countryId"))->get()->getRowArray();
+            $this->session->set("countryId", $sessCountry["id"]);
+            $this->session->set("countryName", $sessCountry["name"]);
+            $this->session->set("countryCode", $sessCountry["code"]);
+            $this->session->set("countryCurrency", $sessCountry["currency"]);
+            
+            $view = "users";
+            $page_data["page_name"] = "home";
+
+            return view($view . "/index", $page_data);
         }
     }
 
     public function country()
     {
         $country = (int) $this->request->getPost("country");
-        $this->session->set("country", $country);
-        echo $this->session->get("country");
+        $sessCountry = $this->db->table("country")->where("id", $country)->get()->getRowArray();
+        $this->session->set("countryId", $sessCountry["id"]);
+        $this->session->set("countryName", $sessCountry["name"]);
+        $this->session->set("countryCode", $sessCountry["code"]);
+        $this->session->set("countryCurrency", $sessCountry["currency"]);
+        echo true;
     }
 
-    public function shop()
+    public function search()
     {
+        if ($this->session->get("countryId") == NULL) {
+            return redirect()->to(site_url());
+        }
+
         $view = "users";
-        $page_data['page_name'] = "shop";
+        $page_data["page_name"] = "search";
+        $page_data["products"] = $this->ProductModel->like("name", $_GET["keyword"])->where("country", $this->session->get("countryId"))->get()->getResultArray();
+        $page_data["categories"] = $this->CategoryModel->where("country", $this->session->get("countryId"))->get()->getResultArray();
         
         return view($view . "/index", $page_data);
     }
 
-    public function category($param1='', $param2='')
+    public function shop()
     {
+        if ($this->session->get("countryId") == NULL) {
+            return redirect()->to(site_url());
+        }
+
+        $selectedCategoryID = "all";
+
+        // Get the category ids
+        if (isset($_GET["category"]) && !empty($_GET["category"] && $_GET["category"] != "all")) {
+            $selectedCategoryID = $this->CategoryModel->getCategoryIDs($_GET["category"]);
+            // $page_data["products"] = $this->ProductModel->where(array("country" => $this->session->get("country"), "category" => $selectedCategoryID[0]["id"]))->get()->getResultArray();
+            $selectedCategoryProducts = array();
+            foreach ($selectedCategoryID as $key => $selectedCategory) {
+                $selectedCategoryProduct = $this->ProductModel->where(array("country" => $this->session->get("countryId"), "category" => $selectedCategory["id"]))->get()->getRowArray();
+                array_push($selectedCategoryProducts, $selectedCategoryProduct);
+            }
+            $page_data["products"] = $selectedCategoryProducts;
+        }
+
+        if ($selectedCategoryID == "all") {
+            $page_data["products"] = $this->ProductModel->where("country", $this->session->get("countryId"))->get()->getResultArray();
+        }
+
         $view = "users";
-        $page_data['page_name'] = "products";
-        $page_data['products'] = $this->ProductModel->where(array("category" => $param2))->get()->getResultArray();
+        $page_data["page_name"] = "shop";
+        $page_data["selected_category_id"] = $selectedCategoryID;
+        $page_data["categories"] = $this->CategoryModel->where("country", $this->session->get("countryId"))->get()->getResultArray();
+        
+        return view($view . "/index", $page_data);
+    }
+
+    public function category($param1="", $param2="")
+    {
+        if ($this->session->get("countryId") == NULL) {
+            return redirect()->to(site_url());
+        }
+
+        $view = "users";
+        $page_data["page_name"] = "products";
+        $page_data["categoryID"] = $param2;
+        $page_data["products"] = $this->ProductModel->where(array("category" => $param2, "country" => $this->session->get("countryId")))->get()->getResultArray();
         
         return view($view . "/index", $page_data);
     }
 
     public function product($param1='', $param2='')
     {
+        if ($this->session->get("countryId") == NULL) {
+            return redirect()->to(site_url());
+        }
+
         $view = "users";
-        $page_data['page_name'] = "product";
-        $page_data['product'] = $this->ProductModel->where(array("slug" => $param1, "id" => $param2))->get()->getRowArray();
+        $page_data["page_name"] = "product";
+        $page_data["product"] = $this->ProductModel->where(array("slug" => $param1, "id" => $param2, "country" => $this->session->get("countryId")))->get()->getRowArray();
+        $page_data["reviews"] = $this->ReviewModel->where(array("productId" => $param2, "status" => 1))->get()->getResultArray();
+        $page_data["rating"] = $this->db->table("productreviews")->select("AVG(rating) rating")->where(array("productId" => $param2, "status" => 1))->get()->getResultArray();
+        $page_data["isPurchased"] = $this->isPurchased($param2);
+        $this->session->set("productId", $param2);
         
         return view($view . "/index", $page_data);
+    }
+
+    public function isPurchased($productID)
+    {
+        $userId = $this->session->get("userId");
+
+        if ($userId != NULL) {
+            $orders = $this->OrdersModel->where("userId", $userId)->get()->getResultArray();
+            $ordersArr = array();
+            $productsArr = array();
+            $productsIdArr = array();
+            
+            foreach ($orders as $key => $order) {
+                array_push($ordersArr, json_decode($order["products"]));
+            }
+
+            foreach ($ordersArr as $key => $orderArr) {
+                foreach ($orderArr as $key => $value) {
+                    array_push($productsIdArr, $value->productId);
+                }
+            }
+
+            if (in_array($productID, $productsIdArr)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
     }
 
     public function addToCart()
@@ -97,7 +193,7 @@ class Home extends BaseController
                 $data["productId"] = $this->request->getPost("productId");
                 $data["productQty"] = $this->request->getPost("productQty");
                 $data["productPrice"] = $this->request->getPost("productQty") * $price;
-                $data["country"] = $this->session->get("country");
+                $data["country"] = $this->session->get("countryId");
                 $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
 
                 $this->CartModel->insert($data);
@@ -114,7 +210,7 @@ class Home extends BaseController
             $data["productId"] = $this->request->getPost("productId");
             $data["productQty"] = $this->request->getPost("productQty");
             $data["productPrice"] = $this->request->getPost("productQty") * $price;
-            $data["country"] = $this->session->get("country");
+            $data["country"] = $this->session->get("countryId");
             $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
 
             // if (count($_SESSION["cartItems"]) > 0) {
@@ -136,7 +232,7 @@ class Home extends BaseController
     public function cart()
     {
         $view = "users";
-        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
+        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->get()->getResultArray();
         $page_data['page_name'] = "cart";
         
         return view($view . "/index", $page_data);
@@ -162,8 +258,8 @@ class Home extends BaseController
     public function checkout()
     {
         $view = "users";
-        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
-        $page_data["addresses"] = $this->AddressModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
+        $page_data["cart"] = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->get()->getResultArray();
+        $page_data["addresses"] = $this->AddressModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId")))->get()->getResultArray();
         $page_data['page_name'] = "checkout";
         
         return view($view . "/index", $page_data);
@@ -227,18 +323,41 @@ class Home extends BaseController
         $data["contact"] = $this->request->getPost("contact");
         $data["address"] = $this->request->getPost("address");
         $data["address2"] = $this->request->getPost("address2");
-        $data["country"] = $this->session->get("country");
         $data["city"] = $this->request->getPost("city");
         $data["state"] = $this->request->getPost("state");
+        $data["country"] = $this->request->getPost("country");
         $data["zipcode"] = $this->request->getPost("zipcode");
 
         $this->AddressModel->insert($data);
         echo true;
     }
 
-    public function placeOrder($value='')
+    public function getAddress() {
+        $id = $this->request->getPost("addressId");
+        $address = $this->AddressModel->where("id", $id)->get()->getRowArray();
+        echo json_encode($address);
+    }
+
+    public function updateAddress() {
+        $id = $this->request->getPost("id");
+
+        $data["name"] = $this->request->getPost("name");
+        $data["email"] = $this->request->getPost("email");
+        $data["contact"] = $this->request->getPost("contact");
+        $data["address"] = $this->request->getPost("address");
+        $data["address2"] = $this->request->getPost("address2");
+        $data["city"] = $this->request->getPost("city");
+        $data["state"] = $this->request->getPost("state");
+        $data["country"] = $this->request->getPost("country");
+        $data["zipcode"] = $this->request->getPost("zipcode");
+
+        $address = $this->db->table("address")->where("id", $id)->update($data);
+        echo true;
+    }
+
+    public function placeOrder()
     {
-        $cart = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("country")))->get()->getResultArray();
+        $cart = $this->CartModel->orderBy("id DESC")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->get()->getResultArray();
 
         $data["userId"] = $this->session->get("userId");
         $data["addressId"] = $this->request->getPost("addressId");
@@ -246,7 +365,7 @@ class Home extends BaseController
         $data["subtotal"] = $this->request->getPost("subtotal");
         $data["discount"] = $this->request->getPost("discount");
         $data["total"] = $this->request->getPost("total");
-        $data["country"] = $this->session->get("country");
+        $data["country"] = $this->session->get("countryId");
         $data["orderDate"] = strtotime(date("d-M-Y H:i:s"));
         $data["orderStatus"] = 1;
         $data["paymentMethod"] = $this->request->getPost("paymentMethod");
@@ -299,6 +418,19 @@ class Home extends BaseController
         return redirect()->to(site_url());
     }
 
+    public function review()
+    {
+        $data["userId"] = $this->session->get("userId");
+        $data["productId"] = $this->session->get("productId");
+        $data["rating"] = $this->request->getPost("rating");
+        $data["review"] = $this->request->getPost("review");
+        $data["status"] = 0;
+        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+
+        $this->ReviewModel->insert($data);
+        echo true;
+    }
+
     public function deleteUserCart()
     {
         $userCart = $this->CartModel->where("userId", $this->session->get("userId"))->get()->getResultArray();
@@ -310,7 +442,19 @@ class Home extends BaseController
         $this->session->set("cartItems", array());
 
         echo true;
+    }
 
+    public function wishlist()
+    {
+        if ($this->session->get("country") == NULL) {
+            return redirect()->to(site_url());
+        }
+
+        $view = "users";
+        $page_data["wishlists"] = $this->WishlistModel->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->get()->getResultArray();
+        $page_data["page_name"] = "wishlist";
+        
+        return view($view . "/index", $page_data);
     }
 
     public function toggleWishlist()
@@ -323,15 +467,37 @@ class Home extends BaseController
             $this->WishlistModel->delete($check[0]["id"]);
             echo "removed";
         } else {
-            $this->WishlistModel->insert(array("userId" => $this->session->get("userId"), "productId" => $productId, "country" => $this->session->get("country"), "createdAt" => strtotime(date("d-M-Y H:i:s"))));
+            $this->WishlistModel->insert(array("userId" => $this->session->get("userId"), "productId" => $productId, "country" => $this->session->get("countryId"), "createdAt" => strtotime(date("d-M-Y H:i:s"))));
             echo "added";
+        }
+    }
+
+    public function orders($param1="", $param2="")
+    {
+        if ($this->session->get("country") == NULL) {
+            return redirect()->to(site_url());
+        }
+
+        if ($param1 == "view") {
+            $view = "users";
+            $page_data["order"] = $this->OrdersModel->where("id", $param2)->get()->getRowArray();
+            $page_data["page_name"] = "order";
+            
+            return view($view . "/order", $page_data);
+        } else {
+            $view = "users";
+            $page_data["orders"] = $this->OrdersModel->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->get()->getResultArray();
+            $page_data["page_name"] = "orders";
+            
+            return view($view . "/index", $page_data);
         }
     }
 
     public function contact()
     {
+
         $view = "users";
-        $page_data['page_name'] = "contact";
+        $page_data["page_name"] = "contact";
         
         return view($view . "/index", $page_data);
     }

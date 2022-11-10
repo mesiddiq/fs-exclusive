@@ -40,12 +40,12 @@
                         $productImage = $this->db->table("productimages")->orderBy("featured DESC")->where("productID", $product["id"])->get()->getRowArray();
                         ?>
                         <tr>
-                            <td class="text-left align-middle"><img src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="<?php echo $product["name"]; ?>" style="width: 50px;"> <a href="<?php echo site_url(strtolower($sessCountry["code"]).'/product/'.$product['slug'].'/'.$product['id']); ?>"><?php echo $product["name"]; ?></a></td>
+                            <td class="text-left align-middle"><img src="<?php echo site_url('uploads/products/'.$productImage['name']); ?>" alt="<?php echo $product["name"]; ?>" style="width: 50px;"> <a href="<?php echo site_url('product/'.$product['slug'].'/'.$product['id']); ?>"><?php echo $product["name"]; ?></a></td>
                             <td class="align-middle">
                                 <?php if ($product["isDiscount"] == 1): ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?></strong><del class="text-muted ml-2"><?php echo $sessCountry["currency"] . $product["price"]; ?></del>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $product["discountedPrice"]; ?></strong><del class="text-muted ml-2"><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></del>
                                 <?php else: ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $product["price"]; ?></strong>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></strong>
                                 <?php endif; ?>
                             </td>
                             <td class="align-middle">
@@ -65,9 +65,9 @@
                             </td>
                             <td class="align-middle">
                                 <?php if ($product["isDiscount"] == 1): ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $cart["productPrice"]; ?></strong>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $cart["productPrice"]; ?></strong>
                                 <?php else: ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $cart["productPrice"]; ?></strong>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $cart["productPrice"]; ?></strong>
                                 <?php endif; ?>
                             </td>
                             <td class="align-middle"><button class="btn btn-sm btn-primary removeFromCart text-white" data-id="<?php echo $cart["id"]; ?>"><i class="fa fa-times"></i></button></td>
@@ -92,12 +92,12 @@
                         $sessCartproductImage = $this->db->table("productimages")->orderBy("featured DESC")->where("productID", $sessCartproduct["id"])->get()->getRowArray();
                         ?>
                         <tr>
-                            <td class="text-left align-middle"><img src="<?php echo site_url('uploads/products/'.$sessCartproductImage['name']); ?>" alt="<?php echo $sessCartproduct["name"]; ?>" style="width: 50px;"> <a href="<?php echo site_url(strtolower($sessCountry["code"]).'/product/'.$sessCartproduct['slug'].'/'.$sessCartproduct['id']); ?>"><?php echo $sessCartproduct["name"]; ?></a></td>
+                            <td class="text-left align-middle"><img src="<?php echo site_url('uploads/products/'.$sessCartproductImage['name']); ?>" alt="<?php echo $sessCartproduct["name"]; ?>" style="width: 50px;"> <a href="<?php echo site_url('product/'.$sessCartproduct['slug'].'/'.$sessCartproduct['id']); ?>"><?php echo $sessCartproduct["name"]; ?></a></td>
                             <td class="align-middle">
                                 <?php if ($sessCartproduct["isDiscount"] == 1): ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCartproduct["discountedPrice"]; ?></strong><del class="text-muted ml-2"><?php echo $sessCountry["currency"] . $sessCartproduct["price"]; ?></del>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $sessCartproduct["discountedPrice"]; ?></strong><del class="text-muted ml-2"><?php echo $this->session->get("countryCurrency") . $sessCartproduct["price"]; ?></del>
                                 <?php else: ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCartproduct["price"]; ?></strong>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $sessCartproduct["price"]; ?></strong>
                                 <?php endif; ?>
                             </td>
                             <td class="align-middle">
@@ -117,9 +117,9 @@
                             </td>
                             <td class="align-middle">
                                 <?php if ($sessCartproduct["isDiscount"] == 1): ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCart["productPrice"]; ?></strong>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $sessCart["productPrice"]; ?></strong>
                                 <?php else: ?>
-                                <strong class="text-dark"><?php echo $sessCountry["currency"] . $sessCart["productPrice"]; ?></strong>
+                                <strong class="text-dark"><?php echo $this->session->get("countryCurrency") . $sessCart["productPrice"]; ?></strong>
                                 <?php endif; ?>
                             </td>
                             <td class="align-middle"><button class="btn btn-sm btn-primary removeFromSessionCart text-white" data-id="<?php echo $key; ?>"><i class="fa fa-times"></i></button></td>
@@ -134,7 +134,7 @@
                         <?php endif; ?>
                     </tbody>
                 </table>
-                <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>"><button class="btn btn-primary text-white my-3">Continue Shopping</button></a>
+                <a href="<?php echo site_url('shop'); ?>"><button class="btn btn-primary text-white my-3">Continue Shopping</button></a>
             </div>
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
@@ -144,17 +144,17 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium"><?php echo $sessCountry["currency"] . $subTotal; ?></h6>
+                            <h6 class="font-weight-medium"><?php echo $this->session->get("countryCurrency") . $subTotal; ?></h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Discount</h6>
-                            <h6 class="font-weight-medium"><?php echo $sessCountry["currency"] . $discount; ?></h6>
+                            <h6 class="font-weight-medium"><?php echo $this->session->get("countryCurrency") . $discount; ?></h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold"><?php echo $sessCountry["currency"] . ($subTotal - $discount); ?></h5>
+                            <h5 class="font-weight-bold"><?php echo $this->session->get("countryCurrency") . ($subTotal - $discount); ?></h5>
                         </div>
                         <a href="<?php echo site_url('checkout'); ?>"><button class="btn btn-block btn-primary text-white my-3 py-3">Proceed To Checkout</button></a>
                     </div>

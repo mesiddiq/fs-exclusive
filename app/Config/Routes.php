@@ -45,16 +45,36 @@ $routes->set404Override(function(){
  */
 $routes->get('/', 'Home::index');
 $routes->post('/country', 'Home::country');
+// Search
+$routes->get('/search', 'Home::search');
+// Products
+$routes->get('/shop', 'Home::shop');
+$routes->get('/category/(:any)/(:num)', 'Home::category/$1/$2');
+$routes->get('/product/(:any)/(:num)', 'Home::product/$1/$2');
+// Wishlist
+$routes->get('/wishlist', 'Home::wishlist');
+$routes->post('/toggleWishlist', 'Home::toggleWishlist');
+// Cart
 $routes->get('/cart', 'Home::cart');
 $routes->post('/addToCart', 'Home::addToCart');
 $routes->post('/removeFromCart', 'Home::removeFromCart');
 $routes->post('/removeFromSessionCart', 'Home::removeFromSessionCart');
 $routes->post('/deleteUserCart', 'Home::deleteUserCart');
-$routes->post('/toggleWishlist', 'Home::toggleWishlist');
-$routes->get('/checkout', 'Home::checkout');
+// Address
 $routes->post('/addAddress', 'Home::addAddress');
+$routes->post('/getAddress', 'Home::getAddress');
+$routes->post('/updateAddress', 'Home::updateAddress');
+// Checkout
+$routes->get('/checkout', 'Home::checkout');
 $routes->post('/placeOrder', 'Home::placeOrder');
+// Orders
+$routes->get('/orders', 'Home::orders');
+$routes->get('/orders/(:any)/(:num)', 'Home::orders/$1/$2');
+// Product Review
+$routes->post('/review', 'Home::review');
+// On Demand Product
 $routes->post('/customProduct', 'Home::customProduct');
+// Test Mail
 $routes->get('/sendmail', 'Home::sendMail');
 // Login
 $routes->post('/login', 'Login::index');
@@ -65,27 +85,27 @@ $routes->post('/change', 'Login::change');
 $routes->get('/logout', 'Login::logout');
 
 // United Kingdom
-$routes->get('/uk', 'Uk::index');
-$routes->get('/uk/shop', 'Uk::shop');
-$routes->get('/uk/search', 'Uk::search');
-$routes->post('/uk/search', 'Uk::search');
-$routes->get('/uk/category/(:any)/(:num)', 'Uk::category/$1/$2');
-$routes->get('/uk/product/(:any)/(:num)', 'Uk::product/$1/$2');
-$routes->get('/uk/wishlist', 'Uk::wishlist');
-$routes->get('/uk/orders', 'Uk::orders');
-$routes->get('/uk/order/(:num)', 'Uk::order/$1');
-$routes->get('/uk/contact', 'Uk::contact');
+// $routes->get('/uk', 'Uk::index');
+// $routes->get('/uk/shop', 'Uk::shop');
+// $routes->get('/uk/search', 'Uk::search');
+// $routes->post('/uk/search', 'Uk::search');
+// $routes->get('/uk/category/(:any)/(:num)', 'Uk::category/$1/$2');
+// $routes->get('/uk/product/(:any)/(:num)', 'Uk::product/$1/$2');
+// $routes->get('/uk/wishlist', 'Uk::wishlist');
+// $routes->get('/uk/orders', 'Uk::orders');
+// $routes->get('/uk/orders/(:any)/(:num)', 'Uk::orders/$1/$2');
+// $routes->get('/uk/contact', 'Uk::contact');
 
 // Malaysia
-$routes->get('/my', 'My::index');
-$routes->get('/my/shop', 'My::shop');
-$routes->get('/my/search', 'My::search');
-$routes->get('/my/category/(:any)/(:num)', 'My::category/$1/$2');
-$routes->get('/my/product/(:any)/(:num)', 'My::product/$1/$2');
-$routes->get('/my/wishlist', 'My::wishlist');
-$routes->get('/my/orders', 'My::orders');
-$routes->get('/my/order/(:num)', 'My::order/$1');
-$routes->get('/my/contact', 'My::contact');
+// $routes->get('/my', 'My::index');
+// $routes->get('/my/shop', 'My::shop');
+// $routes->get('/my/search', 'My::search');
+// $routes->get('/my/category/(:any)/(:num)', 'My::category/$1/$2');
+// $routes->get('/my/product/(:any)/(:num)', 'My::product/$1/$2');
+// $routes->get('/my/wishlist', 'My::wishlist');
+// $routes->get('/my/orders', 'My::orders');
+// $routes->get('/my/order/(:num)', 'My::order/$1');
+// $routes->get('/my/contact', 'My::contact');
 
 /*
  * --------------------------------------------------------------------
@@ -111,6 +131,12 @@ $routes->post('/admin/products/(:alpha)/(:num)', 'Admin::products/$1/$2');
 // Orders
 $routes->get('/admin/orders', 'Admin::orders');
 $routes->get('/admin/orders/(:alpha)/(:num)', 'Admin::orders/$1/$2');
+// Reviews
+$routes->get('/admin/reviews', 'Admin::reviews');
+$routes->get('/admin/reviews/(:alpha)', 'Admin::reviews/$1');
+$routes->post('/admin/reviews/(:alpha)', 'Admin::reviews/$1');
+$routes->get('/admin/reviews/(:alpha)/(:num)', 'Admin::reviews/$1/$2');
+$routes->post('/admin/reviews/(:alpha)/(:num)', 'Admin::reviews/$1/$2');
 // Requirements
 $routes->get('/admin/requirements', 'Admin::requirements');
 $routes->get('/admin/requirements/(:alpha)/(:num)', 'Admin::requirements/$1/$2');
@@ -120,6 +146,12 @@ $routes->get('/admin/users/(:alpha)', 'Admin::users/$1');
 $routes->post('/admin/users/(:alpha)', 'Admin::users/$1');
 $routes->get('/admin/users/(:alpha)/(:num)', 'Admin::users/$1/$2');
 $routes->post('/admin/users/(:alpha)/(:num)', 'Admin::users/$1/$2');
+// Countries
+$routes->get('/admin/countries', 'Admin::countries');
+$routes->get('/admin/countries/(:alpha)', 'Admin::countries/$1');
+$routes->post('/admin/countries/(:alpha)', 'Admin::countries/$1');
+$routes->get('/admin/countries/(:alpha)/(:num)', 'Admin::countries/$1/$2');
+$routes->post('/admin/countries/(:alpha)/(:num)', 'Admin::countries/$1/$2');
 // Others
 $routes->post('/admin/updateAdminProductCountryId', 'Admin::updateAdminProductCountryId');
 

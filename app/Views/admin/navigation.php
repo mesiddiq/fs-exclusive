@@ -55,8 +55,8 @@
                         <span class="text">Orders</span>
                     </a>
                 </li>
-                <li class="nav-item <?php echo $uri[4] == 'orders' ? 'active' : ''; ?>">
-                    <a href="<?php echo site_url('admin/orders'); ?>">
+                <li class="nav-item <?php echo $uri[4] == 'reviews' ? 'active' : ''; ?>">
+                    <a href="<?php echo site_url('admin/reviews'); ?>">
                         <span class="icon">
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M4.58341 8.70841L6.87508 12.8334H2.29175L4.58341 8.70841ZM2.75008 3.66675H6.41675V7.33341H2.75008V3.66675ZM4.58341 18.3334C5.06964 18.3334 5.53596 18.1403 5.87978 17.7964C6.22359 17.4526 6.41675 16.9863 6.41675 16.5001C6.41675 16.0139 6.22359 15.5475 5.87978 15.2037C5.53596 14.8599 5.06964 14.6667 4.58341 14.6667C4.09718 14.6667 3.63087 14.8599 3.28705 15.2037C2.94324 15.5475 2.75008 16.0139 2.75008 16.5001C2.75008 16.9863 2.94324 17.4526 3.28705 17.7964C3.63087 18.1403 4.09718 18.3334 4.58341 18.3334ZM8.25008 4.58341V6.41675H19.2501V4.58341H8.25008ZM8.25008 17.4167H19.2501V15.5834H8.25008V17.4167ZM8.25008 11.9167H19.2501V10.0834H8.25008V11.9167Z"></path>
@@ -84,6 +84,21 @@
                         </span>
                         <span class="text">Users</span>
                     </a>
+                </li>
+                <li class="nav-item nav-item-has-children <?php echo $uri[4] == 'countries' ? 'active' : ''; ?>">
+                    <a href="javascript:;" class="<?php echo $uri[4] == 'countries' ? '' : 'collapsed'; ?>" data-bs-toggle="collapse" data-bs-target="#settings_menu" aria-controls="settings_menu" aria-expanded="<?php echo $uri[4] == 'countries' ? 'true' : 'false'; ?>" aria-label="Toggle navigation">
+                        <span class="icon">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.9067 14.2908L15.2808 11.9167H6.41667V10.0833H15.2808L12.9067 7.70917L14.2083 6.41667L18.7917 11L14.2083 15.5833L12.9067 14.2908ZM17.4167 2.75C17.9029 2.75 18.3692 2.94315 18.713 3.28697C19.0568 3.63079 19.25 4.0971 19.25 4.58333V8.86417L17.4167 7.03083V4.58333H4.58333V17.4167H17.4167V14.9692L19.25 13.1358V17.4167C19.25 17.9029 19.0568 18.3692 18.713 18.713C18.3692 19.0568 17.9029 19.25 17.4167 19.25H4.58333C3.56583 19.25 2.75 18.425 2.75 17.4167V4.58333C2.75 3.56583 3.56583 2.75 4.58333 2.75H17.4167Z"></path>
+                            </svg>
+                        </span>
+                        <span class="text">Settings</span>
+                    </a>
+                    <ul id="settings_menu" class="collapse dropdown-nav <?php echo $uri[4] == 'countries' ? 'show' : ''; ?>">
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Countries</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>

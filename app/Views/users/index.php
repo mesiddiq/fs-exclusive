@@ -31,11 +31,6 @@
     <?php
     $this->db = \Config\Database::connect();
     $this->session = \Config\Services::session();
-    if ($this->session->get("country") != NULL) {
-        $sessCountry = $this->db->table("country")->where("id", $this->session->get("country"))->get()->getRowArray();
-    } else {
-        $sessCountry = "";
-    }
     include 'header.php';
     include $page_name . '.php';
     include 'footer.php';
@@ -52,52 +47,34 @@
     <script src="<?php echo site_url('assets/js/main.js'); ?>"></script>
 
     <?php include 'modal.php'; ?>
-    
-    <?php if ($page_name == "main"): ?>
-    <script type="text/javascript">
-        $("#countryModal").modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-    </script>
-    <?php endif; ?>
 
-    <script type="text/javascript">
-        function relativeDays(timestamp) {
-            const rtf = new Intl.RelativeTimeFormat('en', {
-                numeric: 'auto',
-            });
-            const oneDayInMs = 1000 * 60 * 60 * 24;
-            const daysDifference = Math.round(
-                (timestamp - new Date().getTime()) / oneDayInMs,
-            );
+    <!-- Recent Sold -->
+    <?php
+    $recentSold = $this->db->table("orders")->orderBy("id DESC")->limit(1)->get()->getRowArray();
+    $recentSoldUser = $this->db->table("users")->where("id", $recentSold["userId"])->get()->getRowArray();
+    ?>
+    <div class="card recent-sold">
+        <div class="card-body">
+            <p><strong class="text-dark"><?php echo $recentSoldUser["name"]; ?></strong> purchased our product</p>
+            <?php echo date("Y-m-d", $recentSold["orderDate"]); ?>
+            <small>
+                <em id="recent-sold-date">
+                    <script type="text/javascript">
+                        var timestamp = new Date("<?php echo date("Y-m-d", $recentSold["orderDate"]); ?>").getTime();
+                        const rtf = new Intl.RelativeTimeFormat('en', {
+                            numeric: 'auto',
+                        });
+                        const oneDayInMs = 1000 * 60 * 60 * 24;
+                        const daysDifference = Math.round(
+                            (timestamp - new Date().getTime()) / oneDayInMs,
+                        );
 
-            return rtf.format(daysDifference, 'day');
-        }
-        setTimeout(function() {
-            // console.log(relativeDays(new Date().getTime()));
-        }, 5000);
-
-        // var s = <?php // echo json_encode($recentOrders) ?>;
-        // var i = 0;
-
-        // (function loop() {
-        //     console.log(s[i]["id"]);
-        //     $("#recent-sold").html(
-        //         "<div class='card recent-sold'>" +
-        //         "<div class='card-body'>" +
-        //         "<p><strong class='text-dark'>Mohamed Siddiq</strong> purchased <strong class='text-dark'>New Hijab</strong></p>" +
-        //         "<small><em>2 days ago</em></small>" +
-        //         "</div>" +
-        //         "</div>"
-        //     );
-        //     if (++i < s.length) {
-        //         setTimeout(loop, 3000);  // call myself in 3 seconds time if required
-        //     }
-        // })();
-
-    </script>
-    <?php // endforeach; ?>
+                        document.write(rtf.format(daysDifference, 'day'));
+                    </script>
+                </em>
+            </small>
+        </div>
+    </div>
     
 </body>
 </html>

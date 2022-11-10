@@ -49,21 +49,9 @@ $this->session = \Config\Services::session();
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
-                    <?php if ($this->session->get("logged_in") == true): ?>
-                    <div class="nav-item dropdown">
-                        <a href="javascript:;" class="nav-link dropdown-toggle text-light py-0" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->get("userName"); ?></a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <?php if ($this->session->get("userRole") === "1"): ?>
-                            <a href="<?php echo site_url("admin/dashboard"); ?>" class="dropdown-item"><i class="fa fa-tachometer-alt"></i> Dashboard</a>
-                            <?php endif; ?>
-                            <a href="<?php echo site_url("logout"); ?>" class="dropdown-item"><i class="fa fa-sign-out-alt"></i> Logout</a>
-                        </div>
-                    </div>
-                    <?php else: ?>
                     <a class="text-light px-2 ml-3 show-modal" href="javascript:;" data-toggle="modal" data-target="#loginModal">
                         <i class="fa fa-user"></i> Login
                     </a>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -108,7 +96,6 @@ $this->session = \Config\Services::session();
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav m-auto">
                     <a href="<?php echo site_url(); ?>" class="nav-item nav-link active">Home</a>
-                    <a href="<?php echo site_url('/shop'); ?>" class="nav-item nav-link">Shop</a>
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle" data-toggle="dropdown">Categories</a>
                     </div>

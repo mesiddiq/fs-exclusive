@@ -45,7 +45,7 @@ if (isset($selected_category_id) && ($selected_category_id != "all")) {
                     if (count($products) > 0):
                     foreach ($products as $key => $product): ?>
                     <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/' . $product['slug'] . '/' . $product['id']); ?>">
+                        <a href="<?php echo site_url('product/' . $product['slug'] . '/' . $product['id']); ?>">
                             <div class="card product-item border-0 mb-4">
                                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                                     <?php
@@ -62,14 +62,14 @@ if (isset($selected_category_id) && ($selected_category_id != "all")) {
                                     <h6 class="text-truncate mb-3"><?php echo $product["name"]; ?></h6>
                                     <div class="d-flex justify-content-center">
                                         <?php if ($product["isDiscount"] == 1): ?>
-                                        <h6><?php echo $sessCountry["currency"] . $product["discountedPrice"]; ?></h6><h6 class="text-muted ml-2"><del><?php echo $sessCountry["currency"] . $product["price"]; ?></del></h6>
+                                        <h6><?php echo $this->session->get("countryCurrency") . $product["discountedPrice"]; ?></h6><h6 class="text-muted ml-2"><del><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></del></h6>
                                         <?php else: ?>
-                                        <h6><?php echo $sessCountry["currency"] . $product["price"]; ?></h6>
+                                        <h6><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></h6>
                                         <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between bg-light border">
-                                    <a href="<?php echo site_url(strtolower($sessCountry["code"]) . '/product/' . $product['slug'] . '/' . $product['id']); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                                    <a href="<?php echo site_url('product/' . $product['slug'] . '/' . $product['id']); ?>" class="btn btn-sm text-dark m-auto"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                                 </div>
                             </div>
                         </a>
@@ -99,7 +99,7 @@ if (isset($selected_category_id) && ($selected_category_id != "all")) {
                     <?php else: ?>
                     <div class="col-12 pb-1 text-center">
                         <h2>Sorry..!<br>No products added</h2>
-                        <a href="<?php echo site_url(strtolower($sessCountry["code"]) . "/shop"); ?>"><button class="btn btn-primary text-white py-2 px-4" type="button">View more products</button></a>
+                        <a href="<?php echo site_url("shop"); ?>"><button class="btn btn-primary text-white py-2 px-4" type="button">View more products</button></a>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -116,7 +116,7 @@ if (isset($selected_category_id) && ($selected_category_id != "all")) {
         }
 
         function get_url() {
-            var urlPrefix = "<?php echo site_url(strtolower($sessCountry["code"]) . '/shop'); ?>";
+            var urlPrefix = "<?php echo site_url('shop'); ?>";
             var urlSuffix = "";
             var categoryArr = [];
 
