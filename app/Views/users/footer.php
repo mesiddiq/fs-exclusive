@@ -4,7 +4,7 @@
     <div class="container-fluid bg-secondary text-dark">
         <div class="row px-xl-5 pt-5 text-center">
             <div class="col-lg-12 mb-5 pr-3 pr-xl-5">
-                <a href="<?php echo site_url(); ?>" class="text-decoration-none"><img src="<?php echo site_url('assets/img/logo.png'); ?>"></a>
+                <a href="<?php echo site_url(); ?>"><img class="img-fluid py-3" src="<?php echo site_url('assets/img/logo.png'); ?>" width="140px"></a>
                 <div class="align-items-center mt-3">
                     <a class="text-dark px-2" href="javascript:;">
                         <i class="fab fa-facebook-f"></i>

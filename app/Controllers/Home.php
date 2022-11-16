@@ -88,7 +88,7 @@ class Home extends BaseController
         // Get the category ids
         if (isset($_GET["category"]) && !empty($_GET["category"] && $_GET["category"] != "all")) {
             $selectedCategoryID = $this->CategoryModel->getCategoryIDs($_GET["category"]);
-            // $page_data["products"] = $this->ProductModel->where(array("country" => $this->session->get("country"), "category" => $selectedCategoryID[0]["id"]))->get()->getResultArray();
+            // $page_data["products"] = $this->ProductModel->where(array("country" => $this->session->get("countryId"), "category" => $selectedCategoryID[0]["id"]))->get()->getResultArray();
             $selectedCategoryProducts = array();
             foreach ($selectedCategoryID as $key => $selectedCategory) {
                 $selectedCategoryProduct = $this->ProductModel->where(array("country" => $this->session->get("countryId"), "category" => $selectedCategory["id"]))->get()->getRowArray();
@@ -446,7 +446,7 @@ class Home extends BaseController
 
     public function wishlist()
     {
-        if ($this->session->get("country") == NULL) {
+        if ($this->session->get("countryId") == NULL) {
             return redirect()->to(site_url());
         }
 
@@ -474,7 +474,7 @@ class Home extends BaseController
 
     public function orders($param1="", $param2="")
     {
-        if ($this->session->get("country") == NULL) {
+        if ($this->session->get("countryId") == NULL) {
             return redirect()->to(site_url());
         }
 

@@ -51,6 +51,7 @@
     <!-- Recent Sold -->
     <?php
     $recentSold = $this->db->table("orders")->orderBy("id DESC")->limit(1)->get()->getRowArray();
+    if ($recentSold != NULL):
     $recentSoldUser = $this->db->table("users")->where("id", $recentSold["userId"])->get()->getRowArray();
     ?>
     <div class="card recent-sold">
@@ -75,6 +76,7 @@
             </small>
         </div>
     </div>
+    <?php endif; ?>
     
 </body>
 </html>

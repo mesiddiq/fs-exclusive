@@ -23,7 +23,7 @@
                     $product = $this->db->table("products")->where("id", $wishlist["productId"])->get()->getRowArray();
                     ?>
                     <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                        <a href="<?php echo site_url(strtolower('product/' . $product['slug'] . '/' . $product['id']); ?>">
+                        <a href="<?php echo site_url(strtolower('product/' . $product['slug'] . '/' . $product['id'])); ?>">
                             <div class="card product-item border-0 mb-4">
                                 <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                                     <?php
@@ -77,7 +77,7 @@
                     <?php else: ?>
                     <div class="col-12 pb-1 text-center">
                         <h2>Sorry..!<br>No products found</h2>
-                        <a href="<?php echo site_url(strtolower("shop"); ?>"><button class="btn btn-primary text-white py-2 px-4" type="button">View more products</button></a>
+                        <a href="<?php echo site_url(strtolower("shop")); ?>"><button class="btn btn-primary text-white py-2 px-4" type="button">View more products</button></a>
                     </div>
                     <?php endif; ?>
                 </div>
