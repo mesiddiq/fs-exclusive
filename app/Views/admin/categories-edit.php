@@ -68,11 +68,11 @@
                                         <label style="font-size: 14px; font-weight: 500; color: #262d3f; display: block; margin-bottom: 10px;">Status</label>
                                         <div class="form-check form-check-inline radio-style mb-20">
                                             <input class="form-check-input" type="radio" value="1" name="status" <?php echo $category["status"] == 1 ? 'checked' : ''; ?>>
-                                            <label class="form-check-label" for="status">Active</label>
+                                            <label class="form-check-label" for="status">Publish</label>
                                         </div>
                                         <div class="form-check form-check-inline radio-style mb-20">
                                             <input class="form-check-input" type="radio" value="0" name="status" <?php echo $category["status"] == 0 ? 'checked' : ''; ?>>
-                                            <label class="form-check-label" for="status">Not Active</label>
+                                            <label class="form-check-label" for="status">Pending</label>
                                         </div>
                                     </div>
                                     <div class="col-12">

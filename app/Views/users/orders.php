@@ -50,7 +50,7 @@
                                 </td>
                                 <td class="text-center align-middle">
                                     <div class="action justify-content-end">
-                                        <a href="<?php echo site_url(strtolower('orders/view/' . $order['id']); ?>" target="_blank">
+                                        <a href="<?php echo site_url(strtolower('orders/view/' . $order['id'])); ?>" target="_blank">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </div>

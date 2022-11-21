@@ -37,7 +37,7 @@
                                             <button class="bg-transparent border-0 kanban-button" type="button">
                                                 <div class="kanban-card-header">
                                                     <span class="priority">
-                                                        <?php echo $category['status'] == 1 ? 'Active' : 'Not Active' ?>
+                                                        <?php echo $category['status'] == 1 ? 'Published' : 'Pending' ?>
                                                     </span>
                                                     <a href="<?php echo site_url('admin/categories/edit/'.$category['id']); ?>">
                                                         <span class="tooltip-icon text-gray" data-bs-toggle="tooltip" data-bs-placement="top">

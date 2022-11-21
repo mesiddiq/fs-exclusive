@@ -70,7 +70,7 @@
                         
                     </div>
                     <div class="col-4 invoice-logo">
-                        <img src="<?php echo site_url('assets/img/logo.png'); ?>" alt="" />
+                        <img class="img-fluid py-3" src="<?php echo site_url('assets/img/logo.png'); ?>" width="120px">
                     </div>
                     <div class="col-4 invoice-date mt-4 pt-2">
                         <p><span>Order Date:</span> <?php echo date("d-M-Y", $order["orderDate"]); ?></p>

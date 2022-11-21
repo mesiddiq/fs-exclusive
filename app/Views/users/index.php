@@ -57,7 +57,6 @@
     <div class="card recent-sold">
         <div class="card-body">
             <p><strong class="text-dark"><?php echo $recentSoldUser["name"]; ?></strong> purchased our product</p>
-            <?php echo date("Y-m-d", $recentSold["orderDate"]); ?>
             <small>
                 <em id="recent-sold-date">
                     <script type="text/javascript">

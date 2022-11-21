@@ -67,15 +67,15 @@
                                         <label style="font-size: 14px; font-weight: 500; color: #262d3f; display: block; margin-bottom: 10px;">Status</label>
                                         <div class="form-check form-check-inline radio-style mb-20">
                                             <input class="form-check-input" type="radio" value="1" name="status" checked>
-                                            <label class="form-check-label" for="status">Active</label>
+                                            <label class="form-check-label" for="status">Publish</label>
                                         </div>
                                         <div class="form-check form-check-inline radio-style mb-20">
                                             <input class="form-check-input" type="radio" value="0" name="status">
-                                            <label class="form-check-label" for="status">Not Active</label>
+                                            <label class="form-check-label" for="status">Pending</label>
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <button class="main-btn primary-btn btn-hover">Update</button>
+                                        <button class="main-btn primary-btn btn-hover">Submit</button>
                                     </div>
                                 </div>
                             </form>

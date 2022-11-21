@@ -10,7 +10,7 @@ class CategoryModel extends Model
     protected $primaryKey = "id";
     protected $useAutoIncrement = true;
     protected $returnType     = "array";
-    protected $allowedFields = ["name", "slug", "description", "image", "parent", "status", "author", "createdAt", "updatedAt"];
+    protected $allowedFields = ["name", "slug", "description", "image", "parent", "country", "status", "author", "createdAt", "updatedAt"];
 
 
     public function getCategoryIDs($slug = "")

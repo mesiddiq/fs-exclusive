@@ -415,6 +415,8 @@ class Home extends BaseController
         }
 
         $this->CustomModel->insert($data);
+        $this->EmailModel->sendCustomProductUserMail($data["name"], $data["email"]);
+        $this->EmailModel->sendCustomProductAdminMail($data);
         return redirect()->to(site_url());
     }
 
