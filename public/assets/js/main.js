@@ -585,9 +585,6 @@
                     $("#cart #row"+updateCartRes1.id).text(updateCartRes1.productPrice);
                     $("#cartSubTotal").text(updateCartRes1.cartSubTotal);
                     $("#cartTotal").text(updateCartRes1.cartSubTotal - cartDiscount);
-                    // if (res) {
-                    //     window.location.replace(site_url);
-                    // }
                 }
             });
         });

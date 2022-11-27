@@ -142,7 +142,7 @@
                                         <div class="col-12">
                                             <h3 class="mb-4">Country</h3>
                                             <?php
-                                            $countries = $this->db->table("country")->get()->getResultArray();
+                                            $countries = $this->db->table("country")->where("status", 1)->get()->getResultArray();
                                             foreach ($countries as $key => $country):
                                             ?>
                                             <div class="form-check radio-style mb-20">
@@ -256,17 +256,7 @@
                                         <!-- <div class="col-6">
                                             <div class="input-style-1">
                                                 <label>Price</label>
-                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="price" placeholder="Price" value="<?php echo $product["price"]; ?>" />
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <?php if ($product["isDiscount"] == 1): ?>
-                                            <div class="input-style-1 special-price" style="display: block;">
-                                            <?php else: ?>
-                                            <div class="input-style-1 special-price" style="display: none;">
-                                            <?php endif; ?>
-                                                <label>Special Price</label>
-                                                <input type="number" class="bg-transparent" oninput="this.className = 'bg-transparent form-required'" name="discountedPrice" placeholder="Special Price" value="<?php echo $product["discountedPrice"]; ?>" />
+                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="price" placeholder="Price" />
                                             </div>
                                         </div> -->
                                     </div>

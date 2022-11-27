@@ -78,7 +78,31 @@
                     </a>
                     <ul id="settings_menu" class="collapse dropdown-nav <?php echo $uri[4] == 'countries' ? 'show' : ''; ?>">
                         <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Logo</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Social Links</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Testimonials</a>
+                        </li>
+                        <li>
                             <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Countries</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Website</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Banner</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Privacy Policy</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Terms & Conditions</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Refund Policy</a>
                         </li>
                     </ul>
                 </li>

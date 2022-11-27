@@ -5755,7 +5755,7 @@ h6,
   padding: 0px 15px;
 }
 .sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children ul li {
-  margin-bottom: 10px;
+/*  margin-bottom: 10px;*/
 }
 .sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children ul li:last-child {
   margin-bottom: 0px;
@@ -5764,7 +5764,8 @@ h6,
   font-size: 14px;
   font-weight: 400;
   border-radius: 6px;
-  padding: 8px 15px;
+/*  padding: 8px 15px;*/
+  padding: 8px 15px 8px 40px;
   display: flex;
   align-items: center;
   border: 1px solid transparent;
