@@ -112,6 +112,9 @@
                     </form>
                 </div> -->
                 <div class="d-flex align-items-center mb-4 pt-2">
+                    <?php if ($product["isOutOfStock"] == 1): ?>
+                    <button type="button" class="btn btn-danger text-white px-3"><i class="fa fa-sad-tear mr-1"></i> Out of Stock</button>
+                    <?php else: ?>
                     <div class="input-group quantity mr-3">
                         <div class="input-group-btn">
                             <button class="btn btn-primary text-white btn-minus" >
@@ -126,6 +129,7 @@
                         </div>
                     </div>
                     <button type="button" id="addToCart" class="btn btn-primary text-white px-3" data-productid="<?php echo $product["id"]; ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                    <?php endif; ?>
                 </div>
                 <div class="d-flex">
                     <?php

@@ -238,6 +238,51 @@ class Home extends BaseController
         return view($view . "/index", $page_data);
     }
 
+    public function updateCart()
+    {
+        $id = $this->request->getPost("cartId");
+        $subTotal = (int) $this->request->getPost("cartSubTotal");
+        $action = $this->request->getPost("action");
+
+        $getCart = $this->CartModel->where("id", $id)->first();
+        $getProduct = $this->ProductModel->where("id", $getCart["productId"])->first();
+
+        if ($getProduct["isDiscount"] == 1) {
+            $price = $getProduct["discountedPrice"];
+        } else {
+            $price = $getProduct["price"];
+        }
+
+        if ($action == "plus") {
+            $newQty = $getCart["productQty"] + 1;
+            $newPrice = $newQty * $price;
+        } else if ($action == "minus") {
+            $newQty = $getCart["productQty"] - 1;
+            $newPrice = $newQty * $price;
+        }
+
+
+        if ($newQty > 0) {
+            $this->db->table("cart")->where("id", $id)->update(array("productQty" => $newQty, "productPrice" => $newPrice));
+
+            $userCart = $this->CartModel->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->get()->getResultArray();
+
+            $newSubTotal = 0;
+
+            foreach ($userCart as $key => $userCart) {
+                $newSubTotal += $userCart["productPrice"];
+            }
+
+            $getUpdatedCart = $this->CartModel->where("id", $id)->first();
+            $getUpdatedCart["cartSubTotal"] = $newSubTotal;
+            echo json_encode($getUpdatedCart);
+        } else {
+            $getCart["cartSubTotal"] = $subTotal;
+            echo json_encode($getCart);
+        }
+        
+    }
+
 
     public function removeFromCart()
     {

@@ -231,6 +231,37 @@
                                 <div class="tab">
                                     <div class="row">
                                         <div class="col-12">
+                                            <h3 class="mb-4">Inventory Info</h3>
+                                        </div>
+                                        <!-- <div class="col-6">
+                                            <div class="input-style-1">
+                                                <label>Price</label>
+                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="price" placeholder="Price" value="<?php echo $product["price"]; ?>" />
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <?php if ($product["isDiscount"] == 1): ?>
+                                            <div class="input-style-1 special-price" style="display: block;">
+                                            <?php else: ?>
+                                            <div class="input-style-1 special-price" style="display: none;">
+                                            <?php endif; ?>
+                                                <label>Special Price</label>
+                                                <input type="number" class="bg-transparent" oninput="this.className = 'bg-transparent form-required'" name="discountedPrice" placeholder="Special Price" value="<?php echo $product["discountedPrice"]; ?>" />
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-check checkbox-style mb-20">
+                                                <input class="form-check-input" type="checkbox" value="1" name="isOutOfStock" id="isOutOfStock" <?php echo $product["isOutOfStock"] == 1 ? 'checked' : ''; ?>>
+                                                <label class="form-check-label" for="isOutOfStock">Check if product is out of stock</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab">
+                                    <div class="row">
+                                        <div class="col-12">
                                             <h3 class="mb-4">Price Info</h3>
                                         </div>
                                         <div class="col-6">
@@ -313,7 +344,7 @@
                                 <div style="overflow:auto;" id="nextprevious">
                                     <div style="float:right;"> <button type="button" id="prevBtn" class="main-btn primary-btn btn-hover" onclick="nextPrev(-1)">Previous</button> <button type="button" class="main-btn primary-btn btn-hover" id="nextBtn" onclick="nextPrev(1)">Next</button> </div>
                                 </div>
-                                <div class="all-steps" id="all-steps"> <span class="step"></span> <span class="step"></span> <span class="step"></span> <span class="step"></span> </div>
+                                <div class="all-steps" id="all-steps"> <span class="step"></span> <span class="step"></span> <span class="step"></span> <span class="step"></span> <span class="step"></span> </div>
                             </form>
                         </div>
                         <!-- end card -->
@@ -366,7 +397,7 @@
                     document.getElementById("prevBtn").style.display = "inline";
                 }
 
-                if (n == 4) {
+                if (n == 5) {
                     document.getElementById("nextBtn").innerHTML = "Submit";
                     document.getElementById("nextBtn").setAttribute("type", "submit");
                 } else {

@@ -197,8 +197,8 @@
                     url: site_url + "forgot",
                     data: {email: email},
                     success: function(forRes) {
-                        alert(forRes);
                         if (forRes == true) {
+                            $("#forgotEmail").val("");
                             $("#forgotError").removeClass("text-danger").addClass("text-success").text("Email sent");
                         } else {
                             $("#forgotError").removeClass("text-success").addClass("text-danger").text(forRes);
@@ -559,6 +559,35 @@
                     if (res) {
                         window.location.replace(site_url);
                     }
+                }
+            });
+        });
+
+        $("#cart .input-group-btn .btn").on("click", function() {
+            var cartId = $(this).data("cartid");
+            var cartSubTotal = $("#cartSubTotal").text();
+            var cartDiscount = $("#cartDiscount").text();
+            var action = "";
+            
+            if ($(this).hasClass("btn-minus")) {
+                action = "minus";
+            } else if ($(this).hasClass("btn-plus")) {
+                action = "plus";
+            }
+
+            $.ajax({
+                method: "POST",
+                url: site_url + "updateCart",
+                data: {cartId: cartId, cartSubTotal: cartSubTotal, cartDiscount: cartDiscount, action: action},
+                success: function(updateCartRes) {
+                    console.log(updateCartRes);
+                    var updateCartRes1 = JSON.parse(updateCartRes);
+                    $("#cart #row"+updateCartRes1.id).text(updateCartRes1.productPrice);
+                    $("#cartSubTotal").text(updateCartRes1.cartSubTotal);
+                    $("#cartTotal").text(updateCartRes1.cartSubTotal - cartDiscount);
+                    // if (res) {
+                    //     window.location.replace(site_url);
+                    // }
                 }
             });
         });

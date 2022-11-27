@@ -177,6 +177,7 @@ class Admin extends BaseController
                     $data["price"] = $this->request->getPost("price");
                     $data["discountedPrice"] = $this->request->getPost("discountedPrice");
                     $data["isTopProduct"] = (int) $this->request->getPost("isTopProduct");
+                    $data["isOutOfStock"] = (int) $this->request->getPost("isOutOfStock");
                     $data["status"] = (int) $this->request->getPost("status");
                     $data["author"] = (int) $this->session->get("userId");
                     $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
@@ -228,6 +229,7 @@ class Admin extends BaseController
                     $data["price"] = $this->request->getPost("price");
                     $data["discountedPrice"] = $this->request->getPost("discountedPrice");
                     $data["isTopProduct"] = (int) $this->request->getPost("isTopProduct");
+                    $data["isOutOfStock"] = (int) $this->request->getPost("isOutOfStock");
                     $data["status"] = (int) $this->request->getPost("status");
                     $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
 

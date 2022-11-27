@@ -57,6 +57,7 @@ $routes->post('/toggleWishlist', 'Home::toggleWishlist');
 // Cart
 $routes->get('/cart', 'Home::cart');
 $routes->post('/addToCart', 'Home::addToCart');
+$routes->post('/updateCart', 'Home::updateCart');
 $routes->post('/removeFromCart', 'Home::removeFromCart');
 $routes->post('/removeFromSessionCart', 'Home::removeFromSessionCart');
 $routes->post('/deleteUserCart', 'Home::deleteUserCart');
