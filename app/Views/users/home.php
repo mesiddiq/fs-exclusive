@@ -24,7 +24,7 @@
     
 
     <!-- Featured Start -->
-    <div class="container-fluid pt-5">
+    <!-- <div class="container-fluid pt-5">
         <div class="row px-xl-5 pb-3">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                 <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Featured End -->
 
 
@@ -75,7 +75,7 @@
 
 
     <!-- Offer Start -->
-    <div class="container-fluid offer pt-5">
+    <!-- <div class="container-fluid offer pt-5">
         <div class="row px-xl-5">
             <div class="col-md-6 pb-4">
                 <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-4 px-4">
@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Offer End -->
 
 
@@ -110,7 +110,7 @@
         </div>
         <div class="row px-xl-5 pb-3">
             <?php
-            $products = $this->db->table("products")->where(array("category" => $category["id"], "country" => $this->session->get("countryId")))->get()->getResultArray();
+            $products = $this->db->table("products")->where(array("category" => $category["id"], "country" => $this->session->get("countryId"), "isTopProduct" => 1))->get()->getResultArray();
             foreach ($products as $key => $product): ?>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                 <a href="<?php echo site_url('product/' . $product['slug'] . '/' . $product['id']); ?>">
@@ -150,7 +150,7 @@
 
 
     <!-- Subscribe Start -->
-    <div class="container-fluid bg-secondary my-5">
+    <!-- <div class="container-fluid bg-secondary my-5">
         <div class="row justify-content-md-center py-5 px-xl-5">
             <div class="col-md-6 col-12 py-5">
                 <div class="text-center mb-2 pb-2">
@@ -167,35 +167,30 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Subscribe End -->
 
 
+    <?php
+    $images = $this->db->query("SELECT * FROM `testimonialimages` ORDER BY `order` IS NULL, `order` ASC")->getResultArray();
+    if (count($images) > 0):
+    ?>
     <!-- Vendor Start -->
     <div class="container-fluid py-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Testimonials</span></h2>
+        </div>
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel vendor-carousel">
+                    <?php foreach ($images as $key => $image): ?>
                     <div class="vendor-item border p-4">
-                        <img src="assets/img/testimonial1.jpg" alt="">
+                        <img src="<?php echo site_url("uploads/testimonials/".$image["name"]) ?>" alt="<?php echo $image["name"]; ?>">
                     </div>
-                    <div class="vendor-item border p-4">
-                        <img src="assets/img/testimonial2.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="assets/img/testimonial1.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="assets/img/testimonial2.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="assets/img/testimonial1.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="assets/img/testimonial2.jpg" alt="">
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </div>
     <!-- Vendor End -->
+    <?php endif; ?>

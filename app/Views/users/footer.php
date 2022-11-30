@@ -4,7 +4,7 @@
     <div class="container-fluid bg-secondary text-dark">
         <div class="row px-xl-5 pt-5 text-center">
             <div class="col-lg-12 mb-5 pr-3 pr-xl-5">
-                <a href="<?php echo site_url(); ?>"><img class="img-fluid py-3" src="<?php echo site_url('assets/img/logo.png'); ?>" width="140px"></a>
+                <a href="<?php echo site_url(); ?>"><img class="img-fluid py-3" src="<?php echo site_url('uploads/footer_logo.png'); ?>" width="140px"></a>
                 <div class="align-items-center mt-3">
                     <a class="text-dark px-2" href="javascript:;">
                         <i class="fab fa-facebook-f"></i>
@@ -40,8 +40,7 @@
         <div class="row border-top border-light mx-xl-5 py-4">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-dark">
-                    &copy; <a class="text-dark font-weight-semi-bold" href="#">FS Exclusive</a>. All Rights Reserved. Designed
-                    by <a class="text-dark font-weight-semi-bold" href="https://sparkztechin.com">Sparkz Tech</a>
+                    &copy; <?php echo date("Y"); ?> <a class="text-dark font-weight-semi-bold" href="#">FS Exclusive</a> | All Rights Reserved | Designed by <a class="text-dark font-weight-semi-bold" href="https://sparkztechin.com">Sparkz Tech</a>
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">

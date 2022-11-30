@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php if ($page_name == "main" || $page_name == "home"): ?>
     <title>FS Exclusive</title>
     <?php else: ?>
     <title><?php echo ucfirst($page_name); ?> | FS Exclusive</title>
     <?php endif; ?>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
 
     <!-- Favicon -->
-    <link href="<?php echo site_url('assets/img/favicon.png'); ?>" rel="icon">
+    <link rel="icon" href="<?php echo site_url('uploads/favicon.png'); ?>">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">

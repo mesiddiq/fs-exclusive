@@ -165,9 +165,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="select-style-1">
-                                                <label>Category <?php if(isset($adminProductCountryId)) {
-                                                    var_dump($adminProductCountryId);
-                                                    } ?></label>
+                                                <label>Category</label>
                                                 <div class="select-position">
                                                     <select name="category" class="form-required" onchange="this.className = 'form-required'">
                                                         <option value="">Select</option>

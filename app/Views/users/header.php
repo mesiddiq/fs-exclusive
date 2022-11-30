@@ -52,7 +52,7 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-start">
-                        <a href="<?php echo site_url(); ?>"><img class="img-fluid py-3" src="<?php echo site_url('assets/img/logo.png'); ?>" width="120px"></a>
+                        <a href="<?php echo site_url(); ?>"><img class="img-fluid py-3" src="<?php echo site_url('uploads/logo.png'); ?>" width="120px"></a>
                     </div>
                     <div class="col-md-8 d-md-flex justify-content-center my-auto">
                         <form method="GET" action="<?php echo site_url('search'); ?>" class="searchform order-lg-last">

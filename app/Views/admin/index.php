@@ -57,6 +57,7 @@
         // Delete product image
         $(".deleteProductImage").on("click", function() {
             var id = $(this).data("imageid");
+
             $.ajax({
                 method: "POST",
                 url: "<?php echo site_url('admin/products/deleteImage'); ?>",
@@ -75,6 +76,7 @@
         $(".setImageFeatured").on("click", function() {
             var id = $(this).data("imageid");
             var productid = $(this).data("productid");
+
             $.ajax({
                 method: "POST",
                 url: "<?php echo site_url('admin/products/setImageFeatured'); ?>",
@@ -82,6 +84,48 @@
                 success: function(res) {
                     if (res) {
                         $("#image" + id + " .text-end").html('<a href="javascript:;"><button type="button" class="btn success-btn mt-2"><small><i class="lni lni-checkmark"></i> Featured</small></button></a>');
+                    } else {
+                        alert("Something went wrong");
+                    }
+                }
+            });
+        });
+    </script>
+    <?php } ?>
+
+    <?php if ($page_name == "testimonials") { ?>
+    <script type="text/javascript">
+        // Delete testimonial image
+        $(".deleteTestimonialImage").on("click", function() {
+            var id = $(this).data("imageid");
+
+            $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('admin/testimonials/deleteImage'); ?>",
+                data: {id: id},
+                success: function(tesRes) {
+                    if (tesRes) {
+                        $("#image" + id).remove();
+                    } else {
+                        alert("Something went wrong");
+                    }
+                }
+            });
+        });
+
+        // Set testimonial image order
+        $(".testimonialImageOrder").on("change", function() {
+            var id = $(this).data("imageid");
+            var order = $(this).val();
+            
+            $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('admin/testimonials/updateOrder'); ?>",
+                data: {id: id, order: order},
+                success: function(orderRes) {
+                    if (orderRes) {
+                        // $("#image" + id).remove();
+                        location.reload();
                     } else {
                         alert("Something went wrong");
                     }

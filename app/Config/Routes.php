@@ -147,12 +147,30 @@ $routes->get('/admin/users/(:alpha)', 'Admin::users/$1');
 $routes->post('/admin/users/(:alpha)', 'Admin::users/$1');
 $routes->get('/admin/users/(:alpha)/(:num)', 'Admin::users/$1/$2');
 $routes->post('/admin/users/(:alpha)/(:num)', 'Admin::users/$1/$2');
+// Logo
+$routes->get('/admin/logo', 'Admin::logo');
+$routes->post('/admin/logo/(:alpha)', 'Admin::logo/$1');
+// Social Media
+$routes->get('/admin/social-links', 'Admin::socialLinks');
+$routes->post('/admin/social-links/(:alpha)', 'Admin::socialLinks/$1');
+// Testimonials
+$routes->get('/admin/testimonials', 'Admin::testimonials');
+$routes->post('/admin/testimonials/(:alpha)', 'Admin::testimonials/$1');
 // Countries
 $routes->get('/admin/countries', 'Admin::countries');
 $routes->get('/admin/countries/(:alpha)', 'Admin::countries/$1');
 $routes->post('/admin/countries/(:alpha)', 'Admin::countries/$1');
 $routes->get('/admin/countries/(:alpha)/(:num)', 'Admin::countries/$1/$2');
 $routes->post('/admin/countries/(:alpha)/(:num)', 'Admin::countries/$1/$2');
+// Privacy Policy
+$routes->get('/admin/privacy-policy', 'Admin::privacyPolicy');
+$routes->post('/admin/privacy-policy/(:alpha)', 'Admin::privacyPolicy/$1');
+// Terms
+$routes->get('/admin/terms', 'Admin::terms');
+$routes->post('/admin/terms/(:alpha)', 'Admin::terms/$1');
+// Refund Policy
+$routes->get('/admin/refund-policy', 'Admin::refundPolicy');
+$routes->post('/admin/refund-policy/(:alpha)', 'Admin::refundPolicy/$1');
 // Others
 $routes->post('/admin/updateAdminProductCountryId', 'Admin::updateAdminProductCountryId');
 

@@ -9,6 +9,7 @@ use App\Models\ProductImageModel;
 use App\Models\OrdersModel;
 use App\Models\CustomModel;
 use App\Models\ReviewModel;
+use App\Models\TestimonialImageModel;
 use App\Models\CountriesModel;
 
 class Admin extends BaseController
@@ -23,6 +24,7 @@ class Admin extends BaseController
         $this->OrdersModel = new OrdersModel();
         $this->CustomModel = new CustomModel();
         $this->ReviewModel = new ReviewModel();
+        $this->TestimonialImageModel = new TestimonialImageModel();
         $this->CountriesModel = new CountriesModel();
     }
 
@@ -43,10 +45,10 @@ class Admin extends BaseController
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
-                $page_data["orders"] = $this->OrdersModel->orderBy('id', 'DESC')->limit(10)->get()->getResultArray();
+                $page_data["orders"] = $this->OrdersModel->orderBy("id", "DESC")->limit(10)->get()->getResultArray();
                 $view = "admin";
-                $page_data['page_title'] = "Dashboard";
-                $page_data['page_name'] = "dashboard";
+                $page_data["page_title"] = "Dashboard";
+                $page_data["page_name"] = "dashboard";
 
                 return view($view . "/index", $page_data);
             } else {
@@ -57,7 +59,7 @@ class Admin extends BaseController
         }
     }
 
-    public function categories($param1='', $param2='')
+    public function categories($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
@@ -67,7 +69,7 @@ class Admin extends BaseController
                     $page_data["page_name"] = "categories-add";
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "create") {
+                } else if ($param1 == "create") {
                     $data["country"] = (int) $this->request->getPost("country");
                     $data["name"] = $this->request->getPost("name");
                     $data["slug"] = $this->slugify($this->request->getPost("name"));
@@ -76,14 +78,14 @@ class Admin extends BaseController
                     $data["author"] = (int) $this->session->get("userId");
                     $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
 
-                    if (($_FILES['image']['name']!="")) {
+                    if (($_FILES["image"]["name"]!="")) {
                         // Where the file is going to be stored
                         $target_dir = FCPATH . "uploads/category/";
-                        $file = $_FILES['image']['name'];
+                        $file = $_FILES["image"]["name"];
                         $path = pathinfo($file);
                         $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
-                        $ext = $path['extension'];
-                        $temp_name = $_FILES['image']['tmp_name'];
+                        $ext = $path["extension"];
+                        $temp_name = $_FILES["image"]["tmp_name"];
                         $path_filename_ext = $target_dir . $filename . "." . $ext;
  
                         // Check if file already exists
@@ -100,14 +102,14 @@ class Admin extends BaseController
                     }
                     $create = $this->CategoryModel->insert($data);
                     return redirect()->to("admin/categories");
-                } elseif ($param1 == "edit") {
-                    $page_data["category"] = $this->CategoryModel->where('id', $param2)->get()->getRowArray();
+                } else if ($param1 == "edit") {
+                    $page_data["category"] = $this->CategoryModel->where("id", $param2)->get()->getRowArray();
                     $view = "admin";
                     $page_data["page_title"] = "Edit Category";
                     $page_data["page_name"] = "categories-edit";
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "update") {
+                } else if ($param1 == "update") {
                     $data["country"] = (int) $this->request->getPost("country");
                     $data["name"] = $this->request->getPost("name");
                     $data["slug"] = $this->slugify($this->request->getPost("name"));
@@ -115,14 +117,14 @@ class Admin extends BaseController
                     $data["status"] = $this->request->getPost("status");
                     $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
 
-                    if (($_FILES['image']['name'] != "")) {
+                    if (($_FILES["image"]["name"] != "")) {
                         // Where the file is going to be stored
                         $target_dir = FCPATH . "uploads/category/";
-                        $file = $_FILES['image']['name'];
+                        $file = $_FILES["image"]["name"];
                         $path = pathinfo($file);
                         $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
-                        $ext = $path['extension'];
-                        $temp_name = $_FILES['image']['tmp_name'];
+                        $ext = $path["extension"];
+                        $temp_name = $_FILES["image"]["tmp_name"];
                         $path_filename_ext = $target_dir . $filename . "." . $ext;
  
                         // Check if file already exists
@@ -137,7 +139,7 @@ class Admin extends BaseController
                     } else {
                         $data["image"] = $this->request->getPost("imageName");
                     }
-                    $update = $this->db->table('category')->where('id', $param2)->update($data);
+                    $update = $this->db->table("category")->where("id", $param2)->update($data);
                     return redirect()->to("admin/categories");
                 } else {
                     $page_data["categories"] = $this->CategoryModel->findAll();
@@ -155,7 +157,7 @@ class Admin extends BaseController
         }
     }
 
-    public function products($param1='', $param2='')
+    public function products($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
@@ -166,7 +168,7 @@ class Admin extends BaseController
                     $this->session->set("adminProductCountryId", 1);
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "create") {
+                } else if ($param1 == "create") {
                     $data["name"] = $this->request->getPost("name");
                     $data["slug"] = $this->slugify($this->request->getPost("name"));
                     $data["shortDescription"] = $this->request->getPost("shortDescription");
@@ -185,24 +187,24 @@ class Admin extends BaseController
                     $create = $this->ProductModel->insert($data);
                     $productID = $this->ProductModel->getInsertID();
 
-                    if (($_FILES['image']['name'] != "")) {
-                        for ($i=0; $i < count($_FILES['image']['name']) ; $i++) { 
+                    if (($_FILES["image"]["name"] != "")) {
+                        for ($i=0; $i < count($_FILES["image"]["name"]) ; $i++) { 
                             // Where the file is going to be stored
                             $target_dir = FCPATH . "uploads/products/";
-                            $file = $_FILES['image']['name'][$i];
+                            $file = $_FILES["image"]["name"][$i];
                             $path = pathinfo($file);
                             $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
-                            $ext = $path['extension'];
-                            $temp_name = $_FILES['image']['tmp_name'][$i];
+                            $ext = $path["extension"];
+                            $temp_name = $_FILES["image"]["tmp_name"][$i];
                             $path_filename_ext = $target_dir . $filename . "." . $ext;
      
                             // Check if file already exists
                             if (!file_exists($path_filename_ext)) {
                                 move_uploaded_file($temp_name, $path_filename_ext);
                                 $image = [
-                                    'name' => $filename . "." . $ext,
-                                    'productId'  => $productID,
-                                    'createdAt'  => strtotime(date("d-M-Y H:i:s")),
+                                    "name" => $filename . "." . $ext,
+                                    "productId"  => $productID,
+                                    "createdAt"  => strtotime(date("d-M-Y H:i:s")),
                                 ];
 
                                 $this->ProductImageModel->insert($image);
@@ -211,14 +213,14 @@ class Admin extends BaseController
                     }
 
                     return redirect()->to("admin/products");
-                } elseif ($param1 == "edit") {
-                    $page_data["product"] = $this->ProductModel->where('id', $param2)->get()->getRowArray();
+                } else if ($param1 == "edit") {
+                    $page_data["product"] = $this->ProductModel->where("id", $param2)->get()->getRowArray();
                     $view = "admin";
                     $page_data["page_title"] = "Edit Product";
                     $page_data["page_name"] = "products-edit";
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "update") {
+                } else if ($param1 == "update") {
                     $data["name"] = $this->request->getPost("name");
                     $data["slug"] = $this->slugify($this->request->getPost("name"));
                     $data["shortDescription"] = $this->request->getPost("shortDescription");
@@ -233,15 +235,15 @@ class Admin extends BaseController
                     $data["status"] = (int) $this->request->getPost("status");
                     $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
 
-                    if (($_FILES['image']['name'][0] != "")) {
-                        for ($i=0; $i < count($_FILES['image']['name']) ; $i++) { 
+                    if (($_FILES["image"]["name"][0] != "")) {
+                        for ($i=0; $i < count($_FILES["image"]["name"]) ; $i++) { 
                             // Where the file is going to be stored
                             $target_dir = FCPATH . "uploads/products/";
-                            $file = $_FILES['image']['name'][$i];
+                            $file = $_FILES["image"]["name"][$i];
                             $path = pathinfo($file);
                             $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
-                            $ext = $path['extension'];
-                            $temp_name = $_FILES['image']['tmp_name'][$i];
+                            $ext = $path["extension"];
+                            $temp_name = $_FILES["image"]["tmp_name"][$i];
                             $path_filename_ext = $target_dir . $filename . "." . $ext;
      
                             // Check if file already exists
@@ -260,10 +262,10 @@ class Admin extends BaseController
                     
                     $update = $this->db->table("products")->where("id", $param2)->update($data);
                     return redirect()->to("admin/products");
-                } elseif ($param1 == "delete") {
+                } else if ($param1 == "delete") {
                     $delete = $this->db->table("products")->where("id", $param2)->delete();
                     return redirect()->to("admin/products");
-                } elseif ($param1 == "setImageFeatured") {
+                } else if ($param1 == "setImageFeatured") {
                     $id = $this->request->getPost("id");
                     $productID = $this->request->getPost("productID");
 
@@ -276,7 +278,7 @@ class Admin extends BaseController
                         }
                     }
                     echo true;
-                } elseif ($param1 == "deleteImage") {
+                } else if ($param1 == "deleteImage") {
                     $id = $this->request->getPost("id");
                     $this->ProductImageModel->delete($id);
                     echo true;
@@ -304,19 +306,19 @@ class Admin extends BaseController
         echo json_encode($categories);
     }
 
-    public function orders($param1='', $param2='')
+    public function orders($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "view") {
-                    $page_data["order"] = $this->OrdersModel->where('id', $param2)->get()->getRowArray();
+                    $page_data["order"] = $this->OrdersModel->where("id", $param2)->get()->getRowArray();
                     $view = "admin";
                     $page_data["page_title"] = "View Order";
                     $page_data["page_name"] = "orders-view";
                     
                     return view($view . "/index", $page_data);
                 } else {
-                    $page_data["orders"] = $this->OrdersModel->orderBy('id', 'DESC')->get()->getResultArray();
+                    $page_data["orders"] = $this->OrdersModel->orderBy("id", "DESC")->get()->getResultArray();
                     $view = "admin";
                     $page_data["page_title"] = "Orders";
                     $page_data["page_name"] = "orders";
@@ -331,7 +333,7 @@ class Admin extends BaseController
         }
     }
 
-    public function reviews($param1='', $param2='')
+    public function reviews($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
@@ -343,7 +345,7 @@ class Admin extends BaseController
                     $page_data["products"] = $this->ProductModel->where(array("status" => 1))->get()->getResultArray();
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "create") {
+                } else if ($param1 == "create") {
                     $data["userId"] = $this->request->getPost("userId");
                     $data["productId"] = $this->request->getPost("productId");
                     $data["rating"] = $this->request->getPost("rating");
@@ -353,14 +355,14 @@ class Admin extends BaseController
 
                     $create = $this->ReviewModel->insert($data);
                     return redirect()->to("admin/reviews");
-                } elseif ($param1 == "edit") {
+                } else if ($param1 == "edit") {
                     $view = "admin";
                     $page_data["page_title"] = "Edit Review";
                     $page_data["page_name"] = "reviews-edit";
-                    $page_data["review"] = $this->ReviewModel->where('id', $param2)->get()->getRowArray();
+                    $page_data["review"] = $this->ReviewModel->where("id", $param2)->get()->getRowArray();
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "update") {
+                } else if ($param1 == "update") {
                     $data["rating"] = $this->request->getPost("rating");
                     $data["review"] = $this->request->getPost("review");
                     $data["status"] = $this->request->getPost("status");
@@ -383,7 +385,7 @@ class Admin extends BaseController
         }
     }
 
-    public function requirements($param1='', $param2='')
+    public function requirements($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
@@ -391,7 +393,7 @@ class Admin extends BaseController
                     $view = "admin";
                     $page_data["page_title"] = "View Requirements";
                     $page_data["page_name"] = "requirements-view";
-                    $page_data["requirement"] = $this->CustomModel->where('id', $param2)->get()->getRowArray();
+                    $page_data["requirement"] = $this->CustomModel->where("id", $param2)->get()->getRowArray();
                     
                     return view($view . "/index", $page_data);
                 } else {
@@ -410,7 +412,7 @@ class Admin extends BaseController
         }
     }
 
-    public function users($param1='', $param2='')
+    public function users($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
@@ -420,7 +422,7 @@ class Admin extends BaseController
                     $page_data["page_name"] = "users-add";
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "create") {
+                } else if ($param1 == "create") {
                     $data["name"] = $this->request->getPost("name");
                     $data["email"] = $this->request->getPost("email");
                     $data["contact"] = $this->request->getPost("contact");
@@ -429,28 +431,28 @@ class Admin extends BaseController
 
                     $create = $this->UserModel->insert($data);
                     return redirect()->to("admin/users");
-                } elseif ($param1 == "edit") {
+                } else if ($param1 == "edit") {
                     $view = "admin";
                     $page_data["page_title"] = "Edit User";
                     $page_data["page_name"] = "users-edit";
-                    $page_data["user"] = $this->UserModel->where('id', $param2)->get()->getRowArray();
+                    $page_data["user"] = $this->UserModel->where("id", $param2)->get()->getRowArray();
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "update") {
+                } else if ($param1 == "update") {
                     $data["name"] = $this->request->getPost("name");
                     $data["email"] = $this->request->getPost("email");
                     $data["contact"] = $this->request->getPost("contact");
                     $data["role"] = $this->request->getPost("role");
                     $data["status"] = $this->request->getPost("status");
 
-                    if (($_FILES['image']['name'] != "")) {
+                    if (($_FILES["image"]["name"] != "")) {
                         // Where the file is going to be stored
                         $target_dir = FCPATH . "uploads/users/";
-                        $file = $_FILES['image']['name'];
+                        $file = $_FILES["image"]["name"];
                         $path = pathinfo($file);
                         $filename = strtotime(date("d-M-Y H:i:s"));
-                        $ext = $path['extension'];
-                        $temp_name = $_FILES['image']['tmp_name'];
+                        $ext = $path["extension"];
+                        $temp_name = $_FILES["image"]["tmp_name"];
                         echo $path_filename_ext = $target_dir . $filename . "." . $ext;
  
                         // Check if file already exists
@@ -466,10 +468,10 @@ class Admin extends BaseController
                         $data["image"] = $this->request->getPost("imageName");
                     }
                     
-                    $update = $this->db->table('users')->where('id', $param2)->update($data);
+                    $update = $this->db->table("users")->where("id", $param2)->update($data);
                     return redirect()->to("admin/users");
-                } elseif ($param1 == "delete") {
-                    $delete = $this->db->table('users')->where('id', $param2)->delete();
+                } else if ($param1 == "delete") {
+                    $delete = $this->db->table("users")->where("id", $param2)->delete();
                     return redirect()->to("admin/users");
                 } else {
                     $view = "admin";
@@ -488,7 +490,170 @@ class Admin extends BaseController
         }
     }
 
-    public function countries($param1='', $param2='')
+    public function logo($param1="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "header") {
+                    if (($_FILES["headerLogo"]["name"] != "")) {
+                        // Where the file is going to be stored
+                        $target_dir = FCPATH . "uploads/";
+                        $file = $_FILES["headerLogo"]["name"];
+                        $path = pathinfo($file);
+                        $filename = "logo";
+                        $ext = "png";
+                        $temp_name = $_FILES["headerLogo"]["tmp_name"];
+                        $path_filename_ext = $target_dir . $filename . "." . $ext;
+ 
+                        move_uploaded_file($temp_name, $path_filename_ext);
+                    } else {
+                        $data["image"] = $this->request->getPost("imageName");
+                    }
+
+                    return redirect()->to("admin/logo");
+                } else if ($param1 == "footer") {
+                    if (($_FILES["footerLogo"]["name"] != "")) {
+                        // Where the file is going to be stored
+                        $target_dir = FCPATH . "uploads/";
+                        $file = $_FILES["footerLogo"]["name"];
+                        $path = pathinfo($file);
+                        $filename = "footer_logo";
+                        $ext = "png";
+                        $temp_name = $_FILES["footerLogo"]["tmp_name"];
+                        $path_filename_ext = $target_dir . $filename . "." . $ext;
+ 
+                        move_uploaded_file($temp_name, $path_filename_ext);
+                    } else {
+                        $data["image"] = $this->request->getPost("imageName");
+                    }
+
+                    return redirect()->to("admin/logo");
+                } else if ($param1 == "favicon") {
+                    if (($_FILES["favicon"]["name"] != "")) {
+                        // Where the file is going to be stored
+                        $target_dir = FCPATH . "uploads/";
+                        $file = $_FILES["favicon"]["name"];
+                        $path = pathinfo($file);
+                        $filename = "favicon";
+                        $ext = "png";
+                        $temp_name = $_FILES["favicon"]["tmp_name"];
+                        $path_filename_ext = $target_dir . $filename . "." . $ext;
+ 
+                        move_uploaded_file($temp_name, $path_filename_ext);
+                    } else {
+                        $data["image"] = $this->request->getPost("imageName");
+                    }
+
+                    return redirect()->to("admin/logo");
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Logo";
+                    $page_data["page_name"] = "logo";
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+
+        return view($view . "/index", $page_data);
+    }
+
+    public function socialLinks($param1="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "update") {
+                    $data["value"] = $this->request->getPost("facebookLink");
+                    $this->db->table("settings")->where("key", "facebookLink")->update($data);
+
+                    $data["value"] = $this->request->getPost("twitterLink");
+                    $this->db->table("settings")->where("key", "twitterLink")->update($data);
+
+                    $data["value"] = $this->request->getPost("instagramLink");
+                    $this->db->table("settings")->where("key", "instagramLink")->update($data);
+
+                    $data["value"] = $this->request->getPost("linkedinLink");
+                    $this->db->table("settings")->where("key", "linkedinLink")->update($data);
+
+                    $data["value"] = $this->request->getPost("youtubeLink");
+                    $this->db->table("settings")->where("key", "youtubeLink")->update($data);
+
+                    return redirect()->to("admin/social-links");
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Social Links";
+                    $page_data["page_name"] = "social-links";
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+
+        return view($view . "/index", $page_data);
+    }
+
+    public function testimonials($param1="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "create") {
+                    if (($_FILES["image"]["name"] != "")) {
+                        for ($i=0; $i < count($_FILES["image"]["name"]) ; $i++) { 
+                            // Where the file is going to be stored
+                            $target_dir = FCPATH . "uploads/testimonials/";
+                            $file = $_FILES["image"]["name"][$i];
+                            $path = pathinfo($file);
+                            $filename = strtotime(date("d-M-Y H:i:s")).rand(0, 3000);
+                            $ext = $path["extension"];
+                            $temp_name = $_FILES["image"]["tmp_name"][$i];
+                            $path_filename_ext = $target_dir . $filename . "." . $ext;
+     
+                            // Check if file already exists
+                            if (!file_exists($path_filename_ext)) {
+                                move_uploaded_file($temp_name, $path_filename_ext);
+                                $image = [
+                                    "name" => $filename . "." . $ext,
+                                    "order"  => NULL,
+                                    "createdAt"  => strtotime(date("d-M-Y H:i:s")),
+                                ];
+
+                                $this->TestimonialImageModel->insert($image);
+                            }
+                        }
+                    }
+
+                    return redirect()->to("admin/testimonials");
+                } else if ($param1 == "deleteImage") {
+                    $id = $this->request->getPost("id");
+                    $this->TestimonialImageModel->delete($id);
+                    echo true;
+                } else if ($param1 == "updateOrder") {
+                    $id = $this->request->getPost("id");
+                    $data["order"] = $this->request->getPost("order");
+
+                    $this->db->table("testimonialimages")->where("id", $id)->update($data);
+                    echo true;
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Testimonials";
+                    $page_data["page_name"] = "testimonials";
+                    
+                    return view($view . "/index", $page_data);
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+
+    }
+
+    public function countries($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
@@ -498,7 +663,7 @@ class Admin extends BaseController
                     $page_data["page_name"] = "countries-add";
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "create") {
+                } else if ($param1 == "create") {
                     $data["name"] = $this->request->getPost("name");
                     $data["code"] = $this->request->getPost("code");
                     $data["currency"] = $this->request->getPost("currency");
@@ -507,14 +672,14 @@ class Admin extends BaseController
 
                     $create = $this->CountriesModel->insert($data);
                     return redirect()->to("admin/countries");
-                } elseif ($param1 == "edit") {
+                } else if ($param1 == "edit") {
                     $view = "admin";
                     $page_data["page_title"] = "Edit Review";
                     $page_data["page_name"] = "countries-edit";
-                    $page_data["country"] = $this->CountriesModel->where('id', $param2)->get()->getRowArray();
+                    $page_data["country"] = $this->CountriesModel->where("id", $param2)->get()->getRowArray();
                     
                     return view($view . "/index", $page_data);
-                } elseif ($param1 == "update") {
+                } else if ($param1 == "update") {
                     $data["name"] = $this->request->getPost("name");
                     $data["code"] = $this->request->getPost("code");
                     $data["currency"] = $this->request->getPost("currency");
@@ -538,11 +703,83 @@ class Admin extends BaseController
         }
     }
 
+    public function privacyPolicy($param1="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "update") {
+                    $data["value"] = json_encode($this->request->getPost("privacyPolicy"));
+                    $this->db->table("settings")->where("key", "privacyPolicy")->update($data);
+
+                    return redirect()->to("admin/privacy-policy");
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Privacy Policy";
+                    $page_data["page_name"] = "privacy-policy";
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+
+        return view($view . "/index", $page_data);
+    }
+
+    public function terms($param1="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "update") {
+                    $data["value"] = json_encode($this->request->getPost("terms"));
+                    $this->db->table("settings")->where("key", "terms")->update($data);
+
+                    return redirect()->to("admin/terms");
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Terms";
+                    $page_data["page_name"] = "terms";
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+
+        return view($view . "/index", $page_data);
+    }
+
+    public function refundPolicy($param1="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "update") {
+                    $data["value"] = json_encode($this->request->getPost("refundPolicy"));
+                    $this->db->table("settings")->where("key", "refundPolicy")->update($data);
+
+                    return redirect()->to("admin/refund-policy");
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Refund Policy";
+                    $page_data["page_name"] = "refund-policy";
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+
+        return view($view . "/index", $page_data);
+    }
+
     function slugify($text) {
         $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
         $text = trim($text, '-');
         $text = strtolower($text);
-        //$text = preg_replace('~[^-\w]+~', '', $text);
+        //$text = preg_replace('~[^-\w]+~', "", $text);
         if (empty($text))
         return 'n-a';
         return $text;

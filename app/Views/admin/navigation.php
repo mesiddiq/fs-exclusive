@@ -4,7 +4,7 @@
     <aside class="sidebar-nav-wrapper">
         <div class="navbar-logo">
             <a href="javascript:;">
-                <img class="img-fluid" src="<?php echo site_url('assets/img/logo.png'); ?>" alt="logo" />
+                <img class="img-fluid" src="<?php echo site_url('uploads/logo.png'); ?>" alt="logo" />
             </a>
         </div>
         <nav class="sidebar-nav">
@@ -69,40 +69,40 @@
                         <span class="text">Users</span>
                     </a>
                 </li>
-                <li class="nav-item nav-item-has-children <?php echo $uri[4] == 'countries' ? 'active' : ''; ?>">
-                    <a href="javascript:;" class="<?php echo $uri[4] == 'countries' ? '' : 'collapsed'; ?>" data-bs-toggle="collapse" data-bs-target="#settings_menu" aria-controls="settings_menu" aria-expanded="<?php echo $uri[4] == 'countries' ? 'true' : 'false'; ?>" aria-label="Toggle navigation">
+                <li class="nav-item nav-item-has-children <?php echo $uri[4] == 'logo' || $uri[4] == 'social-links' || $uri[4] == 'testimonials' || $uri[4] == 'countries' || $uri[4] == 'privacy-policy' || $uri[4] == 'terms' || $uri[4] == 'refund-policy' ? 'active' : ''; ?>">
+                    <a href="javascript:;" class="<?php echo $uri[4] == 'logo' || $uri[4] == 'social-links' || $uri[4] == 'testimonials' || $uri[4] == 'countries' || $uri[4] == 'privacy-policy' || $uri[4] == 'terms' || $uri[4] == 'refund-policy' ? '' : 'collapsed'; ?>" data-bs-toggle="collapse" data-bs-target="#settings_menu" aria-controls="settings_menu" aria-expanded="<?php echo $uri[4] == 'logo' || $uri[4] == 'social-links' || $uri[4] == 'testimonials' || $uri[4] == 'countries' || $uri[4] == 'privacy-policy' || $uri[4] == 'terms' || $uri[4] == 'refund-policy' ? 'true' : 'false'; ?>" aria-label="Toggle navigation">
                         <span class="icon">
                             <i class="lni lni-cog"></i>
                         </span>
                         <span class="text">Settings</span>
                     </a>
-                    <ul id="settings_menu" class="collapse dropdown-nav <?php echo $uri[4] == 'countries' ? 'show' : ''; ?>">
+                    <ul id="settings_menu" class="collapse dropdown-nav <?php echo $uri[4] == 'logo' || $uri[4] == 'social-links' || $uri[4] == 'testimonials' || $uri[4] == 'countries' || $uri[4] == 'privacy-policy' || $uri[4] == 'terms' || $uri[4] == 'refund-policy' ? 'show' : ''; ?>">
                         <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Logo</a>
+                            <a href="<?php echo site_url('admin/logo'); ?>" class="<?php echo $uri[4] == 'logo' ? 'active' : ''; ?>"> Logo</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Social Links</a>
+                            <a href="<?php echo site_url('admin/social-links'); ?>" class="<?php echo $uri[4] == 'social-links' ? 'active' : ''; ?>"> Social Links</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Testimonials</a>
+                            <a href="<?php echo site_url('admin/testimonials'); ?>" class="<?php echo $uri[4] == 'testimonials' ? 'active' : ''; ?>"> Testimonials</a>
                         </li>
                         <li>
                             <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Countries</a>
                         </li>
-                        <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Website</a>
+                        <!-- <li>
+                            <a href="<?php // echo site_url('admin/countries'); ?>" class="<?php // echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Website</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Banner</a>
+                            <a href="<?php // echo site_url('admin/countries'); ?>" class="<?php // echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Banner</a>
+                        </li> -->
+                        <li>
+                            <a href="<?php echo site_url('admin/privacy-policy'); ?>" class="<?php echo $uri[4] == 'privacy-policy' ? 'active' : ''; ?>"> Privacy Policy</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Privacy Policy</a>
+                            <a href="<?php echo site_url('admin/terms'); ?>" class="<?php echo $uri[4] == 'terms' ? 'active' : ''; ?>"> Terms & Conditions</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Terms & Conditions</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo site_url('admin/countries'); ?>" class="<?php echo $uri[4] == 'countries' ? 'active' : ''; ?>"> Refund Policy</a>
+                            <a href="<?php echo site_url('admin/refund-policy'); ?>" class="<?php echo $uri[4] == 'refund-policy' ? 'active' : ''; ?>"> Refund Policy</a>
                         </li>
                     </ul>
                 </li>
