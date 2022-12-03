@@ -68,6 +68,7 @@
                     <div class="mb-4 text-center">
                         <h2>Sign In</h2>
                     </div>
+                    <a href="javascript:;" id="google-social-login" class="btn__google" style="width: 155px;"><img src="<?php echo site_url('assets/frontend/new/img/net-icon-01.png'); ?>" class="img-fluid" alt="Logo"> Google</a>
                     <div id="loginError" class="text-danger" style="position: absolute; margin-top: -12px;"></div>
                     <form method="POST" action="javascript:;" class="authForm" id="loginForm" novalidate="novalidate">
                         <div class="input-group mt-5 mb-4">
@@ -421,3 +422,12 @@
         </div>
     </div>
     <!-- Order Modal End -->
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.btn__google').on('click', function() {
+                let google_login_url = '<?php echo google_login_url(); ?>';
+                location.href = google_login_url;
+            });
+        });
+    </script>
