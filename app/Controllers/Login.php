@@ -175,7 +175,7 @@ class Login extends BaseController
                 //     $this->session->set_flashdata('flash_message', get_phrase('you_have_earned_5_points'));
                 // }
 
-                redirect()->to((site_url());
+                return redirect()->to(site_url());
             }
         }
     }

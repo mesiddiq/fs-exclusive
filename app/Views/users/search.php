@@ -33,6 +33,9 @@
                                     ?>
                                     <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/' . $image[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
                                     <?php endif; ?>
+                                    <?php if ($product["isOutOfStock"] == 1): ?>
+                                    <div style="position: absolute; bottom: 5px; width: 100%; background-color: rgba(255, 255, 255, .9); text-align: center; padding: 5px 0; font-weight: 700;">OUT OF STOCK</div>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                     <h6 class="text-truncate mb-3"><?php echo $product["name"]; ?></h6>
