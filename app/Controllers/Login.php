@@ -121,62 +121,113 @@ class Login extends BaseController
     {
         require_once dirname(dirname(__dir__)).'/vendor/autoload.php';
 
-        //Make object of Google API Client for call Google API
+        // Make object of Google API Client for call Google API
         $googleClient = new Google_Client();
 
-        //Set the OAuth 2.0 Client ID
+        // Set the OAuth 2.0 Client ID
         $googleClient->setClientId("561934716888-tm501ggj1m5alcf5o25nbmnb7qo1s1it.apps.googleusercontent.com");
 
-        //Set the OAuth 2.0 Client Secret key
+        // Set the OAuth 2.0 Client Secret key
         $googleClient->setClientSecret("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");
 
-        //Set the OAuth 2.0 Redirect URI
+        // Set the OAuth 2.0 Redirect URI
         $googleClient->setRedirectUri(site_url("login/google"));
 
         $googleClient->addScope('email');
         $googleClient->addScope('profile');
         $googleClient->addScope('openid');
         
-        //This $_GET["code"] variable value received after user has login into their Google Account redirct to PHP script then this variable value has been received
+        // This $_GET["code"] variable value received after user has login into their Google Account redirct to PHP script then this variable value has been received
         if(isset($_GET["code"]))
         {
             unset($_SESSION['access_token']);
             $token = $googleClient->fetchAccessTokenWithAuthCode($_GET["code"]);
 
-            //It will Attempt to exchange a code for an valid authentication token.
+            // It will Attempt to exchange a code for an valid authentication token.
 
-            //This condition will check there is any error occur during geting authentication token. If there is no any error occur then it will execute if block of code/
+            // This condition will check there is any error occur during geting authentication token. If there is no any error occur then it will execute if block of code/
             if(!isset($token['error']))
             {   
-                //Set the access token used for requests
+                // Set the access token used for requests
                 $googleClient->setAccessToken($token['access_token']);
 
-                //Store "access_token" value in $_SESSION variable for future use.
+                // Store "access_token" value in $_SESSION variable for future use.
                 $_SESSION['access_token'] = $token['access_token'];
 
-                //Create Object of Google Service OAuth 2 class
-                $google_service = new Google_Service_Oauth2($googleClient);
+                // Create Object of Google Service OAuth 2 class
+                $googleService = new Google_Service_Oauth2($googleClient);
 
-                //Get user profile data from google
-                $google_data = $google_service->userinfo->get();
+                // Get user profile data from google
+                $googleData = $googleService->userinfo->get();
 
-                // $user_id = $this->user_model->register_google_user($google_data['email'], $google_data['given_name'] . ' ' . $google_data['family_name']);
-                $_SESSION['email'] = $google_data['email'];
-                $_SESSION['name'] = $google_data['given_name'] . ' ' . $google_data['family_name'];
-                $_SESSION['user_image'] = $google_data['picture'];
-                $_SESSION['user_id'] = $user_id;
-                // $_SESSION['logged_in'] = true;
-                // $_SESSION['role_id'] = 3;
-                // $_SESSION['student_login'] = '1';
-
-                // Login Points
-                // $points = $this->login_points($user_id);
-                // if ($points > 0) {
-                //     $this->session->set_flashdata('flash_message', get_phrase('you_have_earned_5_points'));
-                // }
+                // $user_id = $this->user_model->register_google_user($googleData['email'], $googleData['given_name'] . ' ' . $googleData['family_name']);
+                $this->session->set("logged_in", true);
+                // $this->session->set("userId", $user["id"]);
+                $this->session->set("userName", $googleData["given_name"] . " " . $googleData["family_name"]);
+                $this->session->set("userEmail", $googleData["email"]);
+                $this->session->set("userImage", $googleData["picture"]);
+                // $this->session->set("userRole", $user["role"]);
 
                 return redirect()->to(site_url());
             }
+        }
+    }
+
+    public function facebook()
+    {
+        require_once dirname(dirname(__dir__)).'/vendor/autoload.php';
+
+        $facebook = new \Facebook\Facebook([
+          'app_id'      => getSettings('facebook_app_id'),
+          'app_secret'     => getSettings('facebook_secret'),
+          'default_graph_version'  => 'v2.10'
+        ]);
+
+        $facebookOutput = '';
+
+        $facebookHelper = $facebook->getRedirectLoginHelper();
+
+        if (isset($_GET['code'])) {
+
+            if (isset($_SESSION['access_token'])) {
+                $accessToken = $_SESSION['access_token'];
+            } else {
+                $accessToken = $facebookHelper->getAccessToken();
+                $_SESSION['access_token'] = $accessToken;
+                $facebook->setDefaultAccessToken($_SESSION['access_token']);
+            }
+
+            // $this->session->set_userdata('user_id', '');
+            // $this->session->set_userdata('role_id', '');
+            // $this->session->set_userdata('student_login', '');
+            // $this->session->set_userdata('email', '');
+            // $this->session->set_userdata('logged_in', false);
+            // $this->session->set_userdata('role', '');
+            // $this->session->set_userdata('name', '');
+
+            $graphResponse = $facebook->get("/me?fields=name,email", $accessToken);
+            $facebookData = $graphResponse->getGraphUser();
+
+            if (!empty($facebookData['id']))
+            {
+                $_SESSION['user_id'] = $facebookData['id'];
+            }
+            if (!empty($facebookData['name']))
+            {
+                $_SESSION['name'] = $facebookData['name'];
+            }
+            if (!empty($facebookData['email'])) {
+                // $user_id = $this->user_model->register_facebook_user($facebookData['email'], $facebookData['id'], $facebookData['name']);
+                $this->session->set("logged_in", true);
+                // $this->session->set("userId", $user["id"]);
+                $this->session->set("userName", $facebookData["name"]);
+                $this->session->set("userEmail", $facebookData["email"]);
+                $this->session->set("userImage", "http://graph.facebook.com/".$facebookData['id']."/picture");
+                // $this->session->set("userRole", $user["role"]);
+            }
+
+            return redirect()->to(site_url());
+         
         }
     }
 

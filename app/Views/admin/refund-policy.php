@@ -94,7 +94,7 @@
 
         <script type="text/javascript">
             // your javascript goes here
-            var refundPolicy = "<?php echo json_decode(get_settings("refundPolicy")); ?>";
+            var refundPolicy = "<?php echo json_decode(getSettings("refundPolicy")); ?>";
             document.addEventListener("DOMContentLoaded", function () {
                 const editor = new Quill("#quill-editor", {
                     modules: {

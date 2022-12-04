@@ -68,10 +68,18 @@
                     <div class="mb-4 text-center">
                         <h2>Sign In</h2>
                     </div>
-                    <a href="javascript:;" id="google-social-login" class="btn__google" style="width: 155px;"><img src="<?php echo site_url('assets/frontend/new/img/net-icon-01.png'); ?>" class="img-fluid" alt="Logo"> Google</a>
+                    <div class="row">
+                        <div class="btn__google">
+                            <a href="javascript:;"><img src="<?php echo site_url('assets/img/google.png') ?>" width="25px"> Login with Google</a>
+                        </div>
+                        <div class="btn__facebook">
+                            <a href="javascript:;"><img src="<?php echo site_url('assets/img/facebook.png') ?>" width="25px"> Login with Facebook</a>
+                        </div>
+                    </div>
+                    <div class="text-center w-100 py-3">or</div>
                     <div id="loginError" class="text-danger" style="position: absolute; margin-top: -12px;"></div>
                     <form method="POST" action="javascript:;" class="authForm" id="loginForm" novalidate="novalidate">
-                        <div class="input-group mt-5 mb-4">
+                        <div class="input-group mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-user"></i></span>
                             </div>
@@ -116,9 +124,18 @@
                     <div class="mb-4 text-center">
                         <h2>Sign Up</h2>
                     </div>
+                    <div class="row">
+                        <div class="btn__google">
+                            <a href="javascript:;"><img src="<?php echo site_url('assets/img/google.png') ?>" width="25px"> Login with Google</a>
+                        </div>
+                        <div class="btn__facebook">
+                            <a href="javascript:;"><img src="<?php echo site_url('assets/img/facebook.png') ?>" width="25px"> Login with Facebook</a>
+                        </div>
+                    </div>
+                    <div class="text-center w-100 py-3">or</div>
                     <div id="registerError" style="position: absolute; margin-top: -12px;"></div>
                     <form method="POST" action="javascript:;" class="authForm" id="registerForm" novalidate="novalidate">
-                        <div class="input-group mt-5 mb-4">
+                        <div class="input-group mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-user"></i></span>
                             </div>
@@ -428,6 +445,9 @@
             $('.btn__google').on('click', function() {
                 let google_login_url = '<?php echo google_login_url(); ?>';
                 location.href = google_login_url;
+            });
+            $('.btn__facebook').on('click', function() {
+                alert("Not enabled");
             });
         });
     </script>

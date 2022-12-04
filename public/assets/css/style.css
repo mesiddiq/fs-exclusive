@@ -9754,3 +9754,25 @@ a.text-dark:hover, a.text-dark:focus {
 .product-reviews {
   margin-top: 30px;
 }
+.btn__google, .btn__facebook {
+  padding: 5px 8px;
+  border: 1px solid #000;
+  text-align: center;
+  width: 49%;
+  margin: 2px;
+}
+.btn__google img, .btn__facebook img {
+  margin-top: -3px;
+}
+.btn__google:hover, .btn__google a:hover, .btn__facebook:hover, .btn__facebook a:hover {
+  background-color: #d2b482;
+  border: 1px solid #d2b482;
+  color: #000;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .btn__google, .btn__facebook {
+      width: 100%;
+      margin: 2px;
+  }
+}

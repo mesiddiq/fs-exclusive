@@ -27,31 +27,31 @@
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>Facebook</label>
-                                            <input type="url" class="bg-transparent" name="facebookLink" placeholder="https://www.facebook.com" value="<?php echo get_settings('facebookLink') != NULL ? get_settings('facebookLink') : '';  ?>" />
+                                            <input type="url" class="bg-transparent" name="facebookLink" placeholder="https://www.facebook.com" value="<?php echo getSettings('facebookLink') != NULL ? getSettings('facebookLink') : '';  ?>" />
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>Twitter</label>
-                                            <input type="url" class="bg-transparent" name="twitterLink" placeholder="https://www.twitter.com" value="<?php echo get_settings('twitterLink') != NULL ? get_settings('twitterLink') : '';  ?>" />
+                                            <input type="url" class="bg-transparent" name="twitterLink" placeholder="https://www.twitter.com" value="<?php echo getSettings('twitterLink') != NULL ? getSettings('twitterLink') : '';  ?>" />
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>Instagram</label>
-                                            <input type="url" class="bg-transparent" name="instagramLink" placeholder="https://www.instagram.com" value="<?php echo get_settings('instagramLink') != NULL ? get_settings('instagramLink') : '';  ?>" />
+                                            <input type="url" class="bg-transparent" name="instagramLink" placeholder="https://www.instagram.com" value="<?php echo getSettings('instagramLink') != NULL ? getSettings('instagramLink') : '';  ?>" />
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>Linkedin</label>
-                                            <input type="url" class="bg-transparent" name="linkedinLink" placeholder="https://www.linkedin.com" value="<?php echo get_settings('linkedinLink') != NULL ? get_settings('linkedinLink') : '';  ?>" />
+                                            <input type="url" class="bg-transparent" name="linkedinLink" placeholder="https://www.linkedin.com" value="<?php echo getSettings('linkedinLink') != NULL ? getSettings('linkedinLink') : '';  ?>" />
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>Youtube</label>
-                                            <input type="url" class="bg-transparent" name="youtubeLink" placeholder="https://www.youtube.com" value="<?php echo get_settings('youtubeLink') != NULL ? get_settings('youtubeLink') : '';  ?>" />
+                                            <input type="url" class="bg-transparent" name="youtubeLink" placeholder="https://www.youtube.com" value="<?php echo getSettings('youtubeLink') != NULL ? getSettings('youtubeLink') : '';  ?>" />
                                         </div>
                                     </div>
                                     <div class="col-12">

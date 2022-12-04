@@ -94,7 +94,7 @@
 
         <script type="text/javascript">
             // your javascript goes here
-            var privacyPolicy = "<?php echo json_decode(get_settings("privacyPolicy")); ?>";
+            var privacyPolicy = "<?php echo json_decode(getSettings("privacyPolicy")); ?>";
             document.addEventListener("DOMContentLoaded", function () {
                 const editor = new Quill("#quill-editor", {
                     modules: {

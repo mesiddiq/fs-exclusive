@@ -94,7 +94,7 @@
 
         <script type="text/javascript">
             // your javascript goes here
-            var terms = "<?php echo json_decode(get_settings("terms")); ?>";
+            var terms = "<?php echo json_decode(getSettings("terms")); ?>";
             document.addEventListener("DOMContentLoaded", function () {
                 const editor = new Quill("#quill-editor", {
                     modules: {
