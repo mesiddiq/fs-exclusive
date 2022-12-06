@@ -18,12 +18,21 @@ if (! function_exists("getSettings")) {
     }
 }
 
+if (! function_exists("getCurrency")) {
+    function getCurrency($id = "") {
+        $db      = \Config\Database::connect();
+        $result = $db->table("country")->where("id", $id)->get()->getRow()->currency;
+
+        return $result;
+    }
+}
+
 // Google Login url
 function googleLoginURL() {
     $googleClientID      = "561934716888-tm501ggj1m5alcf5o25nbmnb7qo1s1it.apps.googleusercontent.com";
     $googleClientSecret  = "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";
 
-    if (($googleClientID == NULL) || ($googleClientID == 'google_client_id') || ($_SESSION['logged_in'] == true)) {
+    if (($googleClientID == NULL) || ($googleClientID == 'google_client_id')) {
         return "javascript:;";
     }
 

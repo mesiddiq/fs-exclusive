@@ -443,8 +443,8 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $('.btn__google').on('click', function() {
-                let google_login_url = '<?php echo google_login_url(); ?>';
-                location.href = google_login_url;
+                let googleLoginURL = '<?php echo googleLoginURL(); ?>';
+                location.href = googleLoginURL;
             });
             $('.btn__facebook').on('click', function() {
                 alert("Not enabled");

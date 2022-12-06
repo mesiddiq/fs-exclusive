@@ -24,7 +24,7 @@
                             <option value="<?php echo $country['id'] ?>" <?php echo ($this->session->get("countryId") == $country["id"] ? "selected" : "") ?>><?php echo $country["code"] ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <?php if ($this->session->get("logged_in") == true): ?>
+                    <?php if ($this->session->get("logged_in")): ?>
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle text-light py-0" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->get("userName"); ?></a>
                         <div class="dropdown-menu rounded-0 m-0">
@@ -66,7 +66,7 @@
             </div>
             <div class="col-12 col-md-3 d-flex my-auto justify-content-center justify-content-lg-end py-3">
                 <?php
-                if ($this->session->get("logged_in") == true):
+                if ($this->session->get("logged_in")):
                 $cartCount = $this->db->table("cart")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->countAllResults();
                 $wishlistCount = $this->db->table("wishlist")->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->countAllResults();
                 ?>

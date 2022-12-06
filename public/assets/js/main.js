@@ -764,8 +764,9 @@
 
     // Place Order
     $("#placeOrder").on("click", function() {
-        var addressId = $("[name='deliveryAddress']").val();
-        var paymentMethod = $("[name='paymentMethod']").val();
+        var addressId = $("[name='deliveryAddress']:checked").val();
+        // var paymentMethod = $("[name='paymentMethod']").val();
+        var paymentMethod = "";
         var subtotal = $("[name=subtotal]").text();
         var discount = $("[name=discount]").text();
         var total = $("[name=total]").text();
@@ -776,16 +777,11 @@
                 url: site_url + "placeOrder",
                 data: {addressId: addressId, paymentMethod: paymentMethod, subtotal: subtotal, discount: discount, total: total},
                 success: function(res) {
-                    if (res) {
-                        $.ajax({
-                            method: "POST",
-                            url: site_url + "deleteUserCart",
-                            success: function(cartRes) {
-                                if (cartRes) {
-                                    $("#orderModal").modal("show");
-                                }
-                            }
-                        });
+                    res = JSON.parse(res);
+                    if (res.status == "error") {
+                        alert("Something went wrong. Please try again");
+                    } else {
+                        window.location.href = "https://dev.toyyibpay.com/" + res[0].BillCode;
                     }
                 }
             });

@@ -26,15 +26,15 @@
                                 <div class="invoice-header">
                                     <div class="invoice-for mt-4">
                                         <h2 class="mb-10">Order ID</h2>
-                                        <h3>#FS<?php echo date("dmy", $order["orderDate"]). $order["id"]; ?></h3>
+                                        <h3>#FS<?php echo date("dmy", $order["createdAt"]). $order["id"]; ?></h3>
                                         
                                     </div>
                                     <div class="invoice-logo">
                                         <img src="<?php echo site_url('assets/img/logo.png'); ?>" alt="" />
                                     </div>
                                     <div class="invoice-date mt-4 pt-2">
-                                        <p><span>Order Date:</span> <?php echo date("d-M-Y", $order["orderDate"]); ?></p>
-                                        <p><span>Order Time:</span> <?php echo date("h:i A", $order["orderDate"]); ?></p>
+                                        <p><span>Order Date:</span> <?php echo date("d-M-Y", $order["createdAt"]); ?></p>
+                                        <p><span>Order Time:</span> <?php echo date("h:i A", $order["createdAt"]); ?></p>
                                     </div>
                                 </div>
                                 <?php

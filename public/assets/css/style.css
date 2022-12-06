@@ -9725,14 +9725,14 @@ a.text-dark:hover, a.text-dark:focus {
   cursor: pointer;
 }
 .select-address label {
+  cursor: pointer;
   padding-left: 17px;
   margin-bottom: 0px;
   color: #000000;
 }
-.select-address label a {
+.select-address a.showEditAddressModal {
+  padding-left: 17px;
   color: #d2b482;
-  position: relative;
-  top: 5px;
 }
 .custom-product {
   position: fixed;

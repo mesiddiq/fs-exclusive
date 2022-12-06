@@ -77,6 +77,8 @@ $routes->post('/review', 'Home::review');
 $routes->post('/customProduct', 'Home::customProduct');
 // Test Mail
 $routes->get('/sendmail', 'Home::sendMail');
+// Payment Gateway
+$routes->get('/paymentStatus', 'Home::paymentStatus');
 // Login
 $routes->post('/login', 'Login::index');
 $routes->post('/register', 'Login::register');

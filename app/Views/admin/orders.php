@@ -44,7 +44,7 @@
                                             ?>
                                             <tr>
                                                 <td class="text-center align-middle"><?php echo $key+1; ?></td>
-                                                <td class="align-middle"><?php echo date("d-M-Y", $order["orderDate"]); ?></td>
+                                                <td class="align-middle"><?php echo date("d-M-Y", $order["createdAt"]); ?></td>
                                                 <td class="align-middle"><?php echo $user["name"]; ?></td>
                                                 <td class="align-middle"><?php echo $user["email"]; ?></td>
                                                 <td class="align-middle"><?php echo $country["currency"] . $order["total"]; ?></td>

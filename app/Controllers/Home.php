@@ -14,6 +14,8 @@ use App\Models\EmailModel;
 use App\Models\CustomModel;
 use App\Models\ReviewModel;
 
+use App\Libraries\Toyyib;
+
 class Home extends BaseController
 {
 
@@ -411,13 +413,48 @@ class Home extends BaseController
         $data["discount"] = $this->request->getPost("discount");
         $data["total"] = $this->request->getPost("total");
         $data["country"] = $this->session->get("countryId");
-        $data["orderDate"] = strtotime(date("d-M-Y H:i:s"));
+        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
         $data["orderStatus"] = 1;
         $data["paymentMethod"] = $this->request->getPost("paymentMethod");
-        $data["paymentStatus"] = 1;
+        $data["paymentStatus"] = 0; // 1 = Success, 2 = Pending, 3 = Failed
 
         $this->OrdersModel->insert($data);
-        echo true;
+        $orderID = $this->OrdersModel->getInsertID();
+
+        $this->session->set("paymentOrderID", $orderID);
+
+        $userData = $this->UserModel->where("id", $data["userId"])->first();
+
+        if ($this->session->get("countryId") == 2) {
+            $toyyib = new Toyyib();
+
+            $response = $toyyib->createBill($data, $userData, $orderID);
+            echo json_encode($response);
+        }
+    }
+
+    public function paymentStatus()
+    {
+        $orderID = $this->session->get("paymentOrderID");
+        $data["paymentStatus"] = $_GET["status_id"];
+        $data["paymentBillId"] = $_GET["billcode"];
+        $data["paymentOrderId"] = $_GET["order_id"];
+        $data["paymentTransactionId"] = $_GET["transaction_id"];
+
+        $this->db->table("orders")->where("id", $orderID)->update($data);
+
+        unset($_SESSION["paymentOrderID"]);
+
+        if ($data["paymentStatus"] == "1") {
+            $this->deleteUserCart();
+        }
+
+        $view = "users";
+        $page_data["page_name"] = "payment";
+        $page_data["paymentStatus"] = $data["paymentStatus"];
+        $page_data["paymentOrderId"] = $data["paymentOrderId"];
+
+        return view($view . "/index", $page_data);
     }
 
     public function customProduct()
@@ -488,7 +525,7 @@ class Home extends BaseController
 
         $this->session->set("cartItems", array());
 
-        echo true;
+        return true;
     }
 
     public function wishlist()

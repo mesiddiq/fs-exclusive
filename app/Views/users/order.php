@@ -66,21 +66,21 @@
                 <div class="row">
                     <div class="col-4 invoice-for mt-4">
                         <h2 class="mb-10">Order ID</h2>
-                        <h3>#FS<?php echo date("dmy", $order["orderDate"]). $order["id"]; ?></h3>
+                        <h3>#FS<?php echo date("dmy", $order["createdAt"]). $order["id"]; ?></h3>
                         
                     </div>
                     <div class="col-4 invoice-logo">
                         <img class="img-fluid py-3" src="<?php echo site_url('assets/img/logo.png'); ?>" width="120px">
                     </div>
                     <div class="col-4 invoice-date mt-4 pt-2">
-                        <p><span>Order Date:</span> <?php echo date("d-M-Y", $order["orderDate"]); ?></p>
-                        <p><span>Order Time:</span> <?php echo date("h:i A", $order["orderDate"]); ?></p>
+                        <p><span>Order Date:</span> <?php echo date("d-M-Y", $order["createdAt"]); ?></p>
+                        <p><span>Order Time:</span> <?php echo date("h:i A", $order["createdAt"]); ?></p>
                     </div>
                 </div>
                 <?php
+                echo $order["addressId"];
                 $user = $this->db->table("users")->where("id", $order["userId"])->get()->getRowArray();
                 $address = $this->db->table("address")->where("id", $order["addressId"])->get()->getRowArray();
-                $country = $this->db->table("country")->where("id", $order["country"])->get()->getRowArray();
                 ?>
                 <div class="address-item">
                     <p class="text-sm mb-0">To,</p>
@@ -120,7 +120,7 @@
                         <tr>
                             <td><?php echo $key+1; ?></td>
                             <td><?php echo $productInfo["name"] . " x " . $product->productQty; ?></td>
-                            <td><?php echo $country["currency"] . $product->productPrice; ?></td>
+                            <td><?php echo getCurrency($order["country"]) . $product->productPrice; ?></td>
                         </tr>
                         <?php endforeach; ?>
                         <tr>
@@ -129,7 +129,7 @@
                                 <h6 class="text-sm text-medium">Subtotal</h6>
                             </td>
                             <td>
-                                <h6 class="text-sm text-bold"><?php echo $country["currency"] . $order["subtotal"]; ?></h6>
+                                <h6 class="text-sm text-bold"><?php echo getCurrency($order["country"]) . $order["subtotal"]; ?></h6>
                             </td>
                         </tr>
                         <tr>
@@ -138,7 +138,7 @@
                                 <h6 class="text-sm text-medium">Discount</h6>
                             </td>
                             <td class="float-end">
-                                <h6 class="text-sm text-bold"><?php echo $country["currency"] . $order["discount"]; ?></h6>
+                                <h6 class="text-sm text-bold"><?php echo getCurrency($order["country"]) . $order["discount"]; ?></h6>
                             </td>
                         </tr>
                         <tr>
@@ -147,7 +147,7 @@
                                 <h4>Total</h4>
                             </td>
                             <td class="float-end">
-                                <h4><?php echo $country["currency"] . $order["total"]; ?></h4>
+                                <h4><?php echo getCurrency($order["country"]) . $order["total"]; ?></h4>
                             </td>
                         </tr>
                     </tbody>

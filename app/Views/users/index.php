@@ -60,7 +60,7 @@
             <small>
                 <em id="recent-sold-date">
                     <script type="text/javascript">
-                        var timestamp = new Date("<?php echo date("Y-m-d", $recentSold["orderDate"]); ?>").getTime();
+                        var timestamp = new Date("<?php echo date("Y-m-d", $recentSold["createdAt"]); ?>").getTime();
                         const rtf = new Intl.RelativeTimeFormat('en', {
                             numeric: 'auto',
                         });

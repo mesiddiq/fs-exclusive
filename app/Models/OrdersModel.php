@@ -10,6 +10,6 @@ class OrdersModel extends Model
     protected $primaryKey = "id";
     protected $useAutoIncrement = true;
     protected $returnType     = "array";
-    protected $allowedFields = ["userId", "addressId", "products", "subtotal", "discount", "total", "country", "orderDate", "orderStatus", "paymentMethod", "paymentStatus"];
+    protected $allowedFields = ["userId", "addressId", "products", "subtotal", "discount", "total", "country", "paymentMethod", "paymentStatus", "paymentBillId", "paymentOrderId", "paymentTransactionId", "orderStatus", "createdAt"];
 
 }
