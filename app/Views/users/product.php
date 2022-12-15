@@ -29,7 +29,7 @@
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <?php
-                        $avgRating = number_format($rating[0]["rating"], 1);
+                        $avgRating = $rating[0]["rating"] == NULL ? 0 :number_format($rating[0]["rating"], 1);
                         $result = '';
 
                         if ($avgRating > 0) {

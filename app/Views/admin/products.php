@@ -55,7 +55,11 @@
                                                 $country = $this->db->table("country")->where("id", $product["country"])->get()->getRowArray();
                                                 ?>
                                                 <td class="align-middle"><p><?php echo $country["name"]; ?></p></td>
+                                                <?php if ($product["isDiscount"] == 1): ?>
+                                                <td class="align-middle"><p><del style="opacity: .5"><?php echo $country["currency"] . $product["price"]; ?></del> <?php echo $country["currency"] . $product["discountedPrice"]; ?></p></td>
+                                                <?php else: ?>
                                                 <td class="align-middle"><p><?php echo $country["currency"] . $product["price"]; ?></p></td>
+                                                <?php endif; ?>
                                                 <td class="align-middle">
                                                     <?php if ($product["status"] == 0) { ?>
                                                     <span class="status-btn warning-btn">Pending</span>

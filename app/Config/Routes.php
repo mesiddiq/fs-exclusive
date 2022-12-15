@@ -79,11 +79,13 @@ $routes->post('/customProduct', 'Home::customProduct');
 $routes->get('/sendmail', 'Home::sendMail');
 // Payment Gateway
 $routes->get('/paymentStatus', 'Home::paymentStatus');
+$routes->get('/order-confirmation', 'Home::orderConfirmation');
 // Login
 $routes->post('/login', 'Login::index');
 $routes->post('/register', 'Login::register');
 $routes->post('/forgot', 'Login::forgot');
 $routes->get('/reset', 'Login::reset');
+$routes->get('/login/google', 'Login::google');
 $routes->post('/change', 'Login::change');
 $routes->get('/logout', 'Login::logout');
 

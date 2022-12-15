@@ -155,7 +155,7 @@
                                                         $categories = $this->db->table("category")->where(array("status" => 1, "parent" => NULL, "country" => $product["country"]))->get()->getResultArray();
                                                         foreach ($categories as $key => $category):
                                                         ?>
-                                                        <option value="<?php echo $category['id']; ?>" <?php echo $category["id"] == $product["category"] ? 'checked' : ''; ?>><?php echo $category["name"]; ?></option>
+                                                        <option value="<?php echo $category['id']; ?>" <?php echo $category["id"] == $product["category"] ? 'selected' : ''; ?>><?php echo $category["name"]; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -331,16 +331,17 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="0" name="status" <?php echo $product["status"] == 0 ? 'checked' : ''; ?>>
-                                                <label class="form-check-label" for="country">Pending</label>
+                                                <input class="form-check-input" type="radio" value="0" name="status" id="status0" <?php echo $product["status"] == 0 ? 'checked' : ''; ?>>
+                                                <label class="form-check-label" for="status0">Pending</label>
                                             </div>
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="1" name="status" <?php echo $product["status"] == 1 ? 'checked' : ''; ?>>
-                                                <label class="form-check-label" for="country">Publish</label>
+                                                <input class="form-check-input" type="radio" value="1" name="status" id="status1" <?php echo $product["status"] == 1 ? 'checked' : ''; ?>>
+                                                <label class="form-check-label" for="status1">Publish</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab"></div>
                                 <div style="overflow:auto;" id="nextprevious">
                                     <div style="float:right;"> <button type="button" id="prevBtn" class="main-btn primary-btn btn-hover" onclick="nextPrev(-1)">Previous</button> <button type="button" class="main-btn primary-btn btn-hover" id="nextBtn" onclick="nextPrev(1)">Next</button> </div>
                                 </div>
@@ -418,8 +419,8 @@
                     //alert("sdf");
                     document.getElementById("nextprevious").style.display = "none";
                     document.getElementById("all-steps").style.display = "none";
-                    document.getElementById("register").style.display = "none";
-                    document.getElementById("text-message").style.display = "block";
+                    // document.getElementById("register").style.display = "none";
+                    // document.getElementById("text-message").style.display = "block";
                 }
                 showTab(currentTab);
             }

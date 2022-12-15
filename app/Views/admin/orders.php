@@ -48,11 +48,13 @@
                                                 <td class="align-middle"><?php echo $user["name"]; ?></td>
                                                 <td class="align-middle"><?php echo $user["email"]; ?></td>
                                                 <td class="align-middle"><?php echo $country["currency"] . $order["total"]; ?></td>
-                                                <td class="align-middle">
-                                                    <?php if ($order["orderStatus"] == 0) { ?>
-                                                    <span class="status-btn warning-btn">Pending</span>
-                                                    <?php } elseif ($order["orderStatus"] == 1) { ?>
-                                                    <span class="status-btn success-btn">Verified</span>
+                                                <td class="text-center align-middle">
+                                                    <?php if ($order["paymentStatus"] == 1) { ?>
+                                                    <span class="status-btn success-btn">Paid</span>
+                                                    <?php } elseif ($order["orderStatus"] == 2) { ?>
+                                                    <span class="status-btn warning-btn">Unpaid</span>
+                                                    <?php } else { ?>
+                                                    <span class="status-btn danger-btn">Failed</span>
                                                     <?php } ?>
                                                 </td>
                                                 <td class="text-center align-middle">

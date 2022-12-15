@@ -36,7 +36,7 @@ function googleLoginURL() {
         return "javascript:;";
     }
 
-    require_once dirname(dirname(__dir__)).'/vendor/autoload.php';
+    require_once APPPATH.'/vendor/autoload.php';
 
     // Make object of Google API Client for call Google API
     $googleClient = new Google_Client();

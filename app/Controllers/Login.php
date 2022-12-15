@@ -119,10 +119,10 @@ class Login extends BaseController
 
     public function google()
     {
-        require_once dirname(dirname(__dir__)).'/vendor/autoload.php';
+        require_once APPPATH.'/vendor/autoload.php';
 
         // Make object of Google API Client for call Google API
-        $googleClient = new Google_Client();
+        $googleClient = new \Google_Client();
 
         // Set the OAuth 2.0 Client ID
         $googleClient->setClientId("561934716888-tm501ggj1m5alcf5o25nbmnb7qo1s1it.apps.googleusercontent.com");
@@ -155,18 +155,42 @@ class Login extends BaseController
                 $_SESSION['access_token'] = $token['access_token'];
 
                 // Create Object of Google Service OAuth 2 class
-                $googleService = new Google_Service_Oauth2($googleClient);
+                $googleService = new \Google_Service_Oauth2($googleClient);
 
                 // Get user profile data from google
                 $googleData = $googleService->userinfo->get();
+                
+                $checkEmail = $this->UserModel->where('email', $googleData['email'])->first();
 
-                // $user_id = $this->user_model->register_google_user($googleData['email'], $googleData['given_name'] . ' ' . $googleData['family_name']);
-                $this->session->set("logged_in", true);
-                // $this->session->set("userId", $user["id"]);
-                $this->session->set("userName", $googleData["given_name"] . " " . $googleData["family_name"]);
-                $this->session->set("userEmail", $googleData["email"]);
-                $this->session->set("userImage", $googleData["picture"]);
-                // $this->session->set("userRole", $user["role"]);
+                if ($checkEmail == NULL) {
+                    $data['name'] = ucfirst($googleData['given_name']) . ' ' . ucfirst($googleData['family_name']);
+                    $data['email'] = $googleData['email'];
+                    $data['contact'] = "";
+                    $data['password'] = "";
+                    $data['role'] = 3;
+                    $data['status'] = 1;
+                    $data['verificationCode'] = "";
+                    $data['createdAt'] = strtotime(date('d-M-Y H:i:s'));
+                    
+                    $register = $this->UserModel->insert($data);
+                    $sendRegisterMail = $this->EmailModel->sendRegisterMail($data['name'], $data['email']);
+                    
+                    $user = $this->UserModel->where('email', $data['email'])->first();
+                    
+                    $this->session->set("logged_in", true);
+                    $this->session->set("userId", $user["id"]);
+                    $this->session->set("userName", $user["name"]);
+                    $this->session->set("userEmail", $user["email"]);
+                    $this->session->set("userImage", $googleData["picture"]);
+                    $this->session->set("userRole", $user["role"]);
+                } else {
+                    $this->session->set("logged_in", true);
+                    $this->session->set("userId", $checkEmail["id"]);
+                    $this->session->set("userName", $checkEmail["name"]);
+                    $this->session->set("userEmail", $checkEmail["email"]);
+                    $this->session->set("userImage", $googleData["picture"]);
+                    $this->session->set("userRole", $checkEmail["role"]);
+                }
 
                 return redirect()->to(site_url());
             }

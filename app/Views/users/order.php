@@ -78,13 +78,12 @@
                     </div>
                 </div>
                 <?php
-                echo $order["addressId"];
                 $user = $this->db->table("users")->where("id", $order["userId"])->get()->getRowArray();
                 $address = $this->db->table("address")->where("id", $order["addressId"])->get()->getRowArray();
                 ?>
                 <div class="address-item">
                     <p class="text-sm mb-0">To,</p>
-                    <h5 class="font-weight-bold"><?php echo $user["name"]; ?></h5>
+                    <h5 class="font-weight-bold"><?php echo $address["name"]; ?></h5>
                     <p class="text-sm">
                         <?php
                         echo $address["address"];

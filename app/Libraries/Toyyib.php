@@ -2,18 +2,9 @@
 
 namespace App\Libraries;
 
-require_once dirname(dirname(dirname(__FILE__))). '/vendor/autoload.php';
+require_once APPPATH. '/vendor/autoload.php';
 
 class Toyyib {
-    
-    public function __construct()
-    {
-        // $razorpay_keys = get_settings('razorpay_keys');
-        // $razorpay = json_decode($razorpay_keys);
-        // $this->keyId = $razorpay[0]->testmode == "on" ? $razorpay[0]->public_key : $razorpay[0]->public_live_key;
-        // $this->keySecret = $razorpay[0]->testmode == "on" ? $razorpay[0]->secret_key : $razorpay[0]->secret_live_key;
-        // $this->api = new Api($this->keyId, $this->keySecret);
-    }
 
     public function createBill($data = array(), $userData = array(), $orderID = "")
     {
@@ -25,8 +16,8 @@ class Toyyib {
             "billPriceSetting" => 1,
             "billPayorInfo" => 1,
             "billAmount" => (int) $data["total"] * 100,
-            "billReturnUrl" => site_url() . "paymentStatus",
-            "billCallbackUrl" => site_url() ."paymentCallback",
+            "billReturnUrl" => site_url() . "paymentStatus?payment=toyyib",
+            "billCallbackUrl" => site_url() ."checkout",
             "billExternalReferenceNo" => "FS" . $orderID . "_" . substr(md5(time()), 0, 15),
             "billTo" => $userData["name"],
             "billEmail" => $userData["email"],

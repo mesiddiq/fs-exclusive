@@ -15,12 +15,15 @@ use App\Models\CustomModel;
 use App\Models\ReviewModel;
 
 use App\Libraries\Toyyib;
+use App\Libraries\Stripe;
 
 class Home extends BaseController
 {
 
     public function __construct()
     {
+        require APPPATH . 'vendor/autoload.php';
+
         $this->UserModel = new UserModel();
         $this->CategoryModel = new CategoryModel();
         $this->ProductModel = new ProductModel();
@@ -425,21 +428,53 @@ class Home extends BaseController
 
         $userData = $this->UserModel->where("id", $data["userId"])->first();
 
+        if ($this->session->get("countryId") == 1) {
+            $stripe = new Stripe();
+
+            $response = $stripe->createPayment($data["total"], $this->session->get("userEmail"));
+            echo json_encode(array("payment" => "stripe", "response" => $response));
+        }
+
         if ($this->session->get("countryId") == 2) {
             $toyyib = new Toyyib();
 
             $response = $toyyib->createBill($data, $userData, $orderID);
-            echo json_encode($response);
+            echo json_encode(array("payment" => "toyyib", "response" => $response));
         }
     }
 
     public function paymentStatus()
     {
         $orderID = $this->session->get("paymentOrderID");
-        $data["paymentStatus"] = $_GET["status_id"];
-        $data["paymentBillId"] = $_GET["billcode"];
-        $data["paymentOrderId"] = $_GET["order_id"];
-        $data["paymentTransactionId"] = $_GET["transaction_id"];
+
+        if ($_GET["payment"] == "stripe") {
+            $stripe = new Stripe();
+
+            $response = $stripe->verifyPayment($_GET['session_id']);
+
+            if ($response->payment_status == "paid" && $response->status == "complete") {
+                $data["paymentMethod"] = $_GET["payment"];
+                $data["paymentStatus"] = 1;
+                $data["paymentBillId"] = $response->id;
+                $data["paymentOrderId"] = "FS" . $orderID . "_" . substr(md5(time()), 0, 15);
+                $data["paymentTransactionId"] = $response->payment_intent;
+            } else {
+                $data["paymentMethod"] = $_GET["payment"];
+                $data["paymentStatus"] = 3;
+                $data["paymentBillId"] = $response->id;
+                $data["paymentOrderId"] = "FS" . $orderID . "_" . substr(md5(time()), 0, 15);
+                $data["paymentTransactionId"] = $response->payment_intent;
+            }
+        } else if ($_GET["payment"] == "toyyib") {
+            $data["paymentMethod"] = $_GET["payment"];
+            $data["paymentStatus"] = $_GET["status_id"];
+            $data["paymentBillId"] = $_GET["billcode"];
+            $data["paymentOrderId"] = $_GET["order_id"];
+            $data["paymentTransactionId"] = $_GET["transaction_id"];
+        }
+
+        $this->session->set("paymentStatus", $data["paymentStatus"]);
+        $this->session->set("paymentOrderId", $data["paymentOrderId"]);
 
         $this->db->table("orders")->where("id", $orderID)->update($data);
 
@@ -449,12 +484,22 @@ class Home extends BaseController
             $this->deleteUserCart();
         }
 
+        $this->EmailModel->sendOrderConfirmationUserMail($orderID);
+        return redirect()->to(site_url("order-confirmation"));
+    }
+
+    public function orderConfirmation()
+    {
         $view = "users";
         $page_data["page_name"] = "payment";
-        $page_data["paymentStatus"] = $data["paymentStatus"];
-        $page_data["paymentOrderId"] = $data["paymentOrderId"];
+        $page_data["paymentStatus"] = $this->session->get("paymentStatus");
+        $page_data["paymentOrderId"] = $this->session->get("paymentOrderId");
+        
+        unset($_SESSION["paymentStatus"]);
+        unset($_SESSION["paymentOrderId"]);
 
         return view($view . "/index", $page_data);
+
     }
 
     public function customProduct()
@@ -592,4 +637,5 @@ class Home extends BaseController
         // var_dump($res);
         echo substr(md5(time()), 0, 15);
     }
+    
 }

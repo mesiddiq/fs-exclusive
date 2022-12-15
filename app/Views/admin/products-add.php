@@ -146,8 +146,8 @@
                                             foreach ($countries as $key => $country):
                                             ?>
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="<?php echo $country['id']; ?>" name="country" <?php echo $key == 0 ? 'checked' : ''; ?> onchange="updateAdminProductCountryId(this.value)">
-                                                <label class="form-check-label" for="country"><?php echo $country['name']; ?></label>
+                                                <input class="form-check-input" type="radio" value="<?php echo $country['id']; ?>" name="country" id="country<?php echo $country['id']; ?>" <?php echo $key == 0 ? 'checked' : ''; ?> onchange="updateAdminProductCountryId(this.value)">
+                                                <label class="form-check-label" for="country<?php echo $country['id']; ?>"><?php echo $country['name']; ?></label>
                                             </div>
                                             <?php endforeach; ?>
                                             <p id="demo"></p>
@@ -311,16 +311,17 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="0" name="status" checked>
-                                                <label class="form-check-label" for="country">Pending</label>
+                                                <input class="form-check-input" type="radio" value="0" name="status" id="status0" checked>
+                                                <label class="form-check-label" for="status0">Pending</label>
                                             </div>
                                             <div class="form-check radio-style mb-20">
-                                                <input class="form-check-input" type="radio" value="1" name="status">
-                                                <label class="form-check-label" for="country">Publish</label>
+                                                <input class="form-check-input" type="radio" value="1" name="status" id="status1">
+                                                <label class="form-check-label" for="status1">Publish</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab"></div>
                                 <div style="overflow:auto;" id="nextprevious">
                                     <div style="float:right;"> <button type="button" id="prevBtn" class="main-btn primary-btn btn-hover" onclick="nextPrev(-1)">Previous</button> <button type="button" class="main-btn primary-btn btn-hover" id="nextBtn" onclick="nextPrev(1)">Next</button> </div>
                                 </div>

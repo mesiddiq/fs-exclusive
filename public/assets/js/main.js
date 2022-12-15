@@ -778,10 +778,14 @@
                 data: {addressId: addressId, paymentMethod: paymentMethod, subtotal: subtotal, discount: discount, total: total},
                 success: function(res) {
                     res = JSON.parse(res);
-                    if (res.status == "error") {
-                        alert("Something went wrong. Please try again");
-                    } else {
-                        window.location.href = "https://dev.toyyibpay.com/" + res[0].BillCode;
+                    if (res.payment == "stripe") {
+                        window.location.href = res.response.url;
+                    } else if (res.payment == "toyyib") {
+                        if (res.response.status == "error") {
+                            alert("Something went wrong. Please try again");
+                        } else {
+                            window.location.href = "https://dev.toyyibpay.com/" + res.response[0].BillCode;
+                        }
                     }
                 }
             });

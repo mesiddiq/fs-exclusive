@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
-                                            <label>Image</label>
+                                            <label>Image (500px X 400px)</label>
                                             <input type="file" class="bg-transparent" name="image" />
                                         </div>
                                     </div>
