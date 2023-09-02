@@ -55,6 +55,12 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
+                                        <div class="input-style-1">
+                                            <label>Tiktok</label>
+                                            <input type="url" class="bg-transparent" name="tiktokLink" placeholder="https://www.tiktok.com" value="<?php echo getSettings('tiktokLink') != NULL ? getSettings('tiktokLink') : '';  ?>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
                                         <button class="main-btn primary-btn btn-hover">Submit</button>
                                     </div>
                                 </div>

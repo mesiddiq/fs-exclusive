@@ -26,7 +26,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="input-style-1">
-                                            <label>Images</label>
+                                            <label>Images (500px X 400px)</label>
                                             <input type="file" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="image[]" multiple />
                                         </div>
                                     </div>

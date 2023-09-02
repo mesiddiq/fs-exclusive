@@ -4,15 +4,36 @@
         <div class="row top-bar py-2 px-xl-5">
             <div class="col-4 col-lg-6">
                 <div class="d-inline-flex align-items-center">
-                    <a class="text-light px-2" href="javascript:;">
+                    <?php if (getSettings("facebookLink") != ""): ?>
+                    <a class="text-light px-2" href="<?php echo getSettings("facebookLink"); ?>" target="_blank">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a class="text-light px-2" href="javascript:;">
+                    <?php endif; ?>
+                    <?php if (getSettings("twitterLink") != ""): ?>
+                    <a class="text-light px-2" href="<?php echo getSettings("twitterLink"); ?>" target="_blank">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a class="text-light px-2" href="javascript:;">
+                    <?php endif; ?>
+                    <?php if (getSettings("instagramLink") != ""): ?>
+                    <a class="text-light px-2" href="<?php echo getSettings("instagramLink"); ?>" target="_blank">
                         <i class="fab fa-instagram"></i>
                     </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("linkedinLink") != ""): ?>
+                    <a class="text-light px-2" href="<?php echo getSettings("linkedinLink"); ?>" target="_blank">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("youtubeLink") != ""): ?>
+                    <a class="text-light px-2" href="<?php echo getSettings("youtubeLink"); ?>" target="_blank">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("tiktokLink") != ""): ?>
+                    <a class="text-light px-2" href="<?php echo getSettings("tiktokLink"); ?>" target="_blank">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="col-8 col-lg-6 text-right">
@@ -104,20 +125,25 @@
             <button type="button" class="navbar-toggler text-white" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span> Menu
             </button>
+            <button type="button" id="showcustomProductModal" class="navbar-toggler text-white custom-product-menu" style="padding: 9px 12px;">
+                PRE-ORDER
+            </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav m-auto">
                     <a href="<?php echo site_url(); ?>" class="nav-item nav-link active">Home</a>
+                    <a href="<?php echo site_url('about'); ?>" class="nav-item nav-link">About</a>
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle" data-toggle="dropdown">Categories</a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <?php
                             $categories = $this->db->table("category")->where(array("parent" => NULL, "status" => 1, "country" => $this->session->get("countryId")))->get()->getResultArray();
                             foreach ($categories as $key => $category): ?>
-                            <a href="<?php echo site_url('category/' . $category['slug'] . '/' . $category['id']); ?>" class="dropdown-item"><?php echo $category["name"]; ?></a>
+                            <a href="<?php echo site_url('shop?category=' . $category['slug']); ?>" class="dropdown-item"><?php echo $category["name"]; ?></a>
                             <?php endforeach; ?>
                         </div>
                     </div>
                     <a href="<?php echo site_url('contact'); ?>" class="nav-item nav-link">Contact</a>
+                    <a href="javascript:;" id="showcustomProductModal" class="nav-item nav-link d-none d-lg-block ml-3 custom-product-menu">PRE-ORDER</a>
                 </div>
             </div>
         </div>

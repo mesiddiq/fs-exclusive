@@ -39,8 +39,12 @@
                             }
 
                             if (strpos($avgRating, ".") == true) {
-                                $result .= '<small class="fas fa-star-half-alt mr-1"></small>';
+                                $explodeAvgRating = explode(".", $avgRating);
+                                if ($explodeAvgRating[1] != "0") {
+                                    $result .= '<small class="fas fa-star-half-alt mr-1"></small>';
+                                }
                             }
+                            
                             for ($i= 5; $i > ceil($avgRating); $i--) { 
                                 $result .= '<small class="far fa-star mr-1"></small>';
                             }
@@ -61,61 +65,17 @@
                 <h3 class="font-weight-semi-bold mb-4"><?php echo $this->session->get("countryCurrency") . $product["price"]; ?></h3>
                 <?php endif; ?>
                 <p class="mb-4"><?php echo $product["shortDescription"]; ?></p>
-                <!-- <div class="d-flex mb-3">
-                    <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-                    <form>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-1" name="size">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-2" name="size">
-                            <label class="custom-control-label" for="size-2">S</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-3" name="size">
-                            <label class="custom-control-label" for="size-3">M</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-4" name="size">
-                            <label class="custom-control-label" for="size-4">L</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-5" name="size">
-                            <label class="custom-control-label" for="size-5">XL</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="d-flex mb-4">
-                    <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                    <form>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-1" name="color">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-2" name="color">
-                            <label class="custom-control-label" for="color-2">White</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-3" name="color">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-4" name="color">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-5" name="color">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                        </div>
-                    </form>
-                </div> -->
+                <?php if ($product["sizeChart"] == 1): ?>
+                <a href="javascript:;" id="sizeChart"><p class="text-decoration-underline font-weight-medium text-black-50">Size Chart</p></a>
+                <?php endif; ?>
+                <?php if ($product["type"] == 1): ?>
                 <div class="d-flex align-items-center mb-4 pt-2">
-                    <?php if ($product["isOutOfStock"] == 1): ?>
+                    <?php
+                    if ($product["isOutOfStock"] == 1 || $product["quantity"] <= 0):
+                    ?>
                     <button type="button" class="btn btn-danger text-white px-3"><i class="fa fa-sad-tear mr-1"></i> Out of Stock</button>
                     <?php else: ?>
-                    <div class="input-group quantity mr-3">
+                    <!-- <div class="input-group quantity mr-3">
                         <div class="input-group-btn">
                             <button class="btn btn-primary text-white btn-minus" >
                                 <i class="fa fa-minus"></i>
@@ -123,14 +83,88 @@
                         </div>
                         <input type="text" class="form-control bg-secondary text-center" name="productQty" value="1" readonly>
                         <div class="input-group-btn">
-                            <button class="btn btn-primary text-white btn-plus">
+                            <button class="btn btn-primary text-white btn-plus" data-max="<?php echo $product['quantity']; ?>">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                     <button type="button" id="addToCart" class="btn btn-primary text-white px-3" data-productid="<?php echo $product["id"]; ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                     <?php endif; ?>
                 </div>
+                <?php if ($product["quantity"] > 0 && $product["quantity"] < 7): ?>
+                <p class="text-danger">Low stock</p>
+                <?php endif; ?>
+                <?php elseif ($product["type"] == 2): ?>
+                <?php
+                $quantity = 0;
+                $productVariants = $this->db->table("productvariants")->where("productId", $product["id"])->get()->getResultArray();
+
+                foreach ($productVariants as $key => $productVariant):
+                $quantity += $productVariant["quantity"];
+                endforeach;
+                if ($quantity == 0): ?>
+                <div class="d-flex align-items-center mb-4 pt-2">
+                    <button type="button" class="btn btn-danger text-white px-3"><i class="fa fa-sad-tear mr-1"></i> Out of Stock</button>
+                </div>
+                <?php else: ?>
+                <style type="text/css">
+                    .productVariant {
+                        width: 50px;
+                        height: 50px;
+                        display: flex;
+                        text-align: center;
+                        align-items: center;
+                        justify-content: center;
+                        border: 1px solid #CCC;
+                        color: #000;
+                        margin-right: 5px;
+                        cursor: pointer;
+                        font-size: 14px;
+                    }
+                    .productVariant.selected {
+                        border: 2px solid #d2b482;
+                    }
+                </style>
+                <p class="text-decoration-underline text-dark font-weight-medium">Size:</p>
+                <div class="d-flex align-items-center mb-4">
+                    <?php
+                    foreach ($sizes as $key => $size):
+                    $sizeInfo = $this->db->table("productattributesvariants")->where("id", $size["size"])->get()->getRowArray();
+                    ?>
+                    <div class="productVariant productVariantSize" data-id="<?php echo $sizeInfo['id']; ?>"><?php echo $sizeInfo["name"]; ?></div>
+                    <?php endforeach; ?>
+                </div>
+                <p class="text-decoration-underline text-dark font-weight-medium">Color:</p>
+                <div class="d-flex align-items-center mb-4" id="productVariantColor">
+                    <?php
+                    foreach ($colors as $key => $color):
+                    $colorInfo = $this->db->table("productattributesvariants")->where("id", $color["color"])->get()->getRowArray();
+                    if ($colorInfo["isColor"] == 1):
+                    ?>
+                    <div class="productVariant productVariantColor" data-id="<?php echo $colorInfo['id']; ?>" style="background-color: <?php echo $colorInfo["colorCode"]; ?>;"></div>
+                    <?php else: ?>
+                    <div class="productVariant productVariantColor" data-id="<?php echo $colorInfo['id']; ?>"><?php echo $colorInfo["name"]; ?></div>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="d-flex align-items-center mb-4 pt-2">
+                    <!-- <div class="input-group quantity mr-3">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary text-white btn-minus" >
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                        <input type="text" class="form-control bg-secondary text-center" name="productQty" value="1" readonly>
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary text-white btn-plus" data-max="<?php echo $product['quantity']; ?>">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div> -->
+                    <button type="button" id="addVariableProductToCart" class="btn btn-primary text-white px-3" data-productid="<?php echo $product["id"]; ?>" data-sizeid="0" data-colorid="0"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                </div>
+                <?php endif; ?>
+                <?php endif; ?>
                 <div class="d-flex">
                     <?php
                     if ($this->session->get("logged_in") == true):
@@ -148,16 +182,19 @@
                     <p class="text-dark font-weight-medium mb-0 mr-2">Share:</p>
                     <div class="d-inline-flex">
                         <a class="text-dark px-2" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='<?php echo current_url(); ?> + encodeURIComponent(document.URL) + '&t=' + encodeURIComponent(document.URL)); return false;">
-                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-facebook-square"></i>
                         </a>
                         <a class="text-dark px-2" href="https://twitter.com/home?status=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Tweet on Twitter" onclick="window.open('https://twitter.com/intent/tweet?text='<?php echo current_url(); ?> + encodeURIComponent(document.title) + ':%20' + encodeURIComponent(document.URL)); return false;">
-                            <i class="fab fa-twitter"></i>
+                            <i class="fab fa-twitter-square"></i>
                         </a>
-                        <a class="text-dark px-2" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on LinkedIn" onclick="window.open('http://www.linkedin.com/shareArticle?mini=true&amp;url=<?php echo current_url(); ?> + encodeURIComponent(document.URL)); return false;">
-                            <i class="fab fa-linkedin-in"></i>
+                        <a class="text-dark px-2" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on LinkedIn" onclick="window.open('http://www.linkedin.com/shareArticle?mini=true&amp;url=<?php echo current_url(); ?> + encodeURIComponent(document.URL)); return false;'">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a class="text-dark px-2" href="https://pinterest.com/pin/create/link/?url=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on Pinterest" onclick="window.open('https://pinterest.com/pin/create/link/?url='<?php echo current_url(); ?> + encodeURIComponent(document.title) + ':%20' + encodeURIComponent(document.URL)); return false;">
+                            <i class="fab fa-pinterest-square"></i>
                         </a>
                         <a class="text-dark px-2" href="https://wa.me/?text=<?php echo current_url(); ?>" target="_blank" rel="nofollow" title="Share on WhatsApp">
-                            <i class="fab fa-whatsapp"></i>
+                            <i class="fab fa-whatsapp-square"></i>
                         </a>
                     </div>
                 </div>
@@ -214,26 +251,36 @@
                         <div class="my-3">
                             <p class="mb-2">Your Rating</p>
                             <div class="text-primary">
-                                <input type="radio" name="rating" value="1" checked>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <input type="radio" name="rating" value="2">
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <input type="radio" name="rating" value="3">
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <input type="radio" name="rating" value="4">
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <input type="radio" name="rating" value="5">
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
-                                <i class="fas fa-star" style="position: relative; top: -3px;"></i>
+                                <div>
+                                    <input type="radio" name="rating" value="5" checked>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div>
+                                    <input type="radio" name="rating" value="4">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div>
+                                    <input type="radio" name="rating" value="3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div>
+                                    <input type="radio" name="rating" value="2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div>
+                                    <input type="radio" name="rating" value="1">
+                                    <i class="fas fa-star"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">

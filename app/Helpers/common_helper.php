@@ -27,6 +27,15 @@ if (! function_exists("getCurrency")) {
     }
 }
 
+if (! function_exists("getCountry")) {
+    function getCountry($id = "") {
+        $db      = \Config\Database::connect();
+        $result = $db->table("country")->where("id", $id)->get()->getRow()->name;
+
+        return $result;
+    }
+}
+
 // Google Login url
 function googleLoginURL() {
     $googleClientID      = "561934716888-tm501ggj1m5alcf5o25nbmnb7qo1s1it.apps.googleusercontent.com";
@@ -59,27 +68,27 @@ function googleLoginURL() {
 
 // Facebook Login url
 function facebookLoginURL() {
-    $facebookAppID      = getSettings('facebook_app_id');
-    $facebookAppSecret  = getSettings('facebook_secret');
+    $facebookAppID      = "2956734491288416";
+    $facebookAppSecret  = "c1116599cd7ea1551cd9ea9d2e641940";
 
-    if (($facebookAppID == NULL) || ($facebookAppID == 'facebook_app_id') || ($_SESSION['logged_in'] == true)) {
+    if (($facebookAppID == NULL) || ($facebookAppID == 'facebook_app_id')) {
         return "javascript:;";
     }
 
-    require_once dirname(dirname(__dir__)).'/vendor/autoload.php';
+    require_once APPPATH.'/vendor/autoload.php';
 
     $facebook = new \Facebook\Facebook([
-          'app_id'      => getSettings('facebook_app_id'),
-          'app_secret'     => getSettings('facebook_secret'),
-          'default_graph_version'  => 'v2.10'
-        ]);
+        'app_id'      => "2956734491288416",
+        'app_secret'     => "c1116599cd7ea1551cd9ea9d2e641940",
+        'default_graph_version'  => 'v2.10'
+    ]);
 
     $facebookOutput = '';
 
     $facebookHelper = $facebook->getRedirectLoginHelper();
 
     $facebookPermissions = ['email']; // Optional permissions
-    $facebookLoginURL = $facebookHelper->getLoginUrl(getSettings('facebook_redirect_uri'), $facebookPermissions);
+    $facebookLoginURL = $facebookHelper->getLoginUrl(site_url("login/facebook"), $facebookPermissions);
     
     // Render Facebook login button
     return $facebookLoginURL;

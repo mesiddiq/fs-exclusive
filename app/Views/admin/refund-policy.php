@@ -50,7 +50,7 @@
                                                             <button class="ql-header" value="1"></button>
                                                             <button class="ql-header" value="2"></button>
                                                             <button class="ql-blockquote"></button>
-                                                            <button class="ql-code-block"></button>
+                                                            <!-- <button class="ql-code-block"></button> -->
                                                         </span>
                                                         <span class="ql-formats">
                                                             <button class="ql-list" value="ordered"></button>
@@ -58,15 +58,15 @@
                                                             <button class="ql-indent" value="-1"></button>
                                                             <button class="ql-indent" value="+1"></button>
                                                         </span>
-                                                        <span class="ql-formats">
+                                                        <!-- <span class="ql-formats">
                                                             <select class="ql-align"></select>
-                                                        </span>
+                                                        </span> -->
                                                         <span class="ql-formats">
                                                             <button class="ql-link"></button>
                                                         </span>
-                                                        <span class="ql-formats">
+                                                        <!-- <span class="ql-formats">
                                                             <button class="ql-clean"></button>
-                                                        </span>
+                                                        </span> -->
                                                     </div>
                                                     <div id="quill-editor"></div>
                                                 </div>
@@ -94,7 +94,7 @@
 
         <script type="text/javascript">
             // your javascript goes here
-            var refundPolicy = "<?php echo json_decode(getSettings("refundPolicy")); ?>";
+            var refundPolicy = '<?php echo base64_decode(getSettings("refundPolicy")); ?>';
             document.addEventListener("DOMContentLoaded", function () {
                 const editor = new Quill("#quill-editor", {
                     modules: {

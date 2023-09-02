@@ -33,8 +33,23 @@
                                     ?>
                                     <img class="img-fluid w-100" src="<?php echo site_url('uploads/products/' . $image[0]['name']); ?>" alt="<?php echo $product["name"]; ?>">
                                     <?php endif; ?>
-                                    <?php if ($product["isOutOfStock"] == 1): ?>
-                                    <div style="position: absolute; bottom: 5px; width: 100%; background-color: rgba(255, 255, 255, .9); text-align: center; padding: 5px 0; font-weight: 700;">OUT OF STOCK</div>
+                                    <?php
+                                    if ($product["type"] == 1):
+                                    if ($product["isOutOfStock"] == 1 || $product["quantity"] <= 0):
+                                    ?>
+                                    <div style="position: absolute; bottom: 5px; width: 100%; background-color: rgba(255, 255, 255, .9); color: #ff0000; text-align: center; padding: 5px 0; font-weight: 700;">OUT OF STOCK</div>
+                                    <?php endif; ?>
+                                    <?php elseif ($product["type"] == 2): ?>
+                                    <?php
+                                    $quantity = 0;
+                                    $productVariants = $this->db->table("productvariants")->where("productId", $product["id"])->get()->getResultArray();
+
+                                    foreach ($productVariants as $key => $productVariant):
+                                    $quantity += $productVariant["quantity"];
+                                    endforeach;
+                                    if ($quantity == 0): ?>
+                                    <div style="position: absolute; bottom: 5px; width: 100%; background-color: rgba(255, 255, 255, .9); color: #ff0000; text-align: center; padding: 5px 0; font-weight: 700;">OUT OF STOCK</div>
+                                    <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
                                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">

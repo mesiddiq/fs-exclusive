@@ -156,14 +156,26 @@
                                 </div>
                                 <div class="tab">
                                     <div class="row">
+                                        <h3 class="mb-4">Product Info</h3>
                                         <div class="col-12">
-                                            <h3 class="mb-4">Product Info</h3>
                                             <div class="input-style-1">
                                                 <label>Name</label>
                                                 <input type="text" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="name" placeholder="Name" />
                                             </div>
                                         </div>
-                                        <div class="col-12">
+                                        <div class="col-6">
+                                            <div class="select-style-1">
+                                                <label>Type</label>
+                                                <div class="select-position">
+                                                    <select name="type" class="form-required" onchange="this.className = 'form-required'">
+                                                        <option value="">Select</option>
+                                                        <option value="1">Simple</option>
+                                                        <option value="2">Variable</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
                                             <div class="select-style-1">
                                                 <label>Category</label>
                                                 <div class="select-position">
@@ -179,6 +191,24 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-6">
+                                            <div class="select-style-1">
+                                                <label>Size Chart</label>
+                                                <div class="select-position">
+                                                    <select name="sizeChart" class="form-required" onchange="this.className = 'form-required'">
+                                                        <option value="">Select</option>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-style-1">
+                                                <label>Weight (grams)</label>
+                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="weight" placeholder="Weight" value="1" min="1" />
+                                            </div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="input-style-1">
                                                 <label>Short Description</label>
@@ -188,7 +218,7 @@
                                         <div class="col-12">
                                             <div class="input-style-1">
                                                 <label>Description</label>
-                                                <div class="form-editor-wrapper">
+                                                <!-- <div class="form-editor-wrapper">
                                                     <div id="quill-toolbar">
                                                         <span class="ql-formats">
                                                             <select class="ql-font"></select>
@@ -234,8 +264,15 @@
                                                         </span>
                                                     </div>
                                                     <div id="quill-editor"></div>
-                                                </div>
-                                                <textarea class="bg-transparent d-none" placeholder="Description" name="description" id="description" rows="5"></textarea>
+                                                </div> -->
+                                                <style type="text/css">
+                                                    .ck.ck-editor__main .ck.ck-content {
+                                                        padding-left: 30px !important;
+                                                        height: 200px;
+                                                        overflow-y: auto;
+                                                    }
+                                                </style>
+                                                <textarea class="bg-transparent" placeholder="Description" name="description" id="description" rows="5"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -247,23 +284,71 @@
                                     </div>
                                 </div>
                                 <div class="tab">
-                                    <div class="row">
+                                    <div class="row" id="simple-product-info">
                                         <div class="col-12">
                                             <h3 class="mb-4">Inventory Info</h3>
                                         </div>
-                                        <!-- <div class="col-6">
-                                            <div class="input-style-1">
-                                                <label>Price</label>
-                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="price" placeholder="Price" />
-                                            </div>
-                                        </div> -->
-                                    </div>
-                                    <div class="row">
                                         <div class="col-6">
+                                            <div class="input-style-1">
+                                                <label>Quantity</label>
+                                                <input type="number" class="bg-transparent form-required" oninput="this.className = 'bg-transparent form-required'" name="quantity" placeholder="Quantity" value="1" min="0" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
                                             <div class="form-check checkbox-style mb-20">
                                                 <input class="form-check-input" type="checkbox" value="1" name="isOutOfStock" id="isOutOfStock">
                                                 <label class="form-check-label" for="isOutOfStock">Check if product is out of stock</label>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="variable-product-info">
+                                        <div class="col-12">
+                                            <h3 class="mb-4">Inventory Info</h3>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="select-style-1">
+                                                        <label>Size</label>
+                                                        <div class="select-position">
+                                                            <select name="size" id="size">
+                                                                <option value="">Select</option>
+                                                                <?php
+                                                                $sizes = $this->db->table("productattributesvariants")->where(array("status" => 1, "category" => 1))->get()->getResultArray();
+                                                                foreach ($sizes as $key => $size):
+                                                                ?>
+                                                                <option value="<?php echo $size['id']; ?>"><?php echo $size["name"]; ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="select-style-1">
+                                                        <label>Color</label>
+                                                        <div class="select-position">
+                                                            <select name="color" id="color">
+                                                                <option value="">Select</option>
+                                                                <?php
+                                                                $colors = $this->db->table("productattributesvariants")->where(array("status" => 1, "category" => 2))->get()->getResultArray();
+                                                                foreach ($colors as $key => $color):
+                                                                ?>
+                                                                <option value="<?php echo $color['id']; ?>"><?php echo $color["name"]; ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mb-5">
+                                                    <button type="button" class="btn primary-btn" id="addAttributeBtn">Add Attribute</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="input-style-1 mb-0">
+                                                <label>Variants (<span id="variantsCount">0</span>)</label>
+                                            </div>
+                                            <div class="accordion" id="accordionExample"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -393,9 +478,6 @@
                 x[currentTab].style.display = "none";
                 currentTab = currentTab + n;
                 if (currentTab >= x.length) {
-                    // document.getElementById("regForm").submit();
-                    // return false;
-                    //alert("sdf");
                     document.getElementById("nextprevious").style.display = "none";
                     document.getElementById("all-steps").style.display = "none";
                     document.getElementById("register").style.display = "none";

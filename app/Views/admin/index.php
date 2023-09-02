@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="<?php echo site_url('admin/css/quill/snow.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/fullcalendar.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/morris.css'); ?>" />
-    <?php if ($page_name == "dashboard" || $page_name == "products" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "requirements" || $page_name == "users") { ?>
+    <?php if ($page_name == "dashboard" || $page_name == "coupons" || $page_name == "products" || $page_name == "attributes" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "shipping" || $page_name == "shipping-country" || $page_name == "shipping-price" || $page_name == "requirements" || $page_name == "users") { ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/datatable.css'); ?>" />
     <?php } ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/main.css'); ?>" />
@@ -44,7 +44,7 @@
     <script src="<?php echo site_url('admin/js/world-merc.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/polyfill.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/quill.min.js'); ?>"></script>
-    <?php if ($page_name == "dashboard" || $page_name == "products" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "requirements" || $page_name == "users") { ?>
+    <?php if ($page_name == "dashboard" || $page_name == "coupons" || $page_name == "products" || $page_name == "attributes" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "shipping" || $page_name == "shipping-country" || $page_name == "shipping-price" || $page_name == "requirements" || $page_name == "users") { ?>
     <script src="<?php echo site_url('admin/js/datatable.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/Sortable.min.js'); ?>"></script>
     <?php } ?>
@@ -640,6 +640,30 @@
             },
         });
         // =========== chart four end
+    </script>
+    <?php } ?>
+    <?php if ($page_name == "products-add" || $page_name == "products-edit") { ?>
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'), {
+                // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+                toolbar: {
+                    items: [
+                        'undo', 'redo',
+                        '|', 'heading',
+                        '|', 'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
+                        '|', 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code', 'link', 'bulletedList', 'numberedList',
+                        '|', 'todoList', 'outdent', 'indent',
+                        '|', 'alignment',
+                    ],
+                    shouldNotGroupWhenFull: true
+                }
+            }).then(editor => {
+                window.editor = editor;
+            }).catch(err => {
+                console.error( err.stack );
+            });
     </script>
     <?php } ?>
 

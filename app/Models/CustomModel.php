@@ -10,6 +10,6 @@ class CustomModel extends Model
     protected $primaryKey = "id";
     protected $useAutoIncrement = true;
     protected $returnType     = "array";
-    protected $allowedFields = ["name", "email", "contact", "contact2", "address", "address2", "city", "state", "country", "zipcode", "images", "createdAt"];
+    protected $allowedFields = ["name", "email", "contact", "contact2", "address", "address2", "city", "state", "country", "zipcode", "url", "images", "createdAt"];
 
 }

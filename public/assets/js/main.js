@@ -2,6 +2,7 @@
     "use strict";
 
     var site_url = "http://fs.localhost/";
+    var currLoc = $(location).attr('href');
     
     // Dropdown on mouse hover
     $(document).ready(function() {
@@ -42,6 +43,10 @@
             $("#loginModal").modal("show");
         });
 
+        $("#sizeChart").on("click", function() {
+            $("#sizeChartModal").modal("show");
+        });
+
         $("#showAddAddressModal").on("click", function() {
             $("#addAddressModal").modal("show");
         });
@@ -53,7 +58,6 @@
                 url: site_url + "getAddress",
                 data: {addressId: addressId},
                 success: function(getRes) {
-                    console.log(getRes);
                     let address = JSON.parse(getRes);
                     $("#editAddressId").val(address.id);
                     $("#editAddressName").val(address.name);
@@ -63,14 +67,29 @@
                     $("#editAddressAddress2").val(address.address2);
                     $("#editAddressCity").val(address.city);
                     $("#editAddressState").val(address.state);
-                    $("#editAddressCountry").val(address.country);
                     $("#editAddressZipcode").val(address.zipcode);
+                    $.ajax({
+                        method: "POST",
+                        url: site_url + "getShippingCountries",
+                        success: function(getShipRes) {
+                            getShipRes = JSON.parse(getShipRes);
+                            var countries = "";
+                            for (var i = 0; i < getShipRes.length; i++) {
+                                if (getShipRes[i].id == address.country) {
+                                    countries += "<option value='" + getShipRes[i].id + "' selected>" + getShipRes[i].country + "</option>";
+                                } else {
+                                    countries += "<option value='" + getShipRes[i].id + "'>" + getShipRes[i].country + "</option>";
+                                }
+                            }
+                            $("#editAddressCountry").html(countries);
+                        }
+                    });
                     $("#editAddressModal").modal("show");
                 }
             });
         });
 
-        $("#showcustomProductModal").on("click", function() {
+        $("#showcustomProductModal, #showPreorderModal").on("click", function() {
             $("#customProductModal").modal("show");
         });
 
@@ -95,7 +114,8 @@
             e.preventDefault();
             var email = $("#loginEmail").val();
             var password = $("#loginPassword").val();
-            var currLoc = $(location).attr('href');
+            var loginAcceptance = $("[name='loginAcceptance']:checked").val();
+            // var currLoc = $(location).attr('href');
 
             if (password == "") {
                 $("#loginPassword").focus();
@@ -112,19 +132,23 @@
             }
 
             if (email != "" && password != "") {
-                $.ajax({
-                    method: "POST",
-                    url: site_url + "login",
-                    data: {email: email, password: password},
-                    success: function(logRes) {
-                        if (logRes) {
-                            $("#loginError").text("");
-                            window.location.replace(currLoc);
-                        } else {
-                            $("#loginError").text("Invalid credentials");
+                if (loginAcceptance == true) {
+                    $.ajax({
+                        method: "POST",
+                        url: site_url + "login",
+                        data: {email: email, password: password},
+                        success: function(logRes) {
+                            if (logRes) {
+                                $("#loginError").text("");
+                                window.location.replace(currLoc);
+                            } else {
+                                $("#loginError").text("Invalid credentials");
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    alert("Please accept the terms");
+                }
             }
         });
 
@@ -134,7 +158,8 @@
             var name = $("#registerName").val();
             var email = $("#registerEmail").val();
             var password = $("#registerPassword").val();
-            var currLoc = $(location).attr('href');
+            var registerAcceptance = $("[name='registerAcceptance']:checked").val();
+            // var currLoc = $(location).attr('href');
 
             if (password == "") {
                 $("#registerPassword").focus();
@@ -158,23 +183,27 @@
             }
 
             if (name != "" && email != "" && password != "") {
-                $.ajax({
-                    method: "POST",
-                    url: site_url + "register",
-                    data: {name: name, email: email, password: password},
-                    success: function(regRes) {
-                        if (regRes == "Exists") {
-                            $("#registerError").removeClass("text-success").addClass("text-danger").text("Email already exists");
-                        } else if (regRes == "Wrong") {
-                            $("#registerError").removeClass("text-success").addClass("text-danger").text("Something went wrong. Please try again");
-                        } else if (regRes) {
-                            $("#registerError").removeClass("text-danger").addClass("text-success").text("Please verify your email address");
-                            setTimeout(function() {
-                                window.location.replace(currLoc);
-                            }, 5000);
+                if (registerAcceptance == true) {
+                    $.ajax({
+                        method: "POST",
+                        url: site_url + "register",
+                        data: {name: name, email: email, password: password},
+                        success: function(regRes) {
+                            if (regRes == "Exists") {
+                                $("#registerError").removeClass("text-success").addClass("text-danger").text("Email already exists");
+                            } else if (regRes == "Wrong") {
+                                $("#registerError").removeClass("text-success").addClass("text-danger").text("Something went wrong. Please try again");
+                            } else if (regRes) {
+                                $("#registerError").removeClass("text-danger").addClass("text-success").text("Please verify your email address");
+                                setTimeout(function() {
+                                    window.location.replace(currLoc);
+                                }, 5000);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    alert("Please accept the terms");
+                }
             }
         });
 
@@ -182,7 +211,7 @@
         $("#forgotForm").on("submit", function(e) {
             e.preventDefault();
             var email = $("#forgotEmail").val();
-            var currLoc = $(location).attr('href');
+            // var currLoc = $(location).attr('href');
 
             if (email == "") {
                 $("#forgotEmail").focus();
@@ -324,11 +353,15 @@
                         zipcode: zipcode,
                     },
                     success: function(addRes) {
-                        if (addRes) {
-                            location.reload();
+                        if (!addRes) {
+                            alert(addRes);
                         }
+
+                        location.reload();
                     }
                 });
+            } else {
+                alert("Please fill all the required fields");
             }
         });
 
@@ -402,11 +435,15 @@
                         zipcode: zipcode,
                     },
                     success: function(editRes) {
-                        if (editRes) {
-                            location.reload();
+                        if (!editRes) {
+                            alert(editRes);
                         }
+                        
+                        location.reload();
                     }
                 });
+            } else {
+                alert("Please fill all the required fields");
             }
         });
 
@@ -424,13 +461,17 @@
             var country = $("#customProductCountry").val();
             var zipcode = $("#customProductZipcode").val();
             var image = $("#customProductImage").val();
-            var currLoc = $(location).attr('href');
+            var url = $("#customProductURL").val();
+            var loggedIn = $("#customProductLoggedIn").val();
+            // var currLoc = $(location).attr('href');
 
-            if (image == "") {
-                $("#customProductImage").addClass("is-invalid");
-                $("#customProductImage").focus();
-            } else {
-                $("#customProductImage").removeClass("is-invalid");
+            if (loggedIn != "1") {
+                if (image == "") {
+                    $("#customProductImage").addClass("is-invalid");
+                    $("#customProductImage").focus();
+                } else {
+                    $("#customProductImage").removeClass("is-invalid");
+                }
             }
 
             if (zipcode == "") {
@@ -499,7 +540,7 @@
             e.preventDefault();
             var rating = $("[name='rating']:checked").val();
             var review = $("#review").val();
-            var currLoc = $(location).attr('href');
+            // var currLoc = $(location).attr('href');
             
             $.ajax({
                 method: "POST",
@@ -516,6 +557,61 @@
                 }
             });
         });
+
+        // Contact Form
+        $("#contactForm").on("submit", function(e) {
+            e.preventDefault();
+            var contactName = $("#contactName").val();
+            var contactEmail = $("#contactEmail").val();
+            var contactPhone = $("#contactPhone").val();
+            var contactSubject = $("#contactSubject").val();
+            var contactMessage = $("#contactMessage").val();
+
+            if (contactMessage == "") {
+                $("#contactMessage").addClass("required");
+                $("#contactMessage").focus();
+            }
+
+            if (contactSubject == "") {
+                $("#contactSubject").addClass("required");
+                $("#contactSubject").focus();
+            }
+
+            if (contactPhone == "") {
+                $("#contactPhone").addClass("required");
+                $("#contactPhone").focus();
+            }
+
+            if (contactEmail == "") {
+                $("#contactEmail").addClass("required");
+                $("#contactEmail").focus();
+            }
+
+            if (contactName == "") {
+                $("#contactName").addClass("required");
+                $("#contactName").focus();
+            }
+
+            if (contactName != "" && contactEmail != "" && contactPhone != "" && contactSubject != "" && contactMessage != "") {
+                $.ajax({
+                    method: "POST",
+                    url: site_url + "contact",
+                    data: {name: contactName, email: contactEmail, phone: contactPhone, subject: contactSubject, message: contactMessage},
+                    success: function(conRes) {
+                        if (conRes == true) {
+                            $("#contactName").val("");
+                            $("#contactEmail").val("");
+                            $("#contactPhone").val("");
+                            $("#contactSubject").val("");
+                            $("#contactMessage").val("");
+                            $("#sendMessageButton").after("<span class='ml-3 text-success'>Thank you! Our team will contact you.</span>");
+                        }
+                    }
+                });
+            }
+        });
+
+        // 
 
         // Product Image Full Screen
         $("#product-carousel .carousel-item img").on("click", function() {
@@ -540,7 +636,6 @@
                 url: site_url + "country",
                 data: {country: country},
                 success: function(res) {
-                    console.log(res);
                     if (res) {
                         window.location.replace(site_url);
                     }
@@ -555,7 +650,6 @@
                 url: site_url + "country",
                 data: {country: country},
                 success: function(res) {
-                    console.log(res);
                     if (res) {
                         window.location.replace(site_url);
                     }
@@ -580,7 +674,6 @@
                 url: site_url + "updateCart",
                 data: {cartId: cartId, cartSubTotal: cartSubTotal, cartDiscount: cartDiscount, action: action},
                 success: function(updateCartRes) {
-                    console.log(updateCartRes);
                     var updateCartRes1 = JSON.parse(updateCartRes);
                     $("#cart #row"+updateCartRes1.id).text(updateCartRes1.productPrice);
                     $("#cartSubTotal").text(updateCartRes1.cartSubTotal);
@@ -663,7 +756,15 @@
         var button = $(this);
         var oldValue = button.parent().parent().find("input").val();
         if (button.hasClass("btn-plus")) {
-            var newVal = parseFloat(oldValue) + 1;
+            var maxQty = $(".btn-plus").data("max");
+            var maxQty = parseFloat(maxQty);
+            var addVal = parseFloat(oldValue) + 1;
+
+            if (maxQty == oldValue) {
+                var newVal = oldValue;
+            } else {
+                var newVal = addVal;
+            }
         } else {
             if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
@@ -674,6 +775,52 @@
         button.parent().parent().find("input").val(newVal);
     });
 
+    
+    // Product Variant Size
+    $(".productVariantSize").on("click", function() {
+        var size = $(this).data("id");
+
+        $(".productVariantSize").removeClass("selected");
+        $(this).addClass("selected");
+
+        $.ajax({
+            method: "POST",
+            url: site_url + "getVariantColor",
+            data: {size: size},
+            success: function(sizeRes) {
+                sizeRes = JSON.parse(sizeRes);
+                var htmlText = ""
+                
+                for (var i = 0; i < sizeRes.length; i++) {
+                    if (sizeRes[i].exists == true) {
+                        if (sizeRes[i].row.quantity == "0") {
+                            htmlText += "<div class='productVariant text-black-50' style='cursor: not-allowed; position: relative;'><img src='" + site_url + "assets/img/cross.png' style='position: absolute; width:80%; opacity: 50%;' /><span style='position: absolute;'>" + sizeRes[i].row.name + "</span></div>";
+                        } else {
+                            htmlText += "<div class='productVariant productVariantColor' data-id='" + sizeRes[i].row.color + "'>" + sizeRes[i].row.name + "</div>";
+                        }
+                    } else {
+                        htmlText += "<div class='productVariant text-black-50' style='cursor: not-allowed; position: relative;'><img src='" + site_url + "assets/img/cross.png' style='position: absolute; width:80%; opacity: 50%;' /><span style='position: absolute;'>" + sizeRes[i].row.name + "</span></div>";
+                    }
+                }
+
+                $("#productVariantColor").html(htmlText);
+            }
+        });
+
+        $("#addVariableProductToCart").attr("data-sizeid", size);
+    });
+
+    
+    // Product Variant Color
+    $(document).on("click", ".productVariantColor", function() {
+        var color = $(this).data("id");
+
+        $(".productVariantColor").removeClass("selected");
+        $(this).addClass("selected");
+
+        $("#addVariableProductToCart").attr("data-colorid", color);
+    });
+
 
     // Add to Cart
     $("#addToCart").on("click", function() {
@@ -682,17 +829,51 @@
         $.ajax({
             method: "POST",
             url: site_url + "addToCart",
-            data: {productId: productId, productQty: productQty},
+            data: {productId: productId, productQty: 1},
             success: function(cartRes) {
                 if (cartRes == "cart") {
                     $("#cartModal").modal("show");
                 } else if (cartRes == "checkout") {
                     $("#cartModal button").removeAttr("onclick");
-                    $("#cartModal a").attr("href", site_url + "checkout");
+                    $("#cartModal a").attr("href", site_url + "cart");
                     $("#cartModal").modal("show");
                 }
             }
         });
+    });
+
+
+    // Add to Cart Variant
+    $("#addVariableProductToCart").on("click", function() {
+        var productSize = $(this).attr("data-sizeid");
+        var productColor = $(this).attr("data-colorid");
+        var productId = $(this).attr("data-productid");
+
+        if (productSize == "" || productSize == "0") {
+            alert("Select size");
+        } else if (productColor == "" || productColor == "0") {
+            alert("Select color");
+        } else {
+            $.ajax({
+                method: "POST",
+                url: site_url + "addToCartVariant",
+                data: {productId: productId, productQty: 1, productSize: productSize, productColor: productColor},
+                success: function(cartVarRes) {
+                    cartVarRes = JSON.parse(cartVarRes);
+                    if (cartVarRes.error == true) {
+                        alert(cartVarRes.message);
+                    } else {
+                        if (cartVarRes.message == "cart") {
+                            $("#cartModal").modal("show");
+                        } else if (cartVarRes.message == "checkout") {
+                            $("#cartModal button").removeAttr("onclick");
+                            $("#cartModal a").attr("href", site_url + "cart");
+                            $("#cartModal").modal("show");
+                        }
+                    }
+                }
+            });
+        }
     });
 
 
@@ -762,30 +943,184 @@
     });
 
 
+    // Apply Coupon
+    $("#applyCoupon").on("submit", function() {
+        var coupon = $("#couponCode").val();
+        var subtotal = $('#cartSubTotal').text();
+
+        if (coupon != "") {
+            $.ajax({
+                method: "POST",
+                url: site_url + "applyCoupon",
+                data: {coupon: coupon},
+                success: function(couRes) {
+                    couRes = JSON.parse(couRes);
+                    console.log(couRes);
+                    var cartTotalText = ""
+                    
+                    if (couRes.status == "success") {
+                        $("#couponCode").val("");
+                        $("<p class='text-success pl-3 my-3'>" + couRes.message + "</p>").appendTo('#applyCoupon').delay(5000).fadeOut();
+                        $("#cartCouponCode").parent().removeClass("d-none");
+                        $("#cartCouponCode").parent().addClass("d-flex");
+                        $("#cartCouponCode").text("PROMOCODE: " + coupon);
+                        $("#cartSubTotal").text(couRes.subTotal);
+                        $("#cartDiscount").text(couRes.discount);
+                        cartTotalText = "<del>" + subtotal + "</del>" + (couRes.subTotal - couRes.discount)
+                        $("#cartTotal").html(cartTotalText);
+                    } else {
+                        alert(couRes.message);
+                        $("#cartCouponCode").parent().removeClass("d-flex");
+                        $("#cartCouponCode").parent().addClass("d-none");
+                        $("#cartSubTotal").text(subtotal);
+                        $("#cartDiscount").text(0);
+                        $("#cartTotal").text(subtotal);
+                    }
+                }
+            });
+        }
+    });
+
+    // Remove Coupon
+    $("#removeCoupon").on("click", function() {
+        if (currLoc == site_url + "cart") {
+            var subtotal = $('#cartSubTotal').text();
+            var shipping = $('#cartShipping').text();
+        } else if (currLoc == site_url + "checkout") {
+            var subtotal = $("[name='subtotal']").text();
+            var shipping = $("#shippingCost").text();
+        }
+        
+        $.ajax({
+            method: "POST",
+            url: site_url + "removeCoupon",
+            success: function(recoRes) {
+                $("#cartCouponCode").parent().removeClass("d-flex");
+                $("#cartCouponCode").parent().addClass("d-none");
+                
+                if (currLoc == site_url + "cart") {
+                    $("#cartSubTotal").text(subtotal);
+                    $("#cartDiscount").text(0);
+                    $("#cartTotal").text(parseFloat(subtotal) + parseFloat(shipping));
+                } else if (currLoc == site_url + "checkout") {
+                    $("[name='subtotal']").text(subtotal);
+                    $("#shippingDiscount").text(0);
+                    $("#shippingTotal").text(parseFloat(subtotal) + parseFloat(shipping));
+                }
+            }
+        });
+    });
+
+
+    if (currLoc == site_url + "checkout") {
+        var subtotal = $("[name='subtotal']").text();
+        var weight = $("[name='weight']").text();
+        var addressId = $("[name='deliveryAddress']:checked").val();
+
+        $(".select-address input[type='radio']").on("change", function() {
+            addressId = $("[name='deliveryAddress']:checked").val();
+            getShipping(addressId, weight);
+        });
+
+        getShipping(addressId, weight);
+    }
+    
+
+    function getShipping(addressId, weight) {
+        if (addressId == undefined || addressId == "") {
+            $("#shippingCost").text("0");
+            $("#shippingTotal").text(subtotal);
+        } else {
+            $.ajax({
+                method: "POST",
+                url: site_url + "getShipping",
+                data: {addressId: addressId, weight: weight},
+                success: function(shipRes) {
+                    shipRes = JSON.parse(shipRes);
+                    var shippingTotal = 0;
+                    var shippingDiscount = $("#shippingDiscount").text();
+
+                    if (shipRes != null) {
+                        shippingTotal = parseFloat(subtotal) + parseFloat(shipRes.price) - parseFloat(shippingDiscount);
+                        $("#shippingCost").text(shipRes.price);
+                    } else {
+                        shippingTotal = parseFloat(subtotal) + 10 - parseFloat(shippingDiscount);
+                        $("#shippingCost").text(10);
+                    }
+                    $("#shippingTotal").text(shippingTotal);
+                }
+            });
+        }
+    }
+
+
     // Place Order
     $("#placeOrder").on("click", function() {
         var addressId = $("[name='deliveryAddress']:checked").val();
         // var paymentMethod = $("[name='paymentMethod']").val();
         var paymentMethod = "";
         var subtotal = $("[name=subtotal]").text();
+        var shipping = $("[name=shipping]").text();
         var discount = $("[name=discount]").text();
         var total = $("[name=total]").text();
 
-        if (addressId != "") {
+        if (addressId == undefined || addressId == "") {
+            alert("Select delivery address");
+        } else {
+            $("#placeOrder").text("Please wait...");
+            $("#placeOrder").attr("disabled", "disabled");
+            
             $.ajax({
                 method: "POST",
-                url: site_url + "placeOrder",
-                data: {addressId: addressId, paymentMethod: paymentMethod, subtotal: subtotal, discount: discount, total: total},
-                success: function(res) {
-                    res = JSON.parse(res);
-                    if (res.payment == "stripe") {
-                        window.location.href = res.response.url;
-                    } else if (res.payment == "toyyib") {
-                        if (res.response.status == "error") {
-                            alert("Something went wrong. Please try again");
-                        } else {
-                            window.location.href = "https://dev.toyyibpay.com/" + res.response[0].BillCode;
+                url: site_url + "proceedToCheckout",
+                success: function(proceedToCheckoutRes) {
+                    proceedToCheckoutRes = JSON.parse(proceedToCheckoutRes);
+                    console.log(proceedToCheckoutRes);
+
+                    if (proceedToCheckoutRes.length > 0) {
+                        var errorMsg = "";
+                        for (var i = 0; i < proceedToCheckoutRes.length; i++) {
+                            if (proceedToCheckoutRes[i].error == true) {
+                                // errorMsg += "<i class='fa fa-check-circle text-dark'></i> " + proceedToCheckoutRes[i].message + "<br>";
+                                errorMsg += "<li style='list-style-type: disclosure-closed;'>" + proceedToCheckoutRes[i].message + "</li>";
+                            }
                         }
+                        $("#checkoutModal #checkoutModalMsg ul").html(errorMsg);
+                        $("#checkoutModal").modal("show");
+                        $("#placeOrder").text("Place Order");
+                        $("#placeOrder").removeAttr("disabled");
+                    } else {
+                        $.ajax({
+                            method: "POST",
+                            url: site_url + "placeOrder",
+                            data: {addressId: addressId, paymentMethod: paymentMethod, subtotal: subtotal, shipping: shipping, discount: discount, total: total},
+                            success: function(res) {
+                                res = JSON.parse(res);
+                                console.log(res);
+                                
+                                if (res.payment == "stripe") {
+                                    window.location.href = res.response.url;
+                                } else if (res.payment == "toyyib") {
+                                    if (res.response.status == "error") {
+                                        alert(res.response.msg);
+                                        $("#placeOrder").text("Place Order");
+                                        $("#placeOrder").removeAttr("disabled");
+                                    } else {
+                                        if (res.response[0].BillCode == "") {
+                                            alert("Something went wrong. Please try again");
+                                            $("#placeOrder").text("Place Order");
+                                            $("#placeOrder").removeAttr("disabled");
+                                        } else {
+                                            window.location.href = "https://toyyibpay.com/" + res.response[0].BillCode;
+                                        }
+                                    }
+                                } else {
+                                    alert(res.message);
+                                    $("#placeOrder").text("Place Order");
+                                    $("#placeOrder").removeAttr("disabled");
+                                }
+                            }
+                        });
                     }
                 }
             });

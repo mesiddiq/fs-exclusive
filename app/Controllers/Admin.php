@@ -11,6 +11,12 @@ use App\Models\CustomModel;
 use App\Models\ReviewModel;
 use App\Models\TestimonialImageModel;
 use App\Models\CountriesModel;
+use App\Models\ShippingModel;
+use App\Models\ShippingCountryModel;
+use App\Models\ProductAttributesCategoryModel;
+use App\Models\ProductAttributesVariantsModel;
+use App\Models\ProductVariantsModel;
+use App\Models\CouponsModel;
 
 class Admin extends BaseController
 {
@@ -26,6 +32,12 @@ class Admin extends BaseController
         $this->ReviewModel = new ReviewModel();
         $this->TestimonialImageModel = new TestimonialImageModel();
         $this->CountriesModel = new CountriesModel();
+        $this->ShippingModel = new ShippingModel();
+        $this->ShippingCountryModel = new ShippingCountryModel();
+        $this->ProductAttributesCategoryModel = new ProductAttributesCategoryModel();
+        $this->ProductAttributesVariantsModel = new ProductAttributesVariantsModel();
+        $this->ProductVariantsModel = new ProductVariantsModel();
+        $this->CouponsModel = new CouponsModel();
     }
 
     public function index()
@@ -51,6 +63,80 @@ class Admin extends BaseController
                 $page_data["page_name"] = "dashboard";
 
                 return view($view . "/index", $page_data);
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+
+    public function coupons($param1="", $param2="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "add") {
+                    $page_data["countries"] = $this->CountriesModel->where("status", 1)->get()->getResultArray();
+                    $page_data["products"] = $this->ProductModel->get()->getResultArray();
+                    $view = "admin";
+                    $page_data["page_title"] = "Add Coupons";
+                    $page_data["page_name"] = "coupons-add";
+                    
+                    return view($view . "/index", $page_data);
+                } else if ($param1 == "create") {
+                    $data["userId"] = (int) $this->session->get("userId");
+                    $data["code"] = $this->request->getPost("code");
+                    $data["type"] = (int) $this->request->getPost("type");
+                    $data["value"] = (int) $this->request->getPost("value");
+                    $data["country"] = (int) $this->request->getPost("country");
+                    $data["product"] = (int) $this->request->getPost("product");
+                    if ($this->request->getPost("expiry") == "") {
+                        $data["expiry"] = Null;
+                    } else {
+                        $data["expiry"] = strtotime($this->request->getPost("expiry"));
+                    }
+                    $data["count"] = 0;
+                    $data["status"] = (int) $this->request->getPost("status");
+                    $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                    $create = $this->CouponsModel->insert($data);
+                    return redirect()->to("admin/coupons");
+                } else if ($param1 == "edit") {
+                    $page_data["coupon"] = $this->CouponsModel->where("id", $param2)->get()->getRowArray();
+                    $page_data["countries"] = $this->CountriesModel->where("status", 1)->get()->getResultArray();
+                    $page_data["products"] = $this->ProductModel->get()->getResultArray();
+                    $view = "admin";
+                    $page_data["page_title"] = "Edit Coupons";
+                    $page_data["page_name"] = "coupons-edit";
+                    
+                    return view($view . "/index", $page_data);
+                } else if ($param1 == "update") {
+                    $data["code"] = $this->request->getPost("code");
+                    $data["type"] = (int) $this->request->getPost("type");
+                    $data["value"] = (int) $this->request->getPost("value");
+                    $data["country"] = (int) $this->request->getPost("country");
+                    $data["product"] = (int) $this->request->getPost("product");
+                    if ($this->request->getPost("expiry") == "") {
+                        $data["expiry"] = Null;
+                    } else {
+                        $data["expiry"] = strtotime($this->request->getPost("expiry"));
+                    }
+                    $data["status"] = (int) $this->request->getPost("status");
+                    $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                    $update = $this->db->table("coupons")->where("id", $param2)->update($data);
+                    return redirect()->to("admin/coupons");
+                } else if ($param1 == "delete") {
+                    $delete = $this->db->table("coupons")->where("id", $param2)->delete();
+                    return redirect()->to("admin/coupons");
+                } else {
+                    $page_data["coupons"] = $this->CouponsModel->get()->getResultArray();
+                    $view = "admin";
+                    $page_data["page_title"] = "Coupons";
+                    $page_data["page_name"] = "coupons";
+
+                    return view($view . "/index", $page_data);
+                }
             } else {
                 return redirect()->to(site_url());
             }
@@ -162,15 +248,19 @@ class Admin extends BaseController
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "add") {
+                    $this->session->set("productVariants", array());
+
                     $view = "admin";
                     $page_data["page_title"] = "Add Products";
                     $page_data["page_name"] = "products-add";
                     $this->session->set("adminProductCountryId", 1);
+                    $this->session->set("productVariants", array());
                     
                     return view($view . "/index", $page_data);
                 } else if ($param1 == "create") {
                     $data["name"] = $this->request->getPost("name");
                     $data["slug"] = $this->slugify($this->request->getPost("name"));
+                    $data["type"] = (int) $this->request->getPost("type");
                     $data["shortDescription"] = $this->request->getPost("shortDescription");
                     $data["description"] = json_encode($this->request->getPost("description"));
                     $data["category"] = $this->request->getPost("category");
@@ -178,6 +268,9 @@ class Admin extends BaseController
                     $data["isDiscount"] = (int) $this->request->getPost("isDiscount");
                     $data["price"] = $this->request->getPost("price");
                     $data["discountedPrice"] = $this->request->getPost("discountedPrice");
+                    $data["quantity"] = (int) $this->request->getPost("quantity");
+                    $data["weight"] = (int) $this->request->getPost("weight");
+                    $data["sizeChart"] = (int) $this->request->getPost("sizeChart");
                     $data["isTopProduct"] = (int) $this->request->getPost("isTopProduct");
                     $data["isOutOfStock"] = (int) $this->request->getPost("isOutOfStock");
                     $data["status"] = (int) $this->request->getPost("status");
@@ -212,17 +305,31 @@ class Admin extends BaseController
                         }
                     }
 
+                    if ($data["type"] == "2") {
+                        $productVariants = $this->session->get("productVariants");
+
+                        if (count($productVariants) > 0) {
+                            foreach ($productVariants as $key => $value) {
+                                $this->db->table("productvariants")->where("tempId", $value)->update(array("productId" => $productID));
+                            }
+                        }
+                    }
+
                     return redirect()->to("admin/products");
                 } else if ($param1 == "edit") {
                     $page_data["product"] = $this->ProductModel->where("id", $param2)->get()->getRowArray();
                     $view = "admin";
                     $page_data["page_title"] = "Edit Product";
                     $page_data["page_name"] = "products-edit";
+
+                    $this->session->set("productVariants", array());
+                    $this->session->set("productEditId", $param2);
                     
                     return view($view . "/index", $page_data);
                 } else if ($param1 == "update") {
                     $data["name"] = $this->request->getPost("name");
                     $data["slug"] = $this->slugify($this->request->getPost("name"));
+                    $data["type"] = (int) $this->request->getPost("type");
                     $data["shortDescription"] = $this->request->getPost("shortDescription");
                     $data["description"] = json_encode($this->request->getPost("description"));
                     $data["category"] = $this->request->getPost("category");
@@ -230,6 +337,9 @@ class Admin extends BaseController
                     $data["isDiscount"] = (int) $this->request->getPost("isDiscount");
                     $data["price"] = $this->request->getPost("price");
                     $data["discountedPrice"] = $this->request->getPost("discountedPrice");
+                    $data["quantity"] = (int) $this->request->getPost("quantity");
+                    $data["weight"] = (int) $this->request->getPost("weight");
+                    $data["sizeChart"] = (int) $this->request->getPost("sizeChart");
                     $data["isTopProduct"] = (int) $this->request->getPost("isTopProduct");
                     $data["isOutOfStock"] = (int) $this->request->getPost("isOutOfStock");
                     $data["status"] = (int) $this->request->getPost("status");
@@ -282,11 +392,198 @@ class Admin extends BaseController
                     $id = $this->request->getPost("id");
                     $this->ProductImageModel->delete($id);
                     echo true;
+                } else if ($param1 == "variants") {
+                    if ($param2 == "add") {
+                        $productVariants = array();
+
+                        $data["tempId"] = strtotime(date("d-M-Y H:i:s"));
+                        $data["productId"] = $this->session->get("productEditId");
+                        $data["size"] = $this->request->getPost("size");
+                        $data["color"] = $this->request->getPost("color");
+                        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                        if ($this->session->get("productVariants") == "") {
+                            $this->session->set("productVariants", array($data["tempId"]));
+                        } else {
+                            $sessionVariants = $this->session->get("productVariants");
+                            array_push($sessionVariants, $data["tempId"]);
+                            $this->session->set("productVariants", $sessionVariants);
+                        }
+
+                        $this->ProductVariantsModel->insert($data);
+
+                        foreach ($this->session->get("productVariants") as $key => $value) {
+                            $variant = $this->ProductVariantsModel->where("tempId", $value)->get()->getRowArray();
+                            $size = $this->ProductAttributesVariantsModel->where("id", $variant["size"])->get()->getRow()->name;
+                            $color = $this->ProductAttributesVariantsModel->where("id", $variant["color"])->get()->getRow()->name;
+                            array_push($productVariants, array("id" => $variant["id"], "tempId" => $variant["tempId"], "productId" => $variant["productId"], "size" => $size, "color" => $color, "quantity" => $variant["quantity"]));
+                        }
+
+                        echo json_encode($productVariants);
+                    } else if ($param2 == "update") {
+                        $id = $this->request->getPost("id");
+                        $data["productId"] = $this->session->get("productEditId");
+                        $data["quantity"] = $this->request->getPost("quantity");
+
+                        $this->db->table("productvariants")->where("id", $id)->update($data);
+
+                        echo true;
+                    } else if ($param2 == "delete") {
+                        $productVariants = array();
+                        $sessionVariants = array();
+
+
+                        $deleteVariant = $this->ProductVariantsModel->where("id", $this->request->getPost("id"))->get()->getRowArray();
+
+                        foreach ($this->session->get("productVariants") as $key => $value) {
+                            if ($value != $deleteVariant["tempId"]) {
+                                $variant = $this->ProductVariantsModel->where("tempId", $value)->get()->getRowArray();
+                                $size = $this->ProductAttributesVariantsModel->where("id", $variant["size"])->get()->getRow()->name;
+                                $color = $this->ProductAttributesVariantsModel->where("id", $variant["color"])->get()->getRow()->name;
+                                array_push($productVariants, array("id" => $variant["id"], "tempId" => $variant["tempId"], "productId" => $variant["productId"], "size" => $size, "color" => $color, "quantity" => $variant["quantity"]));
+                                array_push($sessionVariants, $value);
+
+                            }
+                        }
+
+                        $this->db->table("productvariants")->where("id", $this->request->getPost("id"))->delete();
+                        $this->session->set("productVariants", $sessionVariants);
+                        echo json_encode($productVariants);
+                    }
                 } else {
                     $page_data["products"] = $this->ProductModel->findAll();
                     $view = "admin";
                     $page_data["page_title"] = "Products";
                     $page_data["page_name"] = "products";
+
+                    return view($view . "/index", $page_data);
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+
+    public function attributes($param1="", $param2="", $param3="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "category") {
+                    if ($param2 == "add") {
+                        $view = "admin";
+                        $page_data["page_title"] = "Add Attributes";
+                        $page_data["page_name"] = "attributes-add";
+
+                        return view($view . "/index", $page_data);
+                    } else if ($param2 == "create") {
+                        $data["name"] = $this->request->getPost("name");
+                        $data["status"] = (int) $this->request->getPost("status");
+                        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+                        
+                        $this->ProductAttributesCategoryModel->insert($data);
+                        return redirect()->to("admin/attributes");
+                    } else if ($param2 == "edit") {
+                        if ($param3 == "") {
+                            return redirect()->to(site_url('admin/attributes'));
+                        } else {
+                            $page_data["attribute"] = $this->ProductAttributesCategoryModel->where("id", $param3)->get()->getRowArray();
+                            $view = "admin";
+                            $page_data["page_title"] = "Edit Attribute";
+                            $page_data["page_name"] = "attributes-edit";
+                            
+                            return view($view . "/index", $page_data);
+                        }
+                    } else if ($param2 == "update") {
+                        if ($param3 == "") {
+                            return redirect()->to(site_url('admin/attributes'));
+                        } else {
+                            $data["name"] = $this->request->getPost("name");
+                            $data["status"] = (int) $this->request->getPost("status");
+                            $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
+                            
+                            $update = $this->db->table("productattributescategory")->where("id", $param3)->update($data);
+                            return redirect()->to("admin/attributes");
+                        }
+                    } else if ($param2 == "delete") {
+                        if ($param3 == "") {
+                            return redirect()->to(site_url('admin/attributes'));
+                        } else {
+                            $this->db->table("productattributescategory")->where("id", $param3)->delete();
+                            return redirect()->to("admin/attributes");
+                        }
+                    } else if ($param2 == "get") {
+                        $categories = $this->request->getPost("categories");
+                        $attributes = array();
+
+                        foreach ($categories as $key => $category) {
+                            $variants = $this->db->table("productattributesvariants")->where("category", $category)->get()->getResultArray();
+                            // 0 => 1,3
+                            // 1 => 2,4,6
+                            // 0 => 1 2, 1 4, 1 6, 3 2, 3 4, 3 6
+                            array_push($attributes, $variants);
+                        }
+
+                        echo json_encode($attributes);
+                    }
+                    
+                } else if ($param1 == "variants") {
+                    if ($param2 == "add") {
+                        $view = "admin";
+                        $page_data["page_title"] = "Add Variants";
+                        $page_data["page_name"] = "attributes-variants-add";
+
+                        return view($view . "/index", $page_data);
+                    } else if ($param2 == "create") {
+                        $data["name"] = $this->request->getPost("name");
+                        $data["category"] = (int) $this->request->getPost("category");
+                        $data["isColor"] = $this->request->getPost("isColor");
+                        $data["colorCode"] = $this->request->getPost("colorCode");
+                        $data["status"] = (int) $this->request->getPost("status");
+                        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+                        
+                        $this->ProductAttributesVariantsModel->insert($data);
+                        return redirect()->to("admin/attributes");
+                    } else if ($param2 == "edit") {
+                        if ($param3 == "") {
+                            return redirect()->to(site_url('admin/attributes'));
+                        } else {
+                            $page_data["variant"] = $this->ProductAttributesVariantsModel->where("id", $param3)->get()->getRowArray();
+                            $view = "admin";
+                            $page_data["page_title"] = "Edit Variant";
+                            $page_data["page_name"] = "attributes-variants-edit";
+
+                            return view($view . "/index", $page_data);
+                        }
+                    } else if ($param2 == "update") {
+                        if ($param3 == "") {
+                            return redirect()->to(site_url('admin/attributes'));
+                        } else {
+                            $data["name"] = $this->request->getPost("name");
+                            $data["category"] = (int) $this->request->getPost("category");
+                            $data["isColor"] = $this->request->getPost("isColor");
+                            $data["colorCode"] = $this->request->getPost("colorCode");
+                            $data["status"] = (int) $this->request->getPost("status");
+                            $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                            $update = $this->db->table("productattributesvariants")->where("id", $param3)->update($data);
+                            return redirect()->to("admin/attributes");
+                        }
+                    } else if ($param2 == "delete") {
+                        if ($param3 == "") {
+                            return redirect()->to(site_url('admin/attributes'));
+                        } else {
+                            $this->db->table("productattributesvariants")->where("id", $param3)->delete();
+                            return redirect()->to("admin/attributes");
+                        }
+                    }
+                } else {
+                    $page_data["attributes"] = $this->ProductAttributesCategoryModel->findAll();
+                    $page_data["variants"] = $this->ProductAttributesVariantsModel->findAll();
+                    $view = "admin";
+                    $page_data["page_title"] = "Attributes";
+                    $page_data["page_name"] = "attributes";
 
                     return view($view . "/index", $page_data);
                 }
@@ -317,6 +614,13 @@ class Admin extends BaseController
                     $page_data["page_name"] = "orders-view";
                     
                     return view($view . "/index", $page_data);
+                } else if ($param1 == "update") {
+                    $data["orderStatus"] = (int) $this->request->getPost("orderStatus");
+                    $data["orderNote"] = $this->request->getPost("orderNote");
+
+                    $update = $this->db->table("orders")->where("id", $param2)->update($data);
+
+                    return redirect()->to(site_url("admin/orders/view/".$param2));
                 } else {
                     $page_data["orders"] = $this->OrdersModel->orderBy("id", "DESC")->get()->getResultArray();
                     $view = "admin";
@@ -350,7 +654,7 @@ class Admin extends BaseController
                     $data["productId"] = $this->request->getPost("productId");
                     $data["rating"] = $this->request->getPost("rating");
                     $data["review"] = $this->request->getPost("review");
-                    $data["status"] = $this->request->getPost("status");
+                    $data["status"] = (int) $this->request->getPost("status");
                     $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
 
                     $create = $this->ReviewModel->insert($data);
@@ -365,7 +669,7 @@ class Admin extends BaseController
                 } else if ($param1 == "update") {
                     $data["rating"] = $this->request->getPost("rating");
                     $data["review"] = $this->request->getPost("review");
-                    $data["status"] = $this->request->getPost("status");
+                    $data["status"] = (int) $this->request->getPost("status");
 
                     $update = $this->db->table("productreviews")->where("id", $param2)->update($data);
                     return redirect()->to("admin/reviews");
@@ -391,14 +695,14 @@ class Admin extends BaseController
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "view") {
                     $view = "admin";
-                    $page_data["page_title"] = "View Requirements";
+                    $page_data["page_title"] = "View Pre-Orders";
                     $page_data["page_name"] = "requirements-view";
                     $page_data["requirement"] = $this->CustomModel->where("id", $param2)->get()->getRowArray();
                     
                     return view($view . "/index", $page_data);
                 } else {
                     $view = "admin";
-                    $page_data["page_title"] = "Requirements";
+                    $page_data["page_title"] = "Pre-Orders";
                     $page_data["page_name"] = "requirements";
                     $page_data["requirements"] = $this->CustomModel->findAll();
 
@@ -580,6 +884,9 @@ class Admin extends BaseController
                     $data["value"] = $this->request->getPost("youtubeLink");
                     $this->db->table("settings")->where("key", "youtubeLink")->update($data);
 
+                    $data["value"] = $this->request->getPost("tiktokLink");
+                    $this->db->table("settings")->where("key", "tiktokLink")->update($data);
+
                     return redirect()->to("admin/social-links");
                 } else {
                     $view = "admin";
@@ -674,7 +981,7 @@ class Admin extends BaseController
                     return redirect()->to("admin/countries");
                 } else if ($param1 == "edit") {
                     $view = "admin";
-                    $page_data["page_title"] = "Edit Review";
+                    $page_data["page_title"] = "Edit Country";
                     $page_data["page_name"] = "countries-edit";
                     $page_data["country"] = $this->CountriesModel->where("id", $param2)->get()->getRowArray();
                     
@@ -703,12 +1010,129 @@ class Admin extends BaseController
         }
     }
 
+    public function shipping($param1="", $param2="", $param3="")
+    {
+        if ($this->session->get("logged_in") == true) {
+            if ($this->session->get("userRole") === "1") {
+                if ($param1 == "country") {
+                    if ($param2 == "add") {
+                        $view = "admin";
+                        $page_data["page_title"] = "Add Country";
+                        $page_data["page_name"] = "shipping-country-add";
+                        
+                        return view($view . "/index", $page_data);
+                    } else if ($param2 == "create") {
+                        $data["country"] = $this->request->getPost("country");
+                        $data["location"] = $this->request->getPost("location");
+                        $data["status"] = $this->request->getPost("status");
+                        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                        $create = $this->ShippingCountryModel->insert($data);
+                        return redirect()->to("admin/shipping/country");
+                    } else if ($param2 == "edit") {
+                        $view = "admin";
+                        $page_data["page_title"] = "Edit Country";
+                        $page_data["page_name"] = "shipping-country-edit";
+                        $page_data["country"] = $this->ShippingCountryModel->where("id", $param3)->get()->getRowArray();
+                        
+                        return view($view . "/index", $page_data);
+                    } else if ($param2 == "update") {
+                        $data["country"] = $this->request->getPost("country");
+                        $data["location"] = $this->request->getPost("location");
+                        $data["status"] = $this->request->getPost("status");
+                        $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                        $update = $this->db->table("shippingcountry")->where("id", $param3)->update($data);
+                        return redirect()->to("admin/shipping/country");
+                    } else if ($param2 == "delete") {
+                        $delete = $this->db->table("shippingcountry")->where("id", $param3)->delete();
+                        return redirect()->to("admin/shipping/country");
+                    } else {
+                        $view = "admin";
+                        $page_data["page_title"] = "Shipping Countries";
+                        $page_data["page_name"] = "shipping-country";
+                        $page_data["shippingCountry"] = $this->ShippingCountryModel->findAll();
+
+                        return view($view . "/index", $page_data);
+                    }
+                } else if ($param1 == "price") {
+                    if ($param2 == "add") {
+                        $view = "admin";
+                        $page_data["page_title"] = "Add Shipping";
+                        $page_data["page_name"] = "shipping-price-add";
+                        
+                        return view($view . "/index", $page_data);
+                    } else if ($param2 == "create") {
+                        $data["name"] = $this->request->getPost("name");
+                        $data["location"] = $this->request->getPost("location");
+                        $data["country"] = $this->request->getPost("country");
+                        $data["minimum"] = $this->request->getPost("minimum");
+                        $data["maximum"] = $this->request->getPost("maximum");
+                        $data["price"] = $this->request->getPost("price");
+                        $data["status"] = $this->request->getPost("status");
+                        $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                        $create = $this->ShippingModel->insert($data);
+                        return redirect()->to("admin/shipping/price");
+                    } else if ($param2 == "edit") {
+                        $view = "admin";
+                        $page_data["page_title"] = "Edit Shipping";
+                        $page_data["page_name"] = "shipping-price-edit";
+                        $page_data["shipping"] = $this->ShippingModel->where("id", $param3)->get()->getRowArray();
+                        
+                        return view($view . "/index", $page_data);
+                    } else if ($param2 == "update") {
+                        $data["name"] = $this->request->getPost("name");
+                        $data["country"] = $this->request->getPost("country");
+                        $data["minimum"] = $this->request->getPost("minimum");
+                        $data["maximum"] = $this->request->getPost("maximum");
+                        $data["price"] = $this->request->getPost("price");
+                        $data["status"] = $this->request->getPost("status");
+                        $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
+
+                        $update = $this->db->table("shipping")->where("id", $param3)->update($data);
+                        return redirect()->to("admin/shipping/price");
+                    } else if ($param2 == "delete") {
+                        $delete = $this->db->table("shipping")->where("id", $param3)->delete();
+                        return redirect()->to("admin/shipping/price");
+                    } else if ($param2 == "countries") {
+                        $location = $this->request->getPost("location");
+
+                        $countries = $this->ShippingCountryModel->where(array("location" => $location, "status" => 1))->get()->getResultArray();
+
+                        echo json_encode($countries);
+                    } else {
+                        $view = "admin";
+                        $page_data["page_title"] = "Shipping Price";
+                        $page_data["page_name"] = "shipping-price";
+                        $page_data["shipping"] = $this->ShippingModel->findAll();
+                        $page_data["shippingCountry"] = $this->ShippingCountryModel->findAll();
+
+                        return view($view . "/index", $page_data);
+                    }
+                } else {
+                    $view = "admin";
+                    $page_data["page_title"] = "Shipping";
+                    $page_data["page_name"] = "shipping";
+                    $page_data["shipping"] = $this->ShippingModel->findAll();
+                    $page_data["shippingCountry"] = $this->ShippingCountryModel->findAll();
+
+                    return view($view . "/index", $page_data);
+                }
+            } else {
+                return redirect()->to(site_url());
+            }
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+
     public function privacyPolicy($param1="")
     {
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "update") {
-                    $data["value"] = json_encode($this->request->getPost("privacyPolicy"));
+                    $data["value"] = base64_encode($this->request->getPost("privacyPolicy"));
                     $this->db->table("settings")->where("key", "privacyPolicy")->update($data);
 
                     return redirect()->to("admin/privacy-policy");
@@ -732,7 +1156,7 @@ class Admin extends BaseController
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "update") {
-                    $data["value"] = json_encode($this->request->getPost("terms"));
+                    $data["value"] = base64_encode($this->request->getPost("terms"));
                     $this->db->table("settings")->where("key", "terms")->update($data);
 
                     return redirect()->to("admin/terms");
@@ -756,7 +1180,7 @@ class Admin extends BaseController
         if ($this->session->get("logged_in") == true) {
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "update") {
-                    $data["value"] = json_encode($this->request->getPost("refundPolicy"));
+                    $data["value"] = base64_encode($this->request->getPost("refundPolicy"));
                     $this->db->table("settings")->where("key", "refundPolicy")->update($data);
 
                     return redirect()->to("admin/refund-policy");
@@ -783,6 +1207,34 @@ class Admin extends BaseController
         if (empty($text))
         return 'n-a';
         return $text;
+    }
+
+    public function testpage()
+    {
+        $categories = [1,2];
+        $attributes = array();
+        $arrayMerge = array();
+
+        foreach ($categories as $key => $category) {
+            $variants = $this->db->table("productattributesvariants")->where("category", $category)->get()->getResultArray();
+            // 0 => 1,3
+            // 1 => 2,4
+            // 0 => 1 2, 1 4, 3 2, 3 4
+            array_push($attributes, $variants);
+        }
+
+        // $arr0 = $attributes[0];
+        // $arr1 = $attributes[1];
+
+        // for ($i=0; $i < count($arr0); $i++) { 
+        //     for ($j=0; $j < count($arr1); $j++) { 
+        //         $tempArr = array($arr0[$i], $arr1[$j]);
+        //         array_push($arrayMerge, $tempArr);
+        //     }
+        // }
+        echo "<pre>";
+        print_r($attributes);
+        echo "</pre>";
     }
 
 }

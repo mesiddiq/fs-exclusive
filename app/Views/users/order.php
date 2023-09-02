@@ -66,11 +66,11 @@
                 <div class="row">
                     <div class="col-4 invoice-for mt-4">
                         <h2 class="mb-10">Order ID</h2>
-                        <h3>#FS<?php echo date("dmy", $order["createdAt"]). $order["id"]; ?></h3>
+                        <h3><?php echo $order["paymentOrderId"]; ?></h3>
                         
                     </div>
-                    <div class="col-4 invoice-logo">
-                        <img class="img-fluid py-3" src="<?php echo site_url('assets/img/logo.png'); ?>" width="120px">
+                    <div class="col-4 invoice-logo mt-3">
+                        <img class="img-fluid py-3" src="<?php echo site_url('assets/img/logo.png'); ?>" width="150px">
                     </div>
                     <div class="col-4 invoice-date mt-4 pt-2">
                         <p><span>Order Date:</span> <?php echo date("d-M-Y", $order["createdAt"]); ?></p>
@@ -81,25 +81,43 @@
                 $user = $this->db->table("users")->where("id", $order["userId"])->get()->getRowArray();
                 $address = $this->db->table("address")->where("id", $order["addressId"])->get()->getRowArray();
                 ?>
-                <div class="address-item">
-                    <p class="text-sm mb-0">To,</p>
-                    <h5 class="font-weight-bold"><?php echo $address["name"]; ?></h5>
-                    <p class="text-sm">
-                        <?php
-                        echo $address["address"];
-                        if ($address["address2"] != NULL) {
-                            echo ", " . $address["address2"] . ", ";
-                        } ?>
-                        <br>
-                        <?php echo $address["city"] . ", " . $address["state"] . " - " . $address["zipcode"]; ?>
-                    </p>
-                    <p class="text-sm">
-                        <span class="text-medium">Email:</span>
-                        <?php echo $address["email"]; ?>
-                        <br>
-                        <span class="text-medium">Contact:</span>
-                        <?php echo $address["contact"]; ?>
-                    </p>
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <div class="address-item">
+                            <p class="text-sm text-dark font-weight-bolder mb-0">To,</p>
+                            <h5 class="text-dark font-weight-bold"><?php echo $address["name"]; ?></h5>
+                            <p class="text-sm">
+                                <?php
+                                echo $address["address"] . ",";
+                                if ($address["address2"] != NULL) {
+                                    echo $address["address2"] . ", ";
+                                } ?>
+                                <br>
+                                <?php echo $address["city"] . ", " . $address["state"] . " - " . $address["zipcode"]; ?>
+                            </p>
+                            <p class="text-sm">
+                                <span class="text-dark"><strong>Email:</strong></span>
+                                <?php echo $address["email"]; ?>
+                                <br>
+                                <span class="text-dark"><strong>Contact:</strong></span>
+                                <?php echo $address["contact"]; ?>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 text-lg-right">
+                        <div class="address-item pb-5">
+                            <h5 class="text-dark font-weight-bold mt-4">Order Status</h5>
+                            <?php if ($order["orderStatus"] == 1) { ?>
+                            <span class="rounded px-2 py-2 badge badge-info">Processing</span>
+                            <?php } elseif ($order["orderStatus"] == 2) { ?>
+                            <span class="rounded px-2 py-2 badge badge-warning text-white">Shipped</span>
+                            <?php } elseif ($order["orderStatus"] == 3) { ?>
+                            <span class="rounded px-2 py-2 badge badge-success">Delivered</span>
+                            `<?php } elseif ($order["orderStatus"] == 4) { ?>
+                            <span class="rounded px-2 py-2 badge badge-danger">Returned</span>
+                            <?php } ?>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive">
@@ -115,10 +133,21 @@
                         <?php
                         foreach (json_decode($order["products"]) as $key => $product):
                         $productInfo = $this->db->table("products")->where("id", $product->productId)->get()->getRowArray();
+                        
+                        if ($product->productType == "2") {
+                            $size = $this->db->table("productattributesvariants")->where("id", $product->productSize)->get()->getRow()->name;
+                            $color = $this->db->table("productattributesvariants")->where("id", $product->productColor)->get()->getRow()->name;
+                        }
                         ?>
                         <tr>
                             <td><?php echo $key+1; ?></td>
-                            <td><?php echo $productInfo["name"] . " x " . $product->productQty; ?></td>
+                            <td>
+                                <?php echo $productInfo["name"] . " x " . $product->productQty; ?>
+                                <?php if ($product->productType == "2"): ?>
+                                <br>
+                                <small><em>Size: <?php echo $size; ?> Color: <?php echo $color; ?></em></small>
+                                <?php endif; ?>
+                            </td>
                             <td><?php echo getCurrency($order["country"]) . $product->productPrice; ?></td>
                         </tr>
                         <?php endforeach; ?>
@@ -129,6 +158,15 @@
                             </td>
                             <td>
                                 <h6 class="text-sm text-bold"><?php echo getCurrency($order["country"]) . $order["subtotal"]; ?></h6>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <h6 class="text-sm text-medium">Shipping</h6>
+                            </td>
+                            <td>
+                                <h6 class="text-sm text-bold"><?php echo getCurrency($order["country"]) . $order["shipping"]; ?></h6>
                             </td>
                         </tr>
                         <tr>

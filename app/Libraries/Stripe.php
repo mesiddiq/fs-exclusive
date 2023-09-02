@@ -9,45 +9,67 @@ class Stripe {
     public function createPayment($amount, $email)
     {
         $stripe = new \Stripe\StripeClient(
-            'sk_test_51MErykA6QzLKCQBYOw1expTp7OaLDmvooaibiEqeNCRGLr335i3WYs7xvcgwLbLnk8ZobgHdwYyPTJnZcf7FkgD200MElqZMKs'
+            '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'
         );
         
-        $ch = $stripe->prices->create([
-            'unit_amount' => (int) $amount * 100,
-            'currency' => 'gbp',
-            "product_data" => [
-                "name" => "Pay for FS Exclusive",
-            ],
-        ]);
+        // $ch = $stripe->prices->create([
+        //     'unit_amount' => (int) $amount * 100,
+        //     'currency' => 'gbp',
+        //     "product_data" => [
+        //         "name" => "Pay for FS Exclusive",
+        //     ],
+        // ]);
 
         // This is your test secret API key.
-        \Stripe\Stripe::setApiKey('sk_test_51MErykA6QzLKCQBYOw1expTp7OaLDmvooaibiEqeNCRGLr335i3WYs7xvcgwLbLnk8ZobgHdwYyPTJnZcf7FkgD200MElqZMKs');
-
-        header('Content-Type: application/json');
+        // \Stripe\Stripe::setApiKey('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');
 
         $YOUR_DOMAIN = site_url();
+        // $response = $stripe->checkout->sessions->create([
+        //     // 'customer_email' => $email,
+        //     'line_items' => [[
+        //     //     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
+        //     //     'price' => $ch->id,
+        //     //     'quantity' => 1,
+        //         'price_data' => [
+        //             'unit_amount' => (int) $amount * 100,
+        //             'currency' => 'gbp',
+        //             "product_data" => [
+        //                 "name" => "Pay for FS Exclusive",
+        //             ],
+        //         ],
+        //         'quantity' => 1,
+        //     ]],
+        //     // 'phone_number_collection' => [
+        //     //     'enabled' => true,
+        //     // ],
+        //     'mode' => 'payment',
+        //     'success_url' => $YOUR_DOMAIN . 'paymentStatus?payment=stripe&session_id={CHECKOUT_SESSION_ID}',
+        //     'cancel_url' => $YOUR_DOMAIN . 'checkout',
+        // ]);
 
-        $response = \Stripe\Checkout\Session::create([
-            'customer_email' => $email,
+        $response = $stripe->checkout->sessions->create([
             'line_items' => [[
-                # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => $ch->id,
+                'price_data' => [
+                    'currency' => 'gbp',
+                    'product_data' => [
+                        "name" => "Pay for FS Exclusive",
+                    ],
+                    'unit_amount' => floatval($amount) * 100,
+                ],
                 'quantity' => 1,
             ]],
-            'phone_number_collection' => [
-                'enabled' => true,
-            ],
             'mode' => 'payment',
             'success_url' => $YOUR_DOMAIN . 'paymentStatus?payment=stripe&session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => $YOUR_DOMAIN . 'checkout',
         ]);
 
         return $response;
+
     }
 
     public function verifyPayment($session_id = "")
     {
-        $stripe = new \Stripe\StripeClient('sk_test_51MErykA6QzLKCQBYOw1expTp7OaLDmvooaibiEqeNCRGLr335i3WYs7xvcgwLbLnk8ZobgHdwYyPTJnZcf7FkgD200MElqZMKs');
+        $stripe = new \Stripe\StripeClient('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');
 
         try {
           $session = $stripe->checkout->sessions->retrieve($session_id);

@@ -10,6 +10,6 @@ class ReviewModel extends Model
     protected $primaryKey = "id";
     protected $useAutoIncrement = true;
     protected $returnType     = "array";
-    protected $allowedFields = ["userId", "productId", "rating", "review", "createdAt"];
+    protected $allowedFields = ["userId", "productId", "rating", "review", "status", "createdAt"];
 
 }

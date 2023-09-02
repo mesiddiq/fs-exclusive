@@ -38,6 +38,7 @@
                                                 <th><h6>Category</h6></th>
                                                 <th><h6>Country</h6></th>
                                                 <th><h6>Price</h6></th>
+                                                <th><h6>Quantity</h6></th>
                                                 <th><h6>Status</h6></th>
                                                 <th class="text-center"><h6>Action</h6></th>
                                             </tr>
@@ -60,6 +61,20 @@
                                                 <?php else: ?>
                                                 <td class="align-middle"><p><?php echo $country["currency"] . $product["price"]; ?></p></td>
                                                 <?php endif; ?>
+                                                <td class="text-center align-middle">
+                                                    <?php if ($product["type"] == 1): ?>
+                                                    <p><?php echo $product["quantity"]; ?></p>
+                                                    <?php
+                                                    elseif ($product["type"] == 2):
+                                                    $quantity = 0;
+                                                    $productVariants = $this->db->table("productvariants")->where("productId", $product["id"])->get()->getResultArray();
+
+                                                    foreach ($productVariants as $key => $productVariant):
+                                                    $quantity += $productVariant["quantity"];
+                                                    endforeach; ?>
+                                                    <p><?php echo $quantity; ?></p>
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td class="align-middle">
                                                     <?php if ($product["status"] == 0) { ?>
                                                     <span class="status-btn warning-btn">Pending</span>
@@ -79,17 +94,6 @@
                                                                 <i class="lni lni-trash-can"></i>
                                                             </button>
                                                         </a>
-                                                        <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="lni lni-more-alt"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                                                            <li class="dropdown-item">
-                                                                <a href="#0" class="text-gray">Mark as Read</a>
-                                                            </li>
-                                                            <li class="dropdown-item">
-                                                                <a href="#0" class="text-gray">Reply</a>
-                                                            </li>
-                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>

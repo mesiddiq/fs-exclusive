@@ -10,6 +10,6 @@ class ProductModel extends Model
     protected $primaryKey = "id";
     protected $useAutoIncrement = true;
     protected $returnType     = "array";
-    protected $allowedFields = ["name", "slug", "shortDescription", "description", "category", "subCategory", "country", "isDiscount", "price", "discountedPrice", "isTopProduct", "isOutOfStock", "images", "status", "author", "createdAt", "updatedAt"];
+    protected $allowedFields = ["name", "slug", "shortDescription", "description", "type", "category", "subCategory", "country", "isDiscount", "price", "discountedPrice", "quantity", "isOutOfStock", "isTopProduct", "weight", "sizeChart", "status", "author", "createdAt", "updatedAt"];
 
 }

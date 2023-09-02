@@ -31,7 +31,7 @@
                                                 <select name="userId">
                                                     <option value="">Select</option>
                                                     <?php foreach ($users as $key => $user): ?>
-                                                    <option value="<?php echo $user['id']; ?>"><?php echo $user["name"]; ?></option>
+                                                    <option value="<?php echo $user['id']; ?>"><?php echo $user["email"]; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -74,16 +74,16 @@
                                     <div class="col-12 mb-4">
                                         <label style="font-size: 14px; font-weight: 500; color: #262d3f; display: block; margin-bottom: 10px;">Status</label>
                                         <div class="form-check form-check-inline radio-style mb-20">
-                                            <input class="form-check-input" type="radio" value="0" name="status" checked>
-                                            <label class="form-check-label" for="status">Pending</label>
+                                            <input class="form-check-input" type="radio" value="0" name="status" id="status0" checked>
+                                            <label class="form-check-label" for="status0">Pending</label>
                                         </div>
                                         <div class="form-check form-check-inline radio-style mb-20">
-                                            <input class="form-check-input" type="radio" value="1" name="status">
-                                            <label class="form-check-label" for="status">Published</label>
+                                            <input class="form-check-input" type="radio" value="1" name="status" id="status1">
+                                            <label class="form-check-label" for="status1">Publish</label>
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <button class="main-btn primary-btn btn-hover">Update</button>
+                                        <button class="main-btn primary-btn btn-hover">Submit</button>
                                     </div>
                                 </div>
                             </form>

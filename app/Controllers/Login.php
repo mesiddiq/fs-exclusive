@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Codeigniter\Controller;
 use App\Models\UserModel;
 use App\Models\EmailModel;
+use App\Models\CartModel;
 
 class Login extends BaseController
 {
@@ -12,6 +13,7 @@ class Login extends BaseController
     {
         $this->UserModel = new UserModel();
         $this->EmailModel = new EmailModel();
+        $this->CartModel = new CartModel();
     }
 
     public function index()
@@ -30,6 +32,25 @@ class Login extends BaseController
             $this->session->set("userEmail", $user["email"]);
             $this->session->set("userImage", $user["image"]);
             $this->session->set("userRole", $user["role"]);
+            
+            $sessCartItems = $this->session->get("cartItems");
+            
+            if ($sessCartItems != NULL) {
+                foreach ($sessCartItems as $key => $value) {
+                    $this->db->table("cart")->where("tempId", $value["tempId"])->update(array("userId" => $this->session->get("userId")));
+                    // $this->CartModel->insert(array(
+                    //     "userId" => $this->session->get("userId"),
+                    //     "productId" => $value["productId"],
+                    //     "productType" => $value["productType"],
+                    //     "productSize" => $value["productSize"],
+                    //     "productColor" => $value["productColor"],
+                    //     "productQty" => $value["productQty"],
+                    //     "productPrice" => $value["productPrice"],
+                    //     "country" => $value["country"],
+                    //     "createdAt" => $value["createdAt"],
+                    // ));
+                }
+            }
             echo true;
         }
         
@@ -53,11 +74,28 @@ class Login extends BaseController
             if ($register) {
                 $sendRegisterMail = $this->EmailModel->sendRegisterMail($data['name'], $data['email']);
                 $user = $this->UserModel->where('email', $data['email'])->first();
+
                 $this->session->set("logged_in", true);
                 $this->session->set("userId", $user["id"]);
                 $this->session->set("userName", $user["name"]);
                 $this->session->set("userEmail", $user["email"]);
                 $this->session->set("userRole", $user["role"]);
+
+                $sessCartItems = $this->session->get("cartItems");
+            
+                if ($sessCartItems != NULL) {
+                    foreach ($sessCartItems as $key => $value) {
+                        // $this->CartModel->insert(array(
+                        //     "userId" => $this->session->get("userId"),
+                        //     "productId" => $value["productId"],
+                        //     "productQty" => $value["productQty"],
+                        //     "productPrice" => $value["productPrice"],
+                        //     "country" => $value["country"],
+                        //     "createdAt" => $value["createdAt"],
+                        // ));
+                        $this->db->table("cart")->where("tempId", $value["tempId"])->update(array("userId" => $this->session->get("userId")));
+                    }
+                }
                 echo true;
             } else {
                 echo "Wrong";
@@ -192,6 +230,21 @@ class Login extends BaseController
                     $this->session->set("userRole", $checkEmail["role"]);
                 }
 
+                $sessCartItems = $this->session->get("cartItems");
+            
+                if ($sessCartItems != NULL) {
+                    foreach ($sessCartItems as $key => $value) {
+                        $this->CartModel->insert(array(
+                            "userId" => $this->session->get("userId"),
+                            "productId" => $value["productId"],
+                            "productQty" => $value["productQty"],
+                            "productPrice" => $value["productPrice"],
+                            "country" => $value["country"],
+                            "createdAt" => $value["createdAt"],
+                        ));
+                    }
+                }
+
                 return redirect()->to(site_url());
             }
         }
@@ -199,55 +252,76 @@ class Login extends BaseController
 
     public function facebook()
     {
-        require_once dirname(dirname(__dir__)).'/vendor/autoload.php';
+        require_once APPPATH."/vendor/autoload.php";
 
         $facebook = new \Facebook\Facebook([
-          'app_id'      => getSettings('facebook_app_id'),
-          'app_secret'     => getSettings('facebook_secret'),
-          'default_graph_version'  => 'v2.10'
+          "app_id"      => "2956734491288416",
+          "app_secret"     => "c1116599cd7ea1551cd9ea9d2e641940",
+          "default_graph_version"  => "v2.10"
         ]);
 
-        $facebookOutput = '';
+        $facebookOutput = "";
 
         $facebookHelper = $facebook->getRedirectLoginHelper();
 
-        if (isset($_GET['code'])) {
+        if (isset($_GET["code"])) {
 
-            if (isset($_SESSION['access_token'])) {
-                $accessToken = $_SESSION['access_token'];
+            if (isset($_SESSION["access_token"])) {
+                $accessToken = $_SESSION["access_token"];
             } else {
                 $accessToken = $facebookHelper->getAccessToken();
-                $_SESSION['access_token'] = $accessToken;
-                $facebook->setDefaultAccessToken($_SESSION['access_token']);
+                $_SESSION["access_token"] = $accessToken;
+                $facebook->setDefaultAccessToken($_SESSION["access_token"]);
             }
-
-            // $this->session->set_userdata('user_id', '');
-            // $this->session->set_userdata('role_id', '');
-            // $this->session->set_userdata('student_login', '');
-            // $this->session->set_userdata('email', '');
-            // $this->session->set_userdata('logged_in', false);
-            // $this->session->set_userdata('role', '');
-            // $this->session->set_userdata('name', '');
 
             $graphResponse = $facebook->get("/me?fields=name,email", $accessToken);
             $facebookData = $graphResponse->getGraphUser();
 
-            if (!empty($facebookData['id']))
-            {
-                $_SESSION['user_id'] = $facebookData['id'];
-            }
-            if (!empty($facebookData['name']))
-            {
-                $_SESSION['name'] = $facebookData['name'];
-            }
-            if (!empty($facebookData['email'])) {
-                // $user_id = $this->user_model->register_facebook_user($facebookData['email'], $facebookData['id'], $facebookData['name']);
+            $checkEmail = $this->UserModel->where("email", $facebookData["email"])->first();
+
+            if ($checkEmail == NULL) {
+                $data["name"] = ucfirst($facebookData["name"]);
+                $data["email"] = $facebookData["email"];
+                $data["contact"] = "";
+                $data["password"] = "";
+                $data["role"] = 3;
+                $data["status"] = 1;
+                $data["verificationCode"] = "";
+                $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
+                
+                $register = $this->UserModel->insert($data);
+                $sendRegisterMail = $this->EmailModel->sendRegisterMail($data["name"], $data["email"]);
+                
+                $user = $this->UserModel->where("email", $data["email"])->first();
+                
                 $this->session->set("logged_in", true);
-                // $this->session->set("userId", $user["id"]);
-                $this->session->set("userName", $facebookData["name"]);
-                $this->session->set("userEmail", $facebookData["email"]);
-                $this->session->set("userImage", "http://graph.facebook.com/".$facebookData['id']."/picture");
-                // $this->session->set("userRole", $user["role"]);
+                $this->session->set("userId", $user["id"]);
+                $this->session->set("userName", $user["name"]);
+                $this->session->set("userEmail", $user["email"]);
+                $this->session->set("userImage", "http://graph.facebook.com/".$facebookData["id"]."/picture");
+                $this->session->set("userRole", $user["role"]);
+            } else {
+                $this->session->set("logged_in", true);
+                $this->session->set("userId", $checkEmail["id"]);
+                $this->session->set("userName", $checkEmail["name"]);
+                $this->session->set("userEmail", $checkEmail["email"]);
+                $this->session->set("userImage", "http://graph.facebook.com/".$facebookData["id"]."/picture");
+                $this->session->set("userRole", $checkEmail["role"]);
+            }
+
+            $sessCartItems = $this->session->get("cartItems");
+        
+            if ($sessCartItems != NULL) {
+                foreach ($sessCartItems as $key => $value) {
+                    $this->CartModel->insert(array(
+                        "userId" => $this->session->get("userId"),
+                        "productId" => $value["productId"],
+                        "productQty" => $value["productQty"],
+                        "productPrice" => $value["productPrice"],
+                        "country" => $value["country"],
+                        "createdAt" => $value["createdAt"],
+                    ));
+                }
             }
 
             return redirect()->to(site_url());
@@ -265,6 +339,12 @@ class Login extends BaseController
         unset($_SESSION["userRole"]);
         unset($_SESSION["userImage"]);
         unset($_SESSION["productId"]);
+        if (isset($_SESSION["access_token"])) {
+            unset($_SESSION["access_token"]);
+        }
+        if (isset($_SESSION["FBRLH_state"])) {
+            unset($_SESSION["FBRLH_state"]);
+        }
         return redirect()->to(site_url());
     }
 

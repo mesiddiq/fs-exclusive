@@ -6,10 +6,10 @@ $this->session = \Config\Services::session();
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FS Exclusive</title>
+    <title>FS Exclusive | From Dubai To Your Doorsteps</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta name="keywords" content="">
+    <meta name="description" content="We are online based in Malaysia and United Kingdom. We take pride Alhamdulillah for strong customers supporting us not only in Malaysia, but also across UK, Singapore and Brunei. Our products are made to last. We have wide variety of styles and colours to choose from. We can ship them right to you, wherever you are in the world.">
 
     <!-- Favicon -->
     <link href="<?php echo site_url('assets/img/favicon.png'); ?>" rel="icon">
@@ -60,22 +60,22 @@ $this->session = \Config\Services::session();
 
     <div class="container-fluid py-2 px-xl-5">
         <div class="row justify-content-between">
-            <div class="col-md-8 order-md-last">
+            <div class="col-md-9">
                 <div class="row">
-                    <div class="col-4 col-md-6 text-center">
-                        <a href="<?php echo site_url(); ?>" class="text-decoration-none"><img src="<?php echo site_url('assets/img/logo.png'); ?>"></a>
+                    <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-start">
+                        <a href="<?php echo site_url(); ?>"><img class="img-fluid py-3" src="<?php echo site_url('uploads/logo.png'); ?>" width="120px"></a>
                     </div>
-                    <div class="col-md-6 d-md-flex justify-content-end my-auto">
-                        <form action="search-result.php" class="searchform order-lg-last">
+                    <div class="col-md-8 d-md-flex justify-content-center my-auto">
+                        <form method="GET" action="<?php echo site_url('search'); ?>" class="searchform order-lg-last">
                             <div class="form-group d-flex">
-                                <input type="text" class="form-control pl-3" placeholder="Search" style="height: auto;">
+                                <input type="text" class="form-control pl-3" name="keyword" placeholder="Search" style="height: auto;">
                                 <button type="submit" placeholder="" class="form-control search"><span class="fa fa-search"></span></button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="col-8 col-md-4 d-flex my-auto justify-content-start py-3">
+            <div class="col-12 col-md-3 d-flex my-auto justify-content-center justify-content-lg-end py-3">
                 <a href="javascript:;" class="btn border mr-1">
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
@@ -96,6 +96,7 @@ $this->session = \Config\Services::session();
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav m-auto">
                     <a href="<?php echo site_url(); ?>" class="nav-item nav-link active">Home</a>
+                    <a href="<?php echo site_url('about'); ?>" class="nav-item nav-link">About</a>
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link dropdown-toggle" data-toggle="dropdown">Categories</a>
                     </div>
@@ -127,37 +128,70 @@ $this->session = \Config\Services::session();
     </div>
     <!-- Carousel End -->
 
-    <!-- ========== footer start =========== -->
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6 order-last order-md-first">
-                    <div class="copyright text-center text-md-start">
-                        <p class="text-sm">
-                            Designed and Developed by
-                            <a
-                                href="https://sparkztechin.com/"
-                                rel="nofollow"
-                                target="_blank"
-                                >
-                                Sparkztechin
-                            </a>
-                        </p>
-                    </div>
+    <!-- Footer Start -->
+    <div class="container-fluid bg-secondary text-dark">
+        <div class="row px-xl-5 pt-5 text-center">
+            <div class="col-lg-12 mb-5 pr-3 pr-xl-5">
+                <a href="<?php echo site_url(); ?>"><img class="img-fluid py-3" src="<?php echo site_url('uploads/footer_logo.png'); ?>" width="140px"></a>
+                <div class="align-items-center mt-3">
+                    <?php if (getSettings("facebookLink") != ""): ?>
+                    <a class="text-dark px-2" href="<?php echo getSettings("facebookLink"); ?>" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("twitterLink") != ""): ?>
+                    <a class="text-dark px-2" href="<?php echo getSettings("twitterLink"); ?>" target="_blank">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("instagramLink") != ""): ?>
+                    <a class="text-dark px-2" href="<?php echo getSettings("instagramLink"); ?>" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("linkedinLink") != ""): ?>
+                    <a class="text-dark px-2" href="<?php echo getSettings("linkedinLink"); ?>" target="_blank">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("youtubeLink") != ""): ?>
+                    <a class="text-dark px-2" href="<?php echo getSettings("youtubeLink"); ?>" target="_blank">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <?php endif; ?>
+                    <?php if (getSettings("tiktokLink") != ""): ?>
+                    <a class="text-dark px-2" href="<?php echo getSettings("tiktokLink"); ?>" target="_blank">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <?php endif; ?>
                 </div>
-                <!-- end col-->
-                <div class="col-md-6">
-                    <div class="terms d-flex justify-content-center justify-content-md-end">
-                        <a href="#0" class="text-sm">Term & Conditions</a>
-                        <a href="#0" class="text-sm ml-15">Privacy & Policy</a>
-                    </div>
+                <div class="align-items-center mt-3">
+                    <a class="text-dark px-2" href="<?php echo site_url('privacy-policy'); ?>">
+                        Privacy Policy
+                    </a>
+                    |
+                    <a class="text-dark px-2" href="<?php echo site_url('terms'); ?>">
+                        Terms of Service
+                    </a>
+                    |
+                    <a class="text-dark px-2" href="<?php echo site_url('refund-policy'); ?>">
+                        Refund Policy
+                    </a>
                 </div>
             </div>
-            <!-- end row -->
         </div>
-        <!-- end container -->
-    </footer>
-    <!-- ========== footer end =========== -->
+        <div class="row border-top border-light mx-xl-5 py-4">
+            <div class="col-md-6 px-xl-0">
+                <p class="mb-md-0 text-center text-md-left text-dark">
+                    &copy; <?php echo date("Y"); ?> <a class="text-dark font-weight-semi-bold" href="#">FS Exclusive</a> | All Rights Reserved<!-- | Designed by <a class="text-dark font-weight-semi-bold" href="https://sparkztechin.com" target="_blank">Sparkz Tech</a>-->
+                </p>
+            </div>
+            <div class="col-md-6 px-xl-0 text-center text-md-right">
+                <img class="img-fluid" src="<?php echo site_url('assets/img/payments.png'); ?>" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
     </main>
     <!-- ======== main-wrapper end =========== -->
 
@@ -171,13 +205,13 @@ $this->session = \Config\Services::session();
     <script src="<?php echo site_url('assets/js/main.js'); ?>"></script>
 
     <script type="text/javascript">
-        $(document).ready(function(){
-            if (navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(showLocation);
-            } else{ 
-                $('#location').html('Geolocation is not supported by this browser.');
-            }
-        });
+        // $(document).ready(function(){
+        //     if (navigator.geolocation){
+        //         navigator.geolocation.getCurrentPosition(showLocation);
+        //     } else{ 
+        //         $('#location').html('Geolocation is not supported by this browser.');
+        //     }
+        // });
 
         function showLocation(position){
             var latitude = position.coords.latitude;

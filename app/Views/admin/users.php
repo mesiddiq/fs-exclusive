@@ -54,7 +54,7 @@
                                                     <span class="status-btn success-btn">Verified</span>
                                                     <?php } ?>
                                                 </td>
-                                                <td class="text-center align-middle">
+                                                <td class="float-end align-middle">
                                                     <div class="action justify-content-end">
                                                         <a href="<?php echo site_url('admin/users/edit/'.$user['id']); ?>">
                                                             <button class="text-dark link-btn">
@@ -66,17 +66,6 @@
                                                                 <i class="lni lni-trash-can"></i>
                                                             </button>
                                                         </a>
-                                                        <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="lni lni-more-alt"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                                                            <li class="dropdown-item">
-                                                                <a href="#0" class="text-gray">Mark as Read</a>
-                                                            </li>
-                                                            <li class="dropdown-item">
-                                                                <a href="#0" class="text-gray">Reply</a>
-                                                            </li>
-                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>

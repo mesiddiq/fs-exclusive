@@ -10,6 +10,6 @@ class CartModel extends Model
     protected $primaryKey = "id";
     protected $useAutoIncrement = true;
     protected $returnType     = "array";
-    protected $allowedFields = ["userId", "productId", "productQty", "productPrice", "country", "createdAt"];
+    protected $allowedFields = ["tempId", "userId", "productId", "productType", "productSize", "productColor", "productQty", "productPrice", "country", "createdAt"];
 
 }

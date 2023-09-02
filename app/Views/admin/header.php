@@ -22,56 +22,6 @@
                                     <i class="lni lni-code-alt"></i>
                                 </button>
                             </a>
-                            <!-- notification start -->
-                            <div class="notification-box ml-15 d-none d-md-flex">
-                                <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="lni lni-alarm"></i>
-                                    <span>2</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
-                                    <li>
-                                        <a href="#0">
-                                            <div class="image">
-                                                <img src="<?php echo site_url('admin/images/lead/lead-6.png'); ?>" alt="" />
-                                            </div>
-                                            <div class="content">
-                                                <h6>
-                                                    John Doe
-                                                    <span class="text-regular">
-                                                        comment on a product.
-                                                    </span>
-                                                </h6>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consect etur adipiscing
-                                                    elit Vivamus tortor.
-                                                </p>
-                                                <!-- <span>10 mins ago</span> -->
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#0">
-                                            <div class="image">
-                                                <img src="<?php echo site_url('admin/images/lead/lead-1.png'); ?>" alt="" />
-                                            </div>
-                                            <div class="content">
-                                                <h6>
-                                                    Jonathon
-                                                    <span class="text-regular">
-                                                        like on a product.
-                                                    </span>
-                                                </h6>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consect etur adipiscing
-                                                    elit Vivamus tortor.
-                                                </p>
-                                                <!-- <span>10 mins ago</span> -->
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- notification end -->
                             <!-- profile start -->
                             <div class="profile-box ml-15">
                                 <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
@@ -92,20 +42,12 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
                                     <li>
-                                        <a href="#0">
+                                        <a href="<?php echo site_url('admin/users/edit/'.$this->session->get('userId')); ?>">
                                             <i class="lni lni-user"></i> View Profile
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#0">
-                                            <i class="lni lni-alarm"></i> Notifications
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#0"> <i class="lni lni-inbox"></i> Messages </a>
-                                    </li>
-                                    <li>
-                                        <a href="#0"> <i class="lni lni-cog"></i> Settings </a>
+                                        <a href="<?php echo site_url('admin/logo'); ?>"> <i class="lni lni-cog"></i> Settings </a>
                                     </li>
                                     <li>
                                         <a href="<?php echo site_url('logout'); ?>"> <i class="lni lni-exit"></i> Sign Out </a>

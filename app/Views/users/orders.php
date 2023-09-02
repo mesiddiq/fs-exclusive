@@ -53,11 +53,13 @@
                                 <span class="rounded px-2 py-2 badge badge-warning text-white">Shipped</span>
                                 <?php } elseif ($order["orderStatus"] == 3) { ?>
                                 <span class="rounded px-2 py-2 badge badge-success">Delivered</span>
+                                <?php } elseif ($order["orderStatus"] == 4) { ?>
+                                <span class="rounded px-2 py-2 badge badge-danger">Returned</span>
                                 <?php } ?>
                             </td>
                             <td class="text-center align-middle">
                                 <div class="action justify-content-end">
-                                    <a href="<?php echo site_url(strtolower('orders/view/' . $order['id'])); ?>" target="_blank">
+                                    <a href="<?php echo site_url(strtolower('orders/view/' . $order['paymentOrderId'])); ?>" target="_blank">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </div>

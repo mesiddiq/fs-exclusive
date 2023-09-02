@@ -10,6 +10,6 @@ class AddressModel extends Model
     protected $primaryKey = "id";
     protected $useAutoIncrement = true;
     protected $returnType     = "array";
-    protected $allowedFields = ["userId", "name", "email", "contact", "address", "address2", "city", "state", "country", "zipcode", "createdAt"];
+    protected $allowedFields = ["userId", "name", "email", "contact", "address", "address2", "city", "state", "country", "zipcode", "location", "createdAt", "updatedAt"];
 
 }
