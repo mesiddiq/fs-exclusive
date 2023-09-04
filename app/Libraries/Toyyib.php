@@ -9,7 +9,7 @@ class Toyyib {
     public function createBill($data = array(), $userData = array(), $addressData = array(), $orderID = "")
     {
         $createBill = array(
-            "userSecretKey" => "jkjfluz0-cny7-bnya-pnw6-af4rwas91z6k",
+            "userSecretKey" => getenv('TOYYIB_SECRET_KEY'),
             "categoryCode" => "es4o616f",
             "billName" => "FS Exclusive - " . $orderID,
             "billDescription" => "FS Exclusive website payment for ID " . $orderID,

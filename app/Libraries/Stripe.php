@@ -8,9 +8,7 @@ class Stripe {
 
     public function createPayment($amount, $email)
     {
-        $stripe = new \Stripe\StripeClient(
-            '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'
-        );
+        $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
         
         // $ch = $stripe->prices->create([
         //     'unit_amount' => (int) $amount * 100,
@@ -69,7 +67,7 @@ class Stripe {
 
     public function verifyPayment($session_id = "")
     {
-        $stripe = new \Stripe\StripeClient('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');
+        $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
 
         try {
           $session = $stripe->checkout->sessions->retrieve($session_id);
