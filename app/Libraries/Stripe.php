@@ -19,7 +19,7 @@ class Stripe {
         // ]);
 
         // This is your test secret API key.
-        // \Stripe\Stripe::setApiKey('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');
+        // \Stripe\Stripe::setApiKey('getenv('STRIPE_SECRET_KEY')');
 
         $YOUR_DOMAIN = site_url();
         // $response = $stripe->checkout->sessions->create([
