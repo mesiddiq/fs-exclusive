@@ -974,7 +974,7 @@
                         $("#cartCouponCode").parent().addClass("d-none");
                         $("#cartSubTotal").text(subtotal);
                         $("#cartDiscount").text(0);
-                        $("#cartTotal").text(subtotal);
+                        // $("#cartTotal").text(subtotal);
                     }
                 }
             });
