@@ -966,7 +966,7 @@
                         $("#cartCouponCode").text("PROMOCODE: " + coupon);
                         $("#cartSubTotal").text(couRes.subTotal);
                         $("#cartDiscount").text(couRes.discount);
-                        cartTotalText = "<del>" + subtotal + "</del>" + (couRes.subTotal - couRes.discount)
+                        cartTotalText = "<del style='opacity: 0.5;'>" + couRes.currency + "" + subtotal + "</del> " + couRes.currency + "" + (couRes.subTotal - couRes.discount)
                         $("#cartTotal").html(cartTotalText);
                     } else {
                         alert(couRes.message);
@@ -995,13 +995,14 @@
             method: "POST",
             url: site_url + "removeCoupon",
             success: function(recoRes) {
+                recoRes = JSON.parse(recoRes);
                 $("#cartCouponCode").parent().removeClass("d-flex");
                 $("#cartCouponCode").parent().addClass("d-none");
                 
                 if (currLoc == site_url + "cart") {
                     $("#cartSubTotal").text(subtotal);
                     $("#cartDiscount").text(0);
-                    $("#cartTotal").text(parseFloat(subtotal) + parseFloat(shipping));
+                    $("#cartTotal").text(recoRes.currency + "" + (parseFloat(subtotal) + parseFloat(shipping)));
                 } else if (currLoc == site_url + "checkout") {
                     $("[name='subtotal']").text(subtotal);
                     $("#shippingDiscount").text(0);

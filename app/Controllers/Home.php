@@ -57,7 +57,7 @@ class Home extends BaseController
             $this->session->set("countryName", $sessCountry["name"]);
             $this->session->set("countryCode", $sessCountry["code"]);
             $this->session->set("countryCurrency", $sessCountry["currency"]);
-            
+
             $this->session->set("isCoupon", false);
             $this->session->set("couponCode", "");
             $this->session->set("couponDiscount", 0);
@@ -717,6 +717,7 @@ class Home extends BaseController
                 $expiry = $coupon["expiry"];
                 $subTotal = 0;
                 $discount = 0;
+                $isDiscount = 0;
                 $price = 0;
 
                 $cart = $this->CartModel->where(array("userId" => $this->session->get("userId"), "country" => $this->session->get("countryId")))->get()->getResultArray();
@@ -752,8 +753,10 @@ class Home extends BaseController
                                 foreach ($productArr as $key => $productArr) {
                                     if ($productArr["isDiscount"] == 1) {
                                         $price = $productArr["discountedPrice"];
+                                        $isDiscount = 0;
                                     } else {
                                         $price = $productArr["price"];
+                                        $isDiscount = $productArr["price"];
                                     }
 
                                     if ($type == 1) {
@@ -761,7 +764,7 @@ class Home extends BaseController
                                             $discount += $value;
                                         }
                                     } else if ($type == 2) {
-                                        $discount += ($value * $price) / 100;
+                                        $discount += ($value * $isDiscount) / 100;
                                     }
                                 }
                             }
@@ -770,15 +773,17 @@ class Home extends BaseController
                             $this->session->set("couponCode", $code);
                             $this->session->set("couponDiscount", $discount);
                             
-                            echo json_encode(["status" => "success", "subTotal" => $subTotal, "discount" => $discount, "product" => $price, "message" => "Coupon Applied..!"]);
+                            echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "product" => $price, "message" => "Coupon Applied..!"]);
                         } else {
                             foreach ($cart as $key => $cart) {
                                 $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
                                 
                                 if ($product["isDiscount"] == 1) {
                                     $subTotal += $cart["productQty"] * $product["discountedPrice"];
+                                    $isDiscount += 0;
                                 } else {
                                     $subTotal += $cart["productQty"] * $product["price"];
+                                    $isDiscount += $cart["productQty"] * $product["price"];
                                 }
                             }
 
@@ -787,14 +792,14 @@ class Home extends BaseController
                                     $discount += $value;
                                 }
                             } else if ($type == 2) {
-                                $discount += ($value * $subTotal) / 100;
+                                $discount += ($value * $isDiscount) / 100;
                             }
 
                             $this->session->set("isCoupon", true);
                             $this->session->set("couponCode", $code);
                             $this->session->set("couponDiscount", $discount);
                             
-                            echo json_encode(["status" => "success", "subTotal" => $subTotal, "discount" => $discount, "product" => $cart, "message" => "Coupon Applied..!"]);
+                            echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "product" => $cart, "message" => "Coupon Applied..!"]);
                         }
                     }
                 } else {
@@ -819,8 +824,10 @@ class Home extends BaseController
                             foreach ($productArr as $key => $productArr) {
                                 if ($productArr["isDiscount"] == 1) {
                                     $price = $productArr["discountedPrice"];
+                                    $isDiscount = 0;
                                 } else {
                                     $price = $productArr["price"];
+                                    $isDiscount = $productArr["price"];
                                 }
 
                                 if ($type == 1) {
@@ -828,7 +835,7 @@ class Home extends BaseController
                                         $discount += $value;
                                     }
                                 } else if ($type == 2) {
-                                    $discount += ($value * $price) / 100;
+                                    $discount += ($value * $isDiscount) / 100;
                                 }
                             }
                         }
@@ -837,15 +844,17 @@ class Home extends BaseController
                         $this->session->set("couponCode", $code);
                         $this->session->set("couponDiscount", $discount);
                         
-                        echo json_encode(["status" => "success", "subTotal" => $subTotal, "discount" => $discount, "product" => $price, "message" => "Coupon Applied..!"]);
+                        echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "product" => $price, "message" => "Coupon Applied..!"]);
                     } else {
                         foreach ($cart as $key => $cart) {
                             $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
                             
                             if ($product["isDiscount"] == 1) {
                                 $subTotal += $cart["productQty"] * $product["discountedPrice"];
+                                $isDiscount += 0; 
                             } else {
                                 $subTotal += $cart["productQty"] * $product["price"];
+                                $isDiscount += $cart["productQty"] * $product["price"];
                             }
                         }
 
@@ -854,20 +863,20 @@ class Home extends BaseController
                                 $discount += $value;
                             }
                         } else if ($type == 2) {
-                            $discount += ($value * $subTotal) / 100;
+                            $discount += ($value * $isDiscount) / 100;
                         }
 
                         $this->session->set("isCoupon", true);
                         $this->session->set("couponCode", $code);
                         $this->session->set("couponDiscount", $discount);
                         
-                        echo json_encode(["status" => "success", "subTotal" => $subTotal, "discount" => $discount, "product" => $cart, "message" => "Coupon Applied..!"]);
+                        echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "product" => $cart, "message" => "Coupon Applied..!"]);
                     }
                 }
 
             }
         } else {
-            echo json_encode(["status" => "failed", "message" => "Something went wrong", "cart" => $_SESSION["cartItems"]]);
+            echo json_encode(["status" => "failed", "message" => "Please login", "cart" => $_SESSION["cartItems"]]);
         }
     }
 
@@ -877,7 +886,7 @@ class Home extends BaseController
         $this->session->set("couponCode", "");
         $this->session->set("couponDiscount", 0);
 
-        echo True;
+        echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency")]);
     }
 
     public function proceedToCheckout()

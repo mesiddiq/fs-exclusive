@@ -221,12 +221,12 @@
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold"><?php echo $this->session->get("countryCurrency"); ?>
+                            <h5 class="font-weight-bold">
                                 <span id='cartTotal'>
                                     <?php if ($this->session->get("isCoupon") != Null) {
-                                        echo "<del>" . $subTotal . "</del>" . ($subTotal + $shipping - $discount);
+                                        echo "<del style='opacity: 0.5;'>" . $this->session->get("countryCurrency") . "" . $subTotal . "</del> " . $this->session->get("countryCurrency") . "" .($subTotal + $shipping - $discount);
                                     } else {
-                                        echo ($subTotal + $shipping - $discount);
+                                        echo $this->session->get("countryCurrency") . '' . ($subTotal + $shipping - $discount);
                                     } ?>
                                 </span>
                             </h5>
