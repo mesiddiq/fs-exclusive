@@ -169,12 +169,12 @@
                     </tbody>
                 </table>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-7">
                         <form id="applyCoupon" class="my-5" action="javascript:;">
                             <div class="input-group">
                                 <input type="text" class="form-control p-4" name="couponCode" id="couponCode" placeholder="Coupon Code" required>
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary text-white">Apply Coupon</button>
+                                    <button class="btn btn-primary text-white">Discount codes & offers</button>
                                 </div>
                             </div>
                         </form>

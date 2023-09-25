@@ -135,6 +135,30 @@
     </script>
     <?php } ?>
 
+    <?php if ($page_name == "coupons-add" || $page_name == "coupons-edit") { ?>
+    <script type="text/javascript">
+        $("[name='country']").on("change", function() {
+            var country = $(this).val();
+
+            $.ajax({
+                method: "POST",
+                url: "<?php echo site_url('admin/getProductsBasedOnCountry') ?>",
+                data: {country: country},
+                success: function(couRes) {
+                    couRes = JSON.parse(couRes);
+                    var html = "<option value=''>Select</option>";
+
+                    for (var i = 0; i < couRes.length; i++) {
+                        html += "<option value='" + couRes[i].id + "'>" + couRes[i].name + "-" + couRes[i].id + "</option>";
+                    }
+
+                    $("[name='product']").html(html);
+                }
+            });
+        })
+    </script>
+    <?php } ?>
+
     <?php if ($page_name == "dashboard") { ?>
     <script type="text/javascript">
         // ======== jvectormap activation

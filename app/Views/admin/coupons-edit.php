@@ -65,8 +65,11 @@
                                             <div class="select-position">
                                                 <select name="product">
                                                     <option value="">Select</option>
-                                                    <?php foreach ($products as $key => $product): ?>
-                                                    <option value="<?php echo $product['id']; ?>" <?php echo $coupon['product'] == $product['id'] ? 'selected' : ''; ?>><?php echo $product["name"]; ?></option>
+                                                    <?php
+                                                    $products = $this->db->table('products')->where(array('country' => $coupon['country'], 'status' => 1))->get()->getResultArray();
+                                                    foreach ($products as $key => $product): 
+                                                    ?>
+                                                    <option value="<?php echo $product['id']; ?>" <?php echo $coupon['product'] == $product['id'] ? 'selected' : ''; ?>><?php echo $product["name"] . "-" . $product['id']; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>

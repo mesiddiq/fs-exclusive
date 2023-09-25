@@ -197,6 +197,7 @@ $routes->get('/admin/refund-policy', 'Admin::refundPolicy');
 $routes->post('/admin/refund-policy/(:alpha)', 'Admin::refundPolicy/$1');
 // Others
 $routes->post('/admin/updateAdminProductCountryId', 'Admin::updateAdminProductCountryId');
+$routes->post('/admin/getProductsBasedOnCountry', 'Admin::getProductsBasedOnCountry');
 $routes->get('/admin/testpage', 'Admin::testpage');
 
 /*

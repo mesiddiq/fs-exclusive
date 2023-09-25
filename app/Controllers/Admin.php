@@ -77,7 +77,7 @@ class Admin extends BaseController
             if ($this->session->get("userRole") === "1") {
                 if ($param1 == "add") {
                     $page_data["countries"] = $this->CountriesModel->where("status", 1)->get()->getResultArray();
-                    $page_data["products"] = $this->ProductModel->get()->getResultArray();
+                    // $page_data["products"] = $this->ProductModel->where("status", 1)->get()->getResultArray();
                     $view = "admin";
                     $page_data["page_title"] = "Add Coupons";
                     $page_data["page_name"] = "coupons-add";
@@ -104,7 +104,7 @@ class Admin extends BaseController
                 } else if ($param1 == "edit") {
                     $page_data["coupon"] = $this->CouponsModel->where("id", $param2)->get()->getRowArray();
                     $page_data["countries"] = $this->CountriesModel->where("status", 1)->get()->getResultArray();
-                    $page_data["products"] = $this->ProductModel->get()->getResultArray();
+                    // $page_data["products"] = $this->ProductModel->where("status", 1)->get()->getResultArray();
                     $view = "admin";
                     $page_data["page_title"] = "Edit Coupons";
                     $page_data["page_name"] = "coupons-edit";

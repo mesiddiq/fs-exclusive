@@ -66,10 +66,7 @@
                                             <label>Product</label>
                                             <div class="select-position">
                                                 <select name="product">
-                                                    <option value="">Select</option>
-                                                    <?php foreach ($products as $key => $product): ?>
-                                                    <option value="<?php echo $product['id']; ?>"><?php echo $product["name"]; ?></option>
-                                                    <?php endforeach; ?>
+                                                    <option value="">Select Country</option>
                                                 </select>
                                             </div>
                                         </div>
