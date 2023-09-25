@@ -60,19 +60,30 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <div class="select-style-1">
+                                        <style type="text/css">
+                                            .select2.select2-container, .select2.select2-container .selection {
+                                                width: 100% !important;
+                                            }
+                                            .select2.select2-container .selection .select2-selection .select2-selection__rendered {
+                                                width: 100% !important;
+                                                height: 49px !important;
+                                                overflow-y: auto;
+                                            }
+                                            .select2-container--default .select2-search--inline .select2-search__field {
+                                                padding: 10px;
+                                                padding-right: 38px;
+                                            }
+                                        </style>
+                                        <div class="input-style-1">
                                             <label>Product</label>
-                                            <div class="select-position">
-                                                <select name="product">
-                                                    <option value="">Select</option>
-                                                    <?php
-                                                    $products = $this->db->table('products')->where(array('country' => $coupon['country'], 'status' => 1))->get()->getResultArray();
-                                                    foreach ($products as $key => $product): 
-                                                    ?>
-                                                    <option value="<?php echo $product['id']; ?>" <?php echo $coupon['product'] == $product['id'] ? 'selected' : ''; ?>><?php echo $product["name"] . "-" . $product['id']; ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
+                                            <select class="select2-multiple" name="product[]" id="couponProducts" multiple="multiple" >
+                                                <?php
+                                                $products = $this->db->table('products')->where(array('country' => $coupon['country'], 'status' => 1))->get()->getResultArray();
+                                                foreach ($products as $key => $product):
+                                                ?>
+                                                <option value="<?php echo $product['id']; ?>" <?php echo in_array($product['id'], json_decode($coupon['product'])) ? 'selected' : ''; ?>><?php echo $product["name"] . "-" . $product['id']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-6">

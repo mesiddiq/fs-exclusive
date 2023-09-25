@@ -89,12 +89,14 @@ class Admin extends BaseController
                     $data["type"] = (int) $this->request->getPost("type");
                     $data["value"] = (int) $this->request->getPost("value");
                     $data["country"] = (int) $this->request->getPost("country");
-                    $data["product"] = (int) $this->request->getPost("product");
+                    $data["product"] = json_encode($this->request->getPost("product"));
+                    
                     if ($this->request->getPost("expiry") == "") {
                         $data["expiry"] = Null;
                     } else {
                         $data["expiry"] = strtotime($this->request->getPost("expiry"));
                     }
+                    
                     $data["count"] = 0;
                     $data["status"] = (int) $this->request->getPost("status");
                     $data["createdAt"] = strtotime(date("d-M-Y H:i:s"));
@@ -115,12 +117,14 @@ class Admin extends BaseController
                     $data["type"] = (int) $this->request->getPost("type");
                     $data["value"] = (int) $this->request->getPost("value");
                     $data["country"] = (int) $this->request->getPost("country");
-                    $data["product"] = (int) $this->request->getPost("product");
+                    $data["product"] = json_encode($this->request->getPost("product"));
+                    
                     if ($this->request->getPost("expiry") == "") {
                         $data["expiry"] = Null;
                     } else {
                         $data["expiry"] = strtotime($this->request->getPost("expiry"));
                     }
+                    
                     $data["status"] = (int) $this->request->getPost("status");
                     $data["updatedAt"] = strtotime(date("d-M-Y H:i:s"));
 

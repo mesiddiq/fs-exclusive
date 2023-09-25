@@ -62,13 +62,25 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <div class="select-style-1">
+                                        <style type="text/css">
+                                            .select2.select2-container, .select2.select2-container .selection {
+                                                width: 100% !important;
+                                            }
+                                            .select2.select2-container .selection .select2-selection .select2-selection__rendered {
+                                                width: 100% !important;
+                                                height: 49px !important;
+                                                overflow-y: auto;
+                                            }
+                                            .select2-container--default .select2-search--inline .select2-search__field {
+                                                padding: 10px;
+                                                padding-right: 38px;
+                                            }
+                                        </style>
+                                        <div class="input-style-1">
                                             <label>Product</label>
-                                            <div class="select-position">
-                                                <select name="product">
-                                                    <option value="">Select Country</option>
-                                                </select>
-                                            </div>
+                                            <select class="select2-multiple" name="product[]" id="couponProducts" multiple="multiple" >
+                                                <option value="">Select Country</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-6">

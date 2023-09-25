@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="<?php echo site_url('admin/css/datatable.css'); ?>" />
     <?php } ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/main.css'); ?>" />
+
+    <!-- ========== SELECT2 CSS ========= -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
 </head>
 <body>
     
@@ -49,6 +52,9 @@
     <script src="<?php echo site_url('admin/js/Sortable.min.js'); ?>"></script>
     <?php } ?>
     <script src="<?php echo site_url('admin/js/main.js'); ?>"></script>
+    
+    <!-- ========= SELECT2 JS ======== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     <?php include 'modal.php'; ?>
 
@@ -137,6 +143,11 @@
 
     <?php if ($page_name == "coupons-add" || $page_name == "coupons-edit") { ?>
     <script type="text/javascript">
+        $(".select2-multiple").select2({
+            placeholder: 'Select Country',
+            width: 'resolve' // need to override the changed default
+        });
+
         $("[name='country']").on("change", function() {
             var country = $(this).val();
 
@@ -146,16 +157,17 @@
                 data: {country: country},
                 success: function(couRes) {
                     couRes = JSON.parse(couRes);
+                    console.log(couRes);
                     var html = "<option value=''>Select</option>";
 
                     for (var i = 0; i < couRes.length; i++) {
                         html += "<option value='" + couRes[i].id + "'>" + couRes[i].name + "-" + couRes[i].id + "</option>";
                     }
 
-                    $("[name='product']").html(html);
+                    $("#couponProducts").html(html);
                 }
             });
-        })
+        });
     </script>
     <?php } ?>
 

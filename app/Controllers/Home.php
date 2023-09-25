@@ -743,7 +743,8 @@ class Home extends BaseController
                                     $subTotal += $cart["productQty"] * $cproduct["price"];
                                 }
 
-                                if ($cproduct["id"] == $product) {
+                                // if ($cproduct["id"] == $product) {
+                                if (in_array($cproduct["id"], json_decode($product))) {
                                     array_push($productArr, $cproduct);
                                 }
 
@@ -773,7 +774,7 @@ class Home extends BaseController
                             $this->session->set("couponCode", $code);
                             $this->session->set("couponDiscount", $discount);
                             
-                            echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "product" => $price, "message" => "Coupon Applied..!"]);
+                            echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "price" => $price, "message" => "Coupon Applied..!"]);
                         } else {
                             foreach ($cart as $key => $cart) {
                                 $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
@@ -814,7 +815,8 @@ class Home extends BaseController
                                 $subTotal += $cart["productQty"] * $cproduct["price"];
                             }
 
-                            if ($cproduct["id"] == $product) {
+                            // if ($cproduct["id"] == $product) {
+                            if (in_array($cproduct["id"], json_decode($product))) {
                                 array_push($productArr, $cproduct);
                             }
 
@@ -844,7 +846,7 @@ class Home extends BaseController
                         $this->session->set("couponCode", $code);
                         $this->session->set("couponDiscount", $discount);
                         
-                        echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "product" => $price, "message" => "Coupon Applied..!"]);
+                        echo json_encode(["status" => "success", "currency" => $this->session->get("countryCurrency"), "subTotal" => $subTotal, "discount" => $discount, "price" => $price, "message" => "Coupon Applied..!"]);
                     } else {
                         foreach ($cart as $key => $cart) {
                             $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
