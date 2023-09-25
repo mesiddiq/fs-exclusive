@@ -732,7 +732,7 @@ class Home extends BaseController
                         
                         echo json_encode(["status" => "error", "message" => "Coupon Code Expired"]);
                     } else {
-                        if ($product != 0) {
+                        if ($product != "") {
                             $productArr = array();
                             foreach ($cart as $key => $cart) {
                                 $cproduct = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
@@ -804,7 +804,7 @@ class Home extends BaseController
                         }
                     }
                 } else {
-                    if ($product != 0) {
+                    if ($product != "") {
                         $productArr = array();
                         foreach ($cart as $key => $cart) {
                             $cproduct = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();

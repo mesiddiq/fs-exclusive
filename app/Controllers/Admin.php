@@ -607,6 +607,14 @@ class Admin extends BaseController
         echo json_encode($categories);
     }
 
+    public function getProductsBasedOnCountry()
+    {
+        $country = $this->request->getPost("country");
+        
+        $products = $this->ProductModel->where(array("country" => $country, "status" => 1))->get()->getResultArray();
+        echo json_encode($products);
+    }
+
     public function orders($param1="", $param2="")
     {
         if ($this->session->get("logged_in") == true) {
