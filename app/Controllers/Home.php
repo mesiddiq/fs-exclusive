@@ -751,18 +751,22 @@ class Home extends BaseController
                             }
 
                             if (count($productArr) > 0) {
-                                foreach ($productArr as $key => $productArr) {
-                                    if ($productArr["isDiscount"] == 1) {
-                                        $price = $productArr["discountedPrice"];
+                                foreach ($productArr as $key => $productArray) {
+                                    if (strval($productArray["isDiscount"]) == "1") {
+                                        $price = $productArray["discountedPrice"];
                                         $isDiscount = 0;
                                     } else {
-                                        $price = $productArr["price"];
-                                        $isDiscount = $productArr["price"];
+                                        $price = $productArray["price"];
+                                        $isDiscount = $productArray["price"];
                                     }
 
                                     if ($type == 1) {
                                         if ($price > $value) {
-                                            $discount += $value;
+                                            if ($isDiscount == 0) {
+                                                $discount += 0;
+                                            } else {
+                                                $discount += $value;
+                                            }
                                         }
                                     } else if ($type == 2) {
                                         $discount += ($value * $isDiscount) / 100;
@@ -790,7 +794,11 @@ class Home extends BaseController
 
                             if ($type == 1) {
                                 if ($subTotal > $value) {
-                                    $discount += $value;
+                                    if ($isDiscount == 0) {
+                                        $discount += 0;
+                                    } else {
+                                        $discount += $value;
+                                    }
                                 }
                             } else if ($type == 2) {
                                 $discount += ($value * $isDiscount) / 100;
@@ -823,17 +831,19 @@ class Home extends BaseController
                         }
 
                         if (count($productArr) > 0) {
-                            foreach ($productArr as $key => $productArr) {
-                                if ($productArr["isDiscount"] == 1) {
-                                    $price = $productArr["discountedPrice"];
+                            foreach ($productArr as $key => $productArray) {
+                                if ($productArray["isDiscount"] == 1) {
+                                    $price = $productArray["discountedPrice"];
                                     $isDiscount = 0;
                                 } else {
-                                    $price = $productArr["price"];
-                                    $isDiscount = $productArr["price"];
+                                    $price = $productArray["price"];
+                                    $isDiscount = $productArray["price"];
                                 }
 
                                 if ($type == 1) {
-                                    if ($price > $value) {
+                                    if ($isDiscount == 0) {
+                                        $discount += 0;
+                                    } else {
                                         $discount += $value;
                                     }
                                 } else if ($type == 2) {
@@ -862,7 +872,11 @@ class Home extends BaseController
 
                         if ($type == 1) {
                             if ($subTotal > $value) {
-                                $discount += $value;
+                                if ($isDiscount == 0) {
+                                    $discount += 0;
+                                } else {
+                                    $discount += $value;
+                                }
                             }
                         } else if ($type == 2) {
                             $discount += ($value * $isDiscount) / 100;
