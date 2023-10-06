@@ -84,6 +84,7 @@
                                             <input type="text" class="bg-transparent" value="<?php echo $requirement["zipcode"]; ?>" />
                                         </div>
                                     </div>
+                                    <?php if (json_decode($requirement["images"]) != NULL): ?>
                                     <div class="col-12">
                                         <div class="input-style-1">
                                             <label>Images</label>
@@ -94,6 +95,7 @@
                                         <img class="img-fluid" src="<?php echo site_url('uploads/custom/' . $image); ?>" alt="<?php echo $image; ?>" />
                                     </div>
                                     <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </div>
                             </form>
                         </div>

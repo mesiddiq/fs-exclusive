@@ -63,8 +63,12 @@
                         $subTotal = 0;
                         $weight = 0;
                         $shipping = 0;
+                        $size = "";
+                        $color = "";
+
                         if ($this->session->get("logged_in")):
                         foreach ($cart as $key => $cart):
+                        if ($cart["productType"] != 0):
                         $product = $this->db->table("products")->where("id", $cart["productId"])->get()->getRowArray();
                         
                         if ($product["isDiscount"] == 1) {
@@ -74,8 +78,13 @@
                         }
 
                         if ($product["type"] == "2") {
-                            $size = $this->db->table("productattributesvariants")->where("id", $cart["productSize"])->get()->getRow()->name;
-                            $color = $this->db->table("productattributesvariants")->where("id", $cart["productColor"])->get()->getRow()->name;
+                            if ($cart["productSize"] != NULL) {
+                                $size = $this->db->table("productattributesvariants")->where("id", $cart["productSize"])->get()->getRow()->name;
+                            }
+
+                            if ($cart["productColor"] != NULL) {
+                                $color = $this->db->table("productattributesvariants")->where("id", $cart["productColor"])->get()->getRow()->name;
+                            }
                         }
 
                         $weight += $cart["productQty"] * $product["weight"];
@@ -83,7 +92,7 @@
                         <div class="d-flex justify-content-between">
                             <p>
                                 <?php echo $product["name"] . " x " . $cart["productQty"]; ?>
-                                <?php if ($product["type"] == "2"): ?>
+                                <?php if ($product["type"] == "2" && $size != "" && $color != ""): ?>
                                 <br>
                                 <small><em>Size: <?php echo $size; ?> Color: <?php echo $color; ?></em></small>
                                 <?php endif; ?>
@@ -94,11 +103,13 @@
                             <p><?php echo $this->session->get("countryCurrency") . ($cart["productQty"] * $product["price"]); ?></p>
                             <?php endif; ?>
                         </div>
+                        <?php endif; ?>
                         <?php endforeach; ?>
                         <?php else: ?>
                         <?php
                         if ($this->session->get("cartItems")):
                         foreach ($this->session->get("cartItems") as $key => $sessCart):
+                        if ($sessCart["productType"] != 0):
                         $sessCartproduct = $this->db->table("products")->where("id", $sessCart["productId"])->get()->getRowArray();
                         
                         if ($sessCartproduct["isDiscount"] == 1) {
@@ -108,8 +119,13 @@
                         }
 
                         if ($sessCartproduct["type"] == "2") {
-                            $sessCartSize = $this->db->table("productattributesvariants")->where("id", $sessCart["productSize"])->get()->getRow()->name;
-                            $sessCartColor = $this->db->table("productattributesvariants")->where("id", $sessCart["productColor"])->get()->getRow()->name;
+                            if ($sessCart["productSize"] != NULL) {
+                                $size = $this->db->table("productattributesvariants")->where("id", $sessCart["productSize"])->get()->getRow()->name;
+                            }
+
+                            if ($sessCart["productColor"] != NULL) {
+                                $color = $this->db->table("productattributesvariants")->where("id", $sessCart["productColor"])->get()->getRow()->name;
+                            }
                         }
 
                         $weight = $sessCart["productQty"] * $sessCartproduct["weight"];
@@ -117,9 +133,9 @@
                         <div class="d-flex justify-content-between">
                             <p>
                                 <?php echo $sessCartproduct["name"] . " x " . $sessCart["productQty"]; ?>
-                                <?php if ($sessCartproduct["type"] == "2"): ?>
+                                <?php if ($sessCartproduct["type"] == "2" && $size != "" && $color != ""): ?>
                                 <br>
-                                <small><em>Size: <?php echo $sessCartSize; ?> Color: <?php echo $sessCartColor; ?></em></small>
+                                <small><em>Size: <?php echo $size; ?> Color: <?php echo $color; ?></em></small>
                                 <?php endif; ?>
                             </p>
                             <?php if ($sessCartproduct["isDiscount"] == 1): ?>
@@ -128,6 +144,7 @@
                             <p><?php echo $this->session->get("countryCurrency") . ($sessCart["productQty"] * $sessCartproduct["price"]); ?></p>
                             <?php endif; ?>
                         </div>
+                        <?php endif; ?>
                         <?php endforeach; ?>
                         <?php endif; ?>
                         <?php endif; ?>
