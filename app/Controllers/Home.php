@@ -164,9 +164,15 @@ class Home extends BaseController
     public function product($param1='', $param2='')
     {
         if ($this->session->get("countryId") == NULL) {
-            $view = "users";
+            // $view = "users";
 
-            return view($view . "/main");
+            // return view($view . "/main");
+            $product = $this->ProductModel->where(array("slug" => $param1, "id" => $param2))->get()->getRowArray();
+            $sessCountry = $this->db->table("country")->where("id", $product["country"])->get()->getRowArray();
+            $this->session->set("countryId", $sessCountry["id"]);
+            $this->session->set("countryName", $sessCountry["name"]);
+            $this->session->set("countryCode", $sessCountry["code"]);
+            $this->session->set("countryCurrency", $sessCountry["currency"]);
         }
 
         $view = "users";

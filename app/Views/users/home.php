@@ -110,7 +110,7 @@
         </div>
         <div class="row px-xl-5 pb-3">
             <?php
-            $products = $this->db->table("products")->where(array("category" => $category["id"], "country" => $this->session->get("countryId"), "isTopProduct" => 1))->get()->getResultArray();
+            $products = $this->db->table("products")->where(array("category" => $category["id"], "country" => $this->session->get("countryId"), "isTopProduct" => 1, "status" => "1"))->get()->getResultArray();
             foreach ($products as $key => $product): ?>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                 <a href="<?php echo site_url('product/' . $product['slug'] . '/' . $product['id']); ?>">
