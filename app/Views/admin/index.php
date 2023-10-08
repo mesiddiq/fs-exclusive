@@ -15,8 +15,20 @@
     <link rel="stylesheet" href="<?php echo site_url('admin/css/quill/snow.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/fullcalendar.css'); ?>" />
     <link rel="stylesheet" href="<?php echo site_url('admin/css/morris.css'); ?>" />
-    <?php if ($page_name == "dashboard" || $page_name == "coupons" || $page_name == "products" || $page_name == "attributes" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "shipping" || $page_name == "shipping-country" || $page_name == "shipping-price" || $page_name == "requirements" || $page_name == "users") { ?>
+    <?php if ($page_name == "dashboard" || $page_name == "coupons" || $page_name == "products" || $page_name == "attributes" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "shipping" || $page_name == "shipping-country" || $page_name == "shipping-price" || $page_name == "requirements") { ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/datatable.css'); ?>" />
+    <?php } else if ($page_name == "users") { ?>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" />
+    <style type="text/css">
+        .dt-buttons .dt-button.buttons-csv {
+            background: #4a6cf7 !important;
+            color: #fff !important;
+            padding: 10px 20px !important;
+            border: none !important;
+            border-radius: 4px !important;
+        }
+    </style>
     <?php } ?>
     <link rel="stylesheet" href="<?php echo site_url('admin/css/main.css'); ?>" />
 
@@ -47,9 +59,25 @@
     <script src="<?php echo site_url('admin/js/world-merc.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/polyfill.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/quill.min.js'); ?>"></script>
-    <?php if ($page_name == "dashboard" || $page_name == "coupons" || $page_name == "products" || $page_name == "attributes" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "shipping" || $page_name == "shipping-country" || $page_name == "shipping-price" || $page_name == "requirements" || $page_name == "users") { ?>
+    <?php if ($page_name == "dashboard" || $page_name == "coupons" || $page_name == "products" || $page_name == "attributes" || $page_name == "orders" || $page_name == "reviews" || $page_name == "countries" || $page_name == "shipping" || $page_name == "shipping-country" || $page_name == "shipping-price" || $page_name == "requirements") { ?>
     <script src="<?php echo site_url('admin/js/datatable.js'); ?>"></script>
     <script src="<?php echo site_url('admin/js/Sortable.min.js'); ?>"></script>
+    <?php } else if ($page_name == "users") { ?>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript">
+        $('#table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'csv',
+                text: 'Export',
+                exportOptions: {
+                    columns: [ 0, 1, 2 ]
+                },
+            }],
+        });
+    </script>
     <?php } ?>
     <script src="<?php echo site_url('admin/js/main.js'); ?>"></script>
     
