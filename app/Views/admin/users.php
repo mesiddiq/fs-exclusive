@@ -32,21 +32,31 @@
                                                 <th><h6>Email</h6></th>
                                                 <th><h6>Contact</h6></th>
                                                 <th><h6>Role</h6></th>
+                                                <th><h6>Country</h6></th>
                                                 <th><h6>Status</h6></th>
                                                 <th class="text-center"><h6>Action</h6></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($users as $key => $user): ?>
+                                            <?php
+                                            foreach ($users as $key => $user):
+                                            $country = "";
+                                            $role = $this->db->table("roles")->where("id", $user["role"])->get()->getRowArray();
+                                            $address = $this->db->table("address")->select("location")->where("userId", $user["id"])->orderBy("id", "DESC")->limit(1)->get()->getResultArray();
+                                            if (count($address) > 0) {
+                                                $builder = $this->db->table("country")->select("name")->where("id", $address[0]["location"])->get()->getResultArray();
+                                                if (count($builder) > 0) {
+                                                    $country = $builder[0]["name"];
+                                                }
+                                            }
+                                            ?>
                                             <tr>
                                                 <td class="text-center align-middle"><p><?php echo $key+1; ?></p></td>
                                                 <td class="align-middle"><p><?php echo $user["name"]; ?></p></td>
                                                 <td class="align-middle"><p><?php echo $user["email"]; ?></p></td>
                                                 <td class="align-middle"><p><?php echo $user["contact"]; ?></p></td>
-                                                <?php
-                                                $role = $this->db->table("roles")->where("id", $user["role"])->get()->getRowArray();
-                                                ?>
                                                 <td class="align-middle"><p><?php echo $role["name"]; ?></p></td>
+                                                <td class="align-middle"><p><?php echo $country; ?></p></td>
                                                 <td class="align-middle">
                                                     <?php if ($user["status"] == 0) { ?>
                                                     <span class="status-btn warning-btn">Pending</span>
