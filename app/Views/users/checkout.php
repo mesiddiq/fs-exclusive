@@ -15,33 +15,132 @@
         <div class="row px-xl-5">
             <div class="col-lg-8">
                 <div class="mb-4">
-                    <?php if (count($addresses) > 0) { ?>
-                    <h4 class="font-weight-semi-bold mb-4">Select Address</h4>
-                    <?php } ?>
-                    <div class="row mb-2">
-                        <?php foreach ($addresses as $key => $address): ?>
-                        <div class="col-6 mb-4">
-                            <div class="select-address">
-                                <input type="radio" name="deliveryAddress" id="address<?php echo $address["id"]; ?>" value="<?php echo $address['id']; ?>" <?php echo $key == 0 ? 'checked' : ''; ?>>
-                                <label for="address<?php echo $address["id"]; ?>"><strong><?php echo $address["name"]; ?></strong><br>
-                                <?php echo $address["address"]; ?>
-                                <?php echo $address["address2"] != NULL ? ", " . $address["address2"] . ", " : ", "; ?>
-                                <?php echo $address["city"] . ", "; ?>
-                                <?php echo $address["state"] . " - "; ?>
-                                <?php echo $address["zipcode"]; ?><br>
-                                <?php echo $address["email"]; ?><br>
-                                <?php echo $address["contact"]; ?></label><br>
-                                <a href="javascript:;" class="showEditAddressModal" data-addressid="<?php echo $address['id']; ?>">Edit</a>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
                     <div class="row">
                         <div class="col-12">
-                            <?php if (!$this->session->get("logged_in")): ?>
-                            <p>Already having an account? <a href="javascript:;" data-toggle="modal" data-target="#loginModal">Login</a></p>
-                            <?php endif; ?>
-                            <button type="button" id="showAddAddressModal" class="btn btn-primary text-white font-weight-bold my-3 py-3 px-4"><i class="fa fa-plus-circle pr-2"></i> Add New Address</button>
+                            <!-- <p>Already having an account? <a href="javascript:;" data-toggle="modal" data-target="#loginModal">Login</a></p> -->
+                            <style type="text/css">
+                                .checkout-accordion-header {
+                                    background-color: #000000;
+                                    padding: 17px 15px 10px 15px;
+                                    cursor: pointer;
+                                }
+                                .checkout-accordion-header h4 {
+                                    color: #ffffff;
+                                    padding-left: 10px;
+                                }
+                            </style>
+                            <div class="checkout-accordion">
+                                <?php if (!$this->session->get("logged_in")): ?>
+                                <div class="checkout-accordion-header">
+                                    <h4><span class="mr-3">1.</span> Are You A New Customer?</h4>
+                                </div>
+                                <div class="checkout-accordion-body" id="checkoutBody1">
+                                    <div class="card card-body">
+                                        <div class="row">
+                                            <div class="col-6 offset-3">
+                                                <div class="mb-4 text-center">
+                                                    <h2>Sign In</h2>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="btn__google">
+                                                        <i class="fab fa-google-plus"></i> Login with Google
+                                                    </div>
+                                                    <div class="btn__facebook">
+                                                        <i class="fab fa-facebook"></i> Login with Facebook
+                                                    </div>
+                                                </div>
+                                                <div class="text-center w-100 py-3">or</div>
+                                                <div id="loginError" class="text-danger" style="position: absolute; margin-top: -39px;"></div>
+                                                <form method="POST" action="javascript:;" class="authForm" id="loginForm" novalidate="novalidate">
+                                                    <div class="input-group mb-4">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                                        </div>
+                                                        <input type="email" class="form-control" name="loginEmail" id="loginEmail" placeholder="Email" aria-label="Email">
+                                                        <small id="loginEmailError" class="text-danger" style="position: absolute; top: 40px; left: 50px;"></small>
+                                                    </div>
+                                                    <div class="input-group mb-4">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                                        </div>
+                                                        <input type="password" class="form-control" name="loginPassword" id="loginPassword" placeholder="Password" aria-label="Password">
+                                                        <small id="loginPasswordError" class="text-danger" style="position: absolute; top: 40px; left: 50px;"></small>
+                                                    </div>
+                                                    <div class="input-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" name="loginAcceptance" id="loginAcceptance" value="1">
+                                                            <label class="custom-control-label" for="loginAcceptance"><small>By signing in, I acknowledge <a href="<?php echo site_url('terms'); ?>" target="_blank" style="text-decoration: underline;">Terms</a> and <a href="<?php echo site_url('privacy-policy'); ?>" target="_blank" style="text-decoration: underline;">Privacy Policy</a></small></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="my-4">
+                                                        <button class="btn btn-primary btn-block text-white py-2 px-4" type="submit">Login</button>
+                                                    </div>
+                                                </form>
+                                                <div class="mb-4 text-center">
+                                                    <a href="javascript:;" class="showForgotModal">Forgot Password?</a>
+                                                </div>
+                                                <hr>
+                                                <div class="mb-4 text-center">
+                                                    Don't have an account? <a href="javascript:;" class="showRegisterModal">Create one</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="checkout-accordion-header">
+                                    <h4><span class="mr-3">2.</span> Delivery Address</h4>
+                                </div>
+                                <?php else: ?>
+                                <div class="checkout-accordion-header">
+                                    <h4><span class="mr-3">1.</span> Account Details</h4>
+                                </div>
+                                <div class="checkout-accordion-body" id="checkoutBody1">
+                                    <div class="card card-body">
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong class="text-dark">Name</strong></td>
+                                                    <td class="text-dark"><?php echo $_SESSION['userName']; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong class="text-dark">Email</strong></td>
+                                                    <td class="text-dark"><?php echo $_SESSION['userEmail']; ?></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="checkout-accordion-header">
+                                    <h4><span class="mr-3">2.</span> Delivery Address</h4>
+                                </div>
+                                <div class="checkout-accordion-body" id="checkoutBody2">
+                                    <div class="card card-body">
+                                        <?php if (count($addresses) > 0) { ?>
+                                        <h4 class="font-weight-semi-bold mb-4">Select Address</h4>
+                                        <?php } ?>
+                                        <div class="row mb-2">
+                                            <?php foreach ($addresses as $key => $address): ?>
+                                            <div class="col-6 mb-4">
+                                                <div class="select-address">
+                                                    <input type="radio" name="deliveryAddress" id="address<?php echo $address["id"]; ?>" value="<?php echo $address['id']; ?>" <?php echo $key == 0 ? 'checked' : ''; ?>>
+                                                    <label for="address<?php echo $address["id"]; ?>"><strong><?php echo $address["name"]; ?></strong><br>
+                                                    <?php echo $address["address"]; ?>
+                                                    <?php echo $address["address2"] != NULL ? ", " . $address["address2"] . ", " : ", "; ?>
+                                                    <?php echo $address["city"] . ", "; ?>
+                                                    <?php echo $address["state"] . " - "; ?>
+                                                    <?php echo $address["zipcode"]; ?><br>
+                                                    <?php echo $address["email"]; ?><br>
+                                                    <?php echo $address["contact"]; ?></label><br>
+                                                    <a href="javascript:;" class="showEditAddressModal" data-addressid="<?php echo $address['id']; ?>">Edit</a>
+                                                </div>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <button type="button" id="showAddAddressModal" class="btn btn-primary text-white font-weight-bold my-3 py-3 px-4"><i class="fa fa-plus-circle pr-2"></i> Add New Address</button>
+                                    </div>
+                                </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -179,7 +278,9 @@
                             <h5 class="font-weight-bold">Total</h5>
                             <h5 class="font-weight-bold"><?php echo $this->session->get("countryCurrency"); ?><span name="total" id="shippingTotal"><?php echo ($subTotal + $shipping - $discount); ?></span></h5>
                         </div>
+                        <?php if ($this->session->get("logged_in")): ?>
                         <button type="button" id="placeOrder" class="btn btn-lg btn-block btn-primary text-white font-weight-bold my-3 py-3">Place Order</button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
